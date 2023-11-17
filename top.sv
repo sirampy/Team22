@@ -7,7 +7,7 @@ module top#(
 
 
 
-topAku alu(
+topAlu alu(
 
 );
 
