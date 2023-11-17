@@ -24,23 +24,10 @@ module top#(
     logic [DATA_WIDTH-1:0] immOp;
     logic [1:0]  immSrc;
 
-topALU ALU(
-    .clk    (clk),
-    .rs1    (rs1),
-    .rs2    (rs2),
-    .rd     (rd),
-    .regFileWen (write_en),
-    .aluSrc (aluSrc),
-    .immOp  (immOp),
-    .aluCtrl (aluCtrl),
-    .memWrite (memWrite),
-    .eq     (eq)
+topAku alu(
+
 );
 
-topPC myPC(
-    .immOp  (immOp),
-    .pcSrc  (pcSrc),
-    .clk    (clk),
-    .rst    (rst),
-    .instr   (pcInstr)
+pctop myPC(
+
 );
