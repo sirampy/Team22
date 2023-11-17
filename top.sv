@@ -1,6 +1,6 @@
 module top#(
-    parameter ADDRESS_WIDTH = 32,
-    DATA_WIDTH = 32
+    parameter ADDRESS_WIDTH = ,
+    DATA_WIDTH = 
 )(
 
 );
