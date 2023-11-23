@@ -17,6 +17,17 @@ int main(int argc, char **argv, char **env) {
     tfp->open("topALU.vcd"); //C++ executable of the system verilog file
 
 
+   //testing bne
+   //expected output: eq = 1, a1 != a0
+    top->clk = 1; //clk is high
+    top->rs1 = 0x0; //00000
+    top->rs2 = 0x1; //00001
+    top->rd = 0x3; //dont care, register not being rewritten
+    top->regFileWen = 0; //not needed
+    top->aluSrc = 0; //not needed, we are selecting register file
+    top->ImmOp = 0xFF;//dont care
+    top->aluCtrl = 1; //for bne
+    
 
     for (i=0; i<300; i++){
 

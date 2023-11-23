@@ -1,4 +1,4 @@
-module topAlu (
+module topALU (
     input logic     clk,        // clock
     input logic     rs1,        // address of register 1
     input logic     rs2,        // address of register 2
