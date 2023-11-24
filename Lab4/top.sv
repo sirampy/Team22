@@ -33,16 +33,8 @@ module top(
         .eq(eq)          
     );
 
-    //instantiating ALU MUX
-    ALUmux ALUmux(
-        .aluSrc(aluSrc),     
-        .regOp2(rd2),    
-        .ImmOp(ImmOp),       
-        .aluOp2(aluOp2)      
-    );
-
     //instantiating RegFile
-    Reg_File #(.ADDR_WDTH(5), .DATA_WDTH(32)) reg_file(
+    reg_file #(.ADDR_WDTH(5), .DATA_WDTH(32)) reg_file(
         .clk(clk),
         .AD1(ad1),
         .AD2(ad2),
@@ -53,17 +45,8 @@ module top(
         .RD2(rd2)
     );
 
-    //instantiating PC multiplexer
-    pcmultiplx pcMUX(
-        .branch_PC(branch_PC), 
-        .PCsrc(PCsrc),        
-        .inc_PC(inc_PC),       
-        .next_PC(next_PC)      
-        
-    );
-
     //instantiating PC register
-    PCreg PCreg(
+    pc_reg PCreg(
         .clk(clk),
         .rst(rst),
         .next_PC(next_PC),
