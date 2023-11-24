@@ -1,4 +1,5 @@
 module control_top #(
+    param INSTR_WIDTH = 32;
     param REG_ADDR_WIDTH = 5;
 )(
     input  logic [15:0]   pc,           // program counter
@@ -20,7 +21,7 @@ module control_top #(
     output logic [23:0]                  imm
 );
 
-logic [31:0]   instr;    //instruction from mem
+logic [INSTR_WIDTH-1:0]   instr;    //instruction from mem
 logic [1:0]    imm_src;  // imm select - depends on if I/S/B type
 logic [1:0]    alu_op;   // select alu operation
 

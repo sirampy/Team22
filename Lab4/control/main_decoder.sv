@@ -1,6 +1,4 @@
-module main_decoder #(
-    param DATA_WIDTH = 32;
-)(
+module main_decoder (
     input  logic          eq,           // equal/zero flag
     input  logic [6:0]    op,           // opcode
     output logic          pc_src,       // select pc next
