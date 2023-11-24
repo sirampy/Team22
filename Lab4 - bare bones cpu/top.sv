@@ -24,43 +24,26 @@ module top(
     logic [7:0]inc_PC;
 
 
-    //instantiating ALU
-    alu alu(
-        .aluOp1(rd1),   
-        .aluOp2(aluOp2),   
-        .aluCtrl(aluCtrl),  
-        .sum(sum),     
-        .eq(eq)          
-    );
 
-    //instantiating ALU MUX
-    ALUmux ALUmux(
-        .aluSrc(aluSrc),     
-        .regOp2(rd2),    
-        .ImmOp(ImmOp),       
-        .aluOp2(aluOp2)      
-    );
-
-    //instantiating RegFile
-    Reg_File #(.ADDR_WDTH(5), .DATA_WDTH(32)) reg_file(
+    alu_top alutop(
         .clk(clk),
-        .AD1(ad1),
-        .AD2(ad2),
-        .AD3(ad3),
-        .WE3(we3),
-        .WD3(wd3),
-        .RD1(rd1),
-        .RD2(rd2)
+        .rs1(ad1),
+        .rs2(ad2),
+        .rd(ad3),
+        .reg_write(we3),
+        .imm_op(ImmOp),
+        .alu_src(aluSrc),
+        .alu_ctrl(aluCtrl),
+        .eq(eq)
     );
-
-    
+  
     pc_top pctop(
         .clk(clk),
-        .imm_op(imm_op),
+        .imm_op(ImmOp),
         .rst(rst),
         .pc_src(pc_src),
         .pc(pc)
-    )
+    );
 
 
 endmodule
