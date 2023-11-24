@@ -1,20 +1,16 @@
-module control #(
+module main_decoder #(
     param DATA_WIDTH = 32;
 )(
     input  logic          eq,           // equal/zero flag
     input  logic [6:0]    op,           // opcode
-    input  logic [2:0]    funct3,
-    input  logic          funct7,       // funct7 bit 5
     output logic          pc_src,       // select pc next
     output logic          result_src,   // select write input
     output logic          mem_write,    // memory write enable
-    output logic [2:0]    alu_control,  // select alu operation
     output logic          alu_src,      // select rd2 or imm
     output logic [1:0]    imm_src,      // imm select
-    output logic          reg_write     // register write enable
+    output logic          reg_write,    // register write enable
+    output logic [1:0]    alu_op        // to input into alu decoder
 );
-
-logic [1:0] alu_op; 
 
 always_comb
     case (op)
@@ -61,5 +57,7 @@ always_comb
             alu_op = 2'b00;
         end
     endcase
+
+assign pc_src = branch & eq;
 
 endmodule
