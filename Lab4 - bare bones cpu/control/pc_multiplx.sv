@@ -1,4 +1,4 @@
-module pcmultiplx(
+module pc_multiplx(
     input logic branch_PC,
     input logic PCsrc,
     input logic inc_PC,

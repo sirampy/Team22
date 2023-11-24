@@ -1,4 +1,4 @@
-module topALU (
+module alu_top (
     input logic     clk,        // clock
     input logic     rs1,        // address of register 1
     input logic     rs2,        // address of register 2
@@ -15,7 +15,7 @@ logic aluOp2;   // input 2
 logic aluOut;   // output of ALU
 logic regOp2;   // second register
 
-Reg_File regfile (
+reg_file regfile (
     .clk (clk),
     .AD1 (rs1),
     .AD2 (rs2),
@@ -26,14 +26,14 @@ Reg_File regfile (
     .RD2 (regOp2)
 );
 
-ALUmux multiplexer (
+alu_mux multiplexer (
     .aluSrc (aluSrc),
     .regOp2 (regOp2),
     .ImmOp (ImmOp),
     .aluOp2 (aluOp2)
 );
 
-ALU alu (
+alu alu (
     .aluOp1 (aluOp1),
     .aluOp2 (aluOp2),
     .aluCtrl (aluCtrl),

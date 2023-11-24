@@ -1,4 +1,4 @@
-module ALUmux(
+module alu_mux(
     input logic     aluSrc,    //select
     input logic     regOp2,    //if 0
     input logic     ImmOp,     //if 1
