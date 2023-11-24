@@ -17,13 +17,16 @@ module control_top #(
 // parts of instruction
     output logic [REG_ADDR_WIDTH-1:0]    rs1,
     output logic [REG_ADDR_WIDTH-1:0]    rs2,
-    output logic [REG_ADDR_WIDTH-1:0]    rd,
-    output logic [23:0]                  imm
+    output logic [REG_ADDR_WIDTH-1:0]    rd
 );
 
 logic [INSTR_WIDTH-1:0]   instr;    //instruction from mem
-logic [1:0]    imm_src;  // imm select - depends on if I/S/B type
-logic [1:0]    alu_op;   // select alu operation
+logic [1:0]               imm_src;  // imm select - depends on if I/S/B type
+logic [1:0]               alu_op;   // select alu operation
+
+assign rs1 = instr[19:15]
+assign rs2 = instr[24:20]
+assign rd = instr[11:7]
 
 instr_mem instr_mem (
     .a (pc),
@@ -55,10 +58,5 @@ sign_extend sign_extend (
     .imm_src (imm_src),
     .imm_ext (imm_op)
 );
-
-assign rs1 = instr[19:15]
-assign rs2 = instr[24:20]
-assign rd = instr[11:7]
-assign imm = instr[31:7]
 
 endmodule
