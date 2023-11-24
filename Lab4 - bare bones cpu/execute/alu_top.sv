@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 module alu_top #(
     param ADDR_WIDTH = 5;
     param DATA_WIDTH = 32;
