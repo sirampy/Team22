@@ -32,7 +32,7 @@ reg_file regfile (
 alu_op2 = alu_src ? reg_op2 : imm_op;
 
 alu alu (
-    .alu_op2 (alu_op2),
+    .aluOp1 (alu_op1),
     .aluOp2 (alu_op2),
     .aluCtrl (alu_ctrl),
     .sum (alu_out),
