@@ -18,32 +18,32 @@ int main(int argc, char **argv, char **env) {
 
 
    //testing beq:rs1=rs2 - works, verified on GTKWave
-    top->clk = 1; //clk is high
-    top->rs1 = 0x0; //00000
-    top->rs2 = 0x0; //00000
-    top->rd = 0x3; //dont care, register not being rewritten
-    top->reg_write = 0; //not needed
-    top->alu_src = 0;
-    top->imm_op = 5; //dont care for this case
-    top->alu_src = 1; 
-    top->imm_op = 0xFF;//dont care
-    top->alu_ctrl = 001; //for beq
+    top->clk_i = 1; //clk is high
+    top->rs1_i = 0x0; //00000
+    top->rs2_i = 0x0; //00000
+    top->rd_i = 0x3; //dont care, register not being rewritten
+    top->reg_write_i = 0; //not needed
+    top->alu_src_i = 0;
+    top->imm_op_i = 5; //dont care for this case
+    top->alu_src_i = 1; 
+    top->imm_op_i = 0xFF;//dont care
+    top->alu_ctrl_i = 001; //for beq
 
     //testing beq:rs1 = immediate - works, verified on GTKWave
-    top->clk = 1; //clk is high
-    top->rs1 = 0x0; //00000
-    top->rs2 = 0x5; //dont care for this case
-    top->rd = 0x3; //dont care, register not being rewritten
-    top->reg_write = 0; //not needed
-    top->alu_src = 1;
-    top->imm_op = 5; 
-    top->alu_ctrl = 001; //for beq   
+    top->clk_i = 1; //clk is high
+    top->rs1_i = 0x0; //00000
+    top->rs2_i = 0x5; //dont care for this case
+    top->rd_i = 0x3; //dont care, register not being rewritten
+    top->reg_write_i = 0; //not needed
+    top->alu_src_i = 1;
+    top->imm_op_i = 5; 
+    top->alu_ctrl_i = 001; //for beq   
 
     for (i=0; i<300; i++){
 
         for (clk=0; clk<2; clk++){
             tfp->dump (2*i + clk);
-            top->clk = !top->clk;
+            top->clk_i = !top->clk_i;
             top->eval();
         }  
 
