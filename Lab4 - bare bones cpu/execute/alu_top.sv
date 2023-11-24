@@ -3,41 +3,36 @@ module alu_top (
     input logic     rs1,        // address of register 1
     input logic     rs2,        // address of register 2
     input logic     rd, 
-    input logic     RegWrite,   // write enable
-    input logic     ImmOp,      // immediate value
-    input logic     aluSrc,     // selects second input
-    input logic     aluCtrl,
+    input logic     reg_write,   // write enable
+    input logic     imm_op,      // immediate value
+    input logic     alu_src,     // selects second input
+    input logic     alu_ctrl,
     output logic    eq,
 );
 
-logic aluOp1;   // input 1
-logic aluOp2;   // input 2
-logic aluOut;   // output of ALU
-logic regOp2;   // second register
+logic alu_op2;   // input 1
+logic alu_op2;   // input 2
+logic alu_out;   // output of ALU
+logic reg_op2;   // second register
 
 reg_file regfile (
     .clk (clk),
     .AD1 (rs1),
     .AD2 (rs2),
     .AD3 (rd),
-    .WE3 (RegWrite),
-    .WD3 (aluOut),
-    .RD1 (aluOp1),
-    .RD2 (regOp2)
+    .WE3 (reg_write),
+    .WD3 (alu_out),
+    .RD1 (alu_op2),
+    .RD2 (reg_op2)
 );
 
-alu_mux multiplexer (
-    .aluSrc (aluSrc),
-    .regOp2 (regOp2),
-    .ImmOp (ImmOp),
-    .aluOp2 (aluOp2)
-);
+alu_op2 = alu_src ? reg_op2 : imm_op;
 
 alu alu (
-    .aluOp1 (aluOp1),
-    .aluOp2 (aluOp2),
-    .aluCtrl (aluCtrl),
-    .sum (aluOut),
+    .alu_op2 (alu_op2),
+    .aluOp2 (alu_op2),
+    .aluCtrl (alu_ctrl),
+    .sum (alu_out),
     .eq (eq)
 );
 

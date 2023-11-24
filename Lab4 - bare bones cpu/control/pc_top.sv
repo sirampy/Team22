@@ -1,20 +1,23 @@
 module pc_top(
-    input logic ImmOp,
+    input logic imm_op,
     input logic clk,
     input logic rst,
-    input logic PCsrc,
+    input logic pc_src,
     output logic pc
 );
-logic next_PC;
+logic next_pc;
 
 pc_multiplx multi(
-    .branch_PC(pc+ImmOp),
+    .branch_PC(pc+imm_op),
     .inc_PC(pc+4),
-    .PCsrc(PCsrc),
-    .next_PC(next_PC),
+    .pc_src(pc_src),
+    .next_pc(next_pc),
 );
+
+next_pc = pc_src ? pc+imm_op : pc+4 ;
+
 pc_reg reg (
-    .next_PC(next_PC),
+    .next_pc(next_pc),
     .clk(clk),
     .rst(rst)
     .pc(pc)
