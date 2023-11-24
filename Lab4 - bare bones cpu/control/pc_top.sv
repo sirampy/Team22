@@ -7,13 +7,6 @@ module pc_top(
 );
 logic next_pc;
 
-pc_multiplx multi(
-    .branch_PC(pc+imm_op),
-    .inc_PC(pc+4),
-    .pc_src(pc_src),
-    .next_pc(next_pc),
-);
-
 next_pc = pc_src ? pc+imm_op : pc+4 ;
 
 pc_reg reg (
@@ -23,5 +16,5 @@ pc_reg reg (
     .pc(pc)
 );
 
-
 endmodule
+
