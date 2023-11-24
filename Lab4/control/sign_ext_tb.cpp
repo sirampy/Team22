@@ -22,7 +22,7 @@ int main(int argc, char **argv, char **env) {
 
     top->eval();             
 
-    //expected output 
+    //expected output
     int expected_imm_ext = (top->instr >> 7) & 0x1F;  //instr[11:7] bits
     expected_imm_ext |= ((top->instr >> 25) & 0x7F) << 5;  //instr[31:25] bits, shift left by 5
 
