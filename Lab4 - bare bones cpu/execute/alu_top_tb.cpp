@@ -1,4 +1,4 @@
-#include "VtopALU.h"
+#include "Valu_top.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
@@ -8,13 +8,13 @@ int main(int argc, char **argv, char **env) {
     int clk;
 
     Verilated::commandArgs(argc, argv);
-    VtopALU* top = new VtopALU;
+    Valu_top* top = new Valu_top;
 
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("topALU.vcd"); //C++ executable of the system verilog file
+    tfp->open("alu_top.vcd"); //C++ executable of the system verilog file
 
 
    //testing bne
