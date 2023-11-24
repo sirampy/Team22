@@ -53,22 +53,14 @@ module top(
         .RD2(rd2)
     );
 
-    //instantiating PC multiplexer
-    pcmultiplx pcMUX(
-        .branch_PC(branch_PC), 
-        .PCsrc(PCsrc),        
-        .inc_PC(inc_PC),       
-        .next_PC(next_PC)      
-        
-    );
-
-    //instantiating PC register
-    PCreg PCreg(
+    
+    pc_top pctop(
         .clk(clk),
+        .imm_op(imm_op),
         .rst(rst),
-        .next_PC(next_PC),
-        .pc(pc)               
-    );
+        .pc_src(pc_src),
+        .pc(pc)
+    )
 
 
 endmodule
