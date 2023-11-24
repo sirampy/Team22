@@ -3,8 +3,8 @@
 #include "verilated_vcd_c.h" 
 
 int main(int argc,char **argv, char **env){
-    int i;
-    int clk;
+    int simcyc;     // simulation clock count
+    int tick;       // each clk cycle has two ticks for two edges
 
     Verilated::commandArgs(argc, argv);
     //init top verilog instance 
@@ -17,21 +17,23 @@ int main(int argc,char **argv, char **env){
     // initialize simulation inputs
     top->clk = 1;
     top->rst = 1;
-    top->PCsrc = 0; 
-    top->ImmOp = 0xFF;
+    top->pc_src = 0; 
+    top->imm_op = 0xFF;
     
     //run simulation for many clock cycles
-    for (i=0; i<300; i++){ 
-            for (clk=0; clk<2; clk++) {
-                tfp->dump (2*i+clk);
-                top->clk = !top->clk;
-                top->eval();
-            }
+    for (simcyc=0; simcyc<300; simcyc++) {
+        for (tick=0; tick<2; tick++) {
+            tfp->dump (2*simcyc+tick);
+            top->clk = !top->clk;
+            top->eval ();
+        }
 
-            top->rst = (i<2) | (i==15);
-            if (Verilated::gotFinish())  
-            exit(0);
+        top->rst = (simcyc < 2);  // assert reset for 1st cycle
+        top->pc_src = (simcyc == 4); //tests if imm_op is added
+
+        if (Verilated::gotFinish())  exit(0);
     }
+
     tfp->close();
     exit(0);
 

@@ -1,21 +1,22 @@
-module pc_top(
-    input logic imm_op,
+module pc_top #(
+    parameter PC_WIDTH = 16
+)(
+    input logic [31:0] imm_op,
     input logic clk,
     input logic rst,
     input logic pc_src,
-    output logic pc
+    output logic [PC_WIDTH-1:0] pc
 );
 
-logic next_pc;
+logic [PC_WIDTH-1:0] next_pc;
 
-next_pc = pc_src ? pc+imm_op : pc+4 ;
+assign next_pc = pc_src ? pc+imm_op : pc+4 ;
 
-pc_reg reg (
+pc_reg pc_reg (
     .next_pc(next_pc),
     .clk(clk),
-    .rst(rst)
+    .rst(rst),
     .pc(pc)
 );
 
 endmodule
-
