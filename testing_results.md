@@ -1,3 +1,3 @@
 ## Individual Components
-### 1. PC
+### 1. Program Counter
 ![PC testing on GTKwave](images/test_pc.png)
