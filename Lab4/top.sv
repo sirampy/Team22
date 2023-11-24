@@ -24,26 +24,51 @@ module top(
     logic [7:0]inc_PC;
 
 
-
-    alu_top alutop(
-        .clk(clk),
-        .rs1(ad1),
-        .rs2(ad2),
-        .rd(ad3),
-        .reg_write(we3),
-        .imm_op(ImmOp),
-        .alu_src(aluSrc),
-        .alu_ctrl(aluCtrl),
-        .eq(eq)
+    //instantiating ALU
+    alu alu(
+        .aluOp1(rd1),   
+        .aluOp2(aluOp2),   
+        .aluCtrl(aluCtrl),  
+        .sum(sum),     
+        .eq(eq)          
     );
-  
-    pc_top pctop(
+
+    //instantiating ALU MUX
+    ALUmux ALUmux(
+        .aluSrc(aluSrc),     
+        .regOp2(rd2),    
+        .ImmOp(ImmOp),       
+        .aluOp2(aluOp2)      
+    );
+
+    //instantiating RegFile
+    Reg_File #(.ADDR_WDTH(5), .DATA_WDTH(32)) reg_file(
         .clk(clk),
-        .imm_op(ImmOp),
+        .AD1(ad1),
+        .AD2(ad2),
+        .AD3(ad3),
+        .WE3(we3),
+        .WD3(wd3),
+        .RD1(rd1),
+        .RD2(rd2)
+    );
+
+    //instantiating PC multiplexer
+    pcmultiplx pcMUX(
+        .branch_PC(branch_PC), 
+        .PCsrc(PCsrc),        
+        .inc_PC(inc_PC),       
+        .next_PC(next_PC)      
+        
+    );
+
+    //instantiating PC register
+    PCreg PCreg(
+        .clk(clk),
         .rst(rst),
-        .pc_src(pc_src),
-        .pc(pc)
+        .next_PC(next_PC),
+        .pc(pc)               
     );
-
 
 endmodule
+

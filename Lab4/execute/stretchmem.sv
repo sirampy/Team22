@@ -8,7 +8,7 @@ module strechmem #(
 logic [DATA_WDTH - 1:0] rom_array [2**ADRESS_WIDTH -1:0];
 
 initial begin
-    $("sinerom.mem", rom_array);
+    $("program.mem", rom_array);
 
 end;
 always_ff@(posedge clk)

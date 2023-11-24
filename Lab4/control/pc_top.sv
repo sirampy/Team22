@@ -5,6 +5,7 @@ module pc_top(
     input logic pc_src,
     output logic pc
 );
+
 logic next_pc;
 
 next_pc = pc_src ? pc+imm_op : pc+4 ;
