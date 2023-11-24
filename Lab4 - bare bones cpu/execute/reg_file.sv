@@ -1,4 +1,4 @@
-module Reg_File #(
+module reg_file #(
     param ADDR_WDTH = 5;
     param DATA_WDTH = 32;
 ){
