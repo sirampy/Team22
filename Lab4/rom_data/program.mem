@@ -1,12 +1,7 @@
-main:
-    addi    t1, zero, 0xff
-    addi    a0, zero, 0x0
-
-mloop:
-    addi    a1, zero, 0x0
-
-iloop:
-    addi    a0, a1, 0
-    addi    a1, a1, 1
-    bne     a1, t1, iloop
-    bne     t1, zero, mloop
+0ff00313
+00000513
+00000593
+00058513
+00158593
+fe659ce3
+fe0318e3
