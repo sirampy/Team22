@@ -14,22 +14,20 @@ module reg_file #(
     output [DATA_WDTH - 1 : 0]rd1,
     output [DATA_WDTH - 1 : 0]rd2
 );
-    logic [ ((2**ADDR_WDTH -1) * DATA_WDTH) -1 : 0] reg_data;
+//    logic [ ((2**ADDR_WDTH -1) * DATA_WDTH) -1 : 0] reg_data;
+    logic [DATA_WDTH-1:0] reg_data [32];    //32 regs of 32-bits
+
+    assign reg_data[0] = {DATA_WDTH{1'b0}};    //zero register
+
     // read logic
-    
-    always_ff @(posedge clk) begin
-        if (ad1 == 0)
-            rd1 [DATA_WDTH - 1 : 0] <= {DATA_WDTH{1'b0}};
-        else 
-            rd1 [DATA_WDTH - 1 : 0] <= reg_data [(ad1 * DATA_WDTH) - 1 : (ad1-1) * DATA_WDTH];
 
-        if (ad2 == 0)
-            rd2 [DATA_WDTH - 1 : 0] <= {DATA_WDTH{1'b0}};
-        else 
-            rd2 [DATA_WDTH - 1 : 0] <= reg_data [(ad2 * DATA_WDTH) -1 : (ad2-1) * DATA_WDTH];
-
-        if (we3 && (ad3 == 'b0))
-            reg_data [(ad3 * DATA_WDTH ) - 1: (ad3-1) * DATA_WDTH] <= [DATA_WDTH - 1 : 0] wd3;
+    //synchronous write port
+    always_ff @ (posedge clk) begin
+        if (we3) reg_data[ad3] <= wd3;
     end
+
+    // read ports of the register file should be asychronous
+    assign rd1 = reg_data[ad1];
+    assign rd2 = reg_data[ad2];
 
 endmodule
