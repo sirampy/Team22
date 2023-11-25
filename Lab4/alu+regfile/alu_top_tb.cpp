@@ -23,10 +23,10 @@ int main(int argc, char **argv, char **env) {
     top->rs1 = 0x0; //00000
     top->rs2 = 0x1; //00001
     top->rd = 0x3; //dont care, register not being rewritten
-    top->regFileWen = 0; //not needed
-    top->aluSrc = 0; //not needed, we are selecting register file
-    top->ImmOp = 0xFF;//dont care
-    top->aluCtrl = 1; //for bne
+    top->reg_write = 0; //not needed
+    top->alu_src = 0; //not needed, we are selecting register file
+    top->imm_op = 0xFF;//dont care
+    top->alu_ctrl = 1; //for bne
     
 
     for (i=0; i<300; i++){
