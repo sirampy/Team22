@@ -1,6 +1,6 @@
 module control_top #(
-    param INSTR_WIDTH = 32;
-    param REG_ADDR_WIDTH = 5;
+    parameter INSTR_WIDTH = 32,
+    parameter REG_ADDR_WIDTH = 5
 )(
     input  logic [15:0]   pc,           // program counter
     input  logic          eq,           // equal/zero flag

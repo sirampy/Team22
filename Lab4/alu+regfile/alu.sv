@@ -1,5 +1,5 @@
 module alu #(
-    param DATA_WIDTH = 32;
+    parameter DATA_WIDTH = 32
 )(
     input  logic [DATA_WIDTH-1:0]    aluOp1,      // RD1 
     input  logic [DATA_WIDTH-1:0]    aluOp2,      // either RD2 or imm
@@ -14,7 +14,7 @@ always_comb
         3'b001: sum = aluOp1 - aluOp2;              // subtract
         3'b010: sum = aluOp1 & aluOp2;              // and
         3'b010: sum = aluOp1 | aluOp2;              // or
-        3'b101: sum = (aluOp1-aluOp2 < 0) ? 1 : 0;  // slt
+        3'b101: sum = (aluOp1-aluOp2 < 0) ? {{DATA_WIDTH-1{1'b0}}, 1'b1} : {DATA_WIDTH{1'b0}};  // slt
         default: sum = 0;
     endcase    
 

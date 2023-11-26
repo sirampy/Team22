@@ -1,6 +1,6 @@
 module alu_top #(
-    param ADDR_WIDTH = 5;
-    param DATA_WIDTH = 32;
+    parameter ADDR_WIDTH = 5,
+    parameter DATA_WIDTH = 32
 )(
     input logic                     clk,           // clock
     input logic [ADDR_WIDTH-1:0]    rs1,           // address of register 1
@@ -13,23 +13,23 @@ module alu_top #(
     output logic                    eq             // equal flag
 );
 
-logic [DATA_WIDTH-1:0] alu_op2;   // input 1
+logic [DATA_WIDTH-1:0] alu_op1;   // input 1
 logic [DATA_WIDTH-1:0] alu_op2;   // input 2
 logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
 logic [DATA_WIDTH-1:0] reg_op2;   // second register
 
 reg_file regfile (
     .clk (clk),
-    .AD1 (rs1),
-    .AD2 (rs2),
-    .AD3 (rd),
-    .WE3 (reg_write), //write enable
-    .WD3 (alu_out), //write data
-    .RD1 (alu_op2),
-    .RD2 (reg_op2)
+    .ad1 (rs1),
+    .ad2 (rs2),
+    .ad3 (rd),
+    .we3 (reg_write), //write enable
+    .wd3 (alu_out), //write data
+    .rd1 (alu_op2),
+    .rd2 (reg_op2)
 );
 
-alu_op2 = alu_src ? reg_op2 : imm_op;
+assign alu_op2 = alu_src ? reg_op2 : imm_op;
 
 alu alu (
     .aluOp1 (alu_op1),
