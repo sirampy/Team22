@@ -24,9 +24,9 @@ logic [INSTR_WIDTH-1:0]   instr;    //instruction from mem
 logic [1:0]               imm_src;  // imm select - depends on if I/S/B type
 logic [1:0]               alu_op;   // select alu operation
 
-assign rs1 = instr[19:15]
-assign rs2 = instr[24:20]
-assign rd = instr[11:7]
+assign rs1 = instr[19:15];
+assign rs2 = instr[24:20];
+assign rd = instr[11:7];
 
 instr_mem instr_mem (
     .a (pc),

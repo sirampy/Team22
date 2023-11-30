@@ -7,13 +7,13 @@ module alu_decoder (
 );
 
 logic [1:0] op5_funct7;
-assign op5_funct7 = {op5, funct7}
+assign op5_funct7 = {op5, funct7};
 
 always_comb
     case (alu_op)
         2'b00: alu_control = 000;       //add for lw, sw
         2'b01: alu_control = 001;       //subtract for beq
-        2'b10: case (funct3):
+        2'b10: case (funct3)
             3'b000: begin
                 if (op5_funct7 != 11) alu_control = 000;  //add
                 else alu_control = 001;                   //subtract
