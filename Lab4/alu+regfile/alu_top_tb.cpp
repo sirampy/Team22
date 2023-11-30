@@ -24,7 +24,7 @@ int main(int argc, char **argv, char **env) {
     top->rs2 = 0x1; //00001
     top->rd = 0x3; //dont care, register not being rewritten
     top->reg_write = 0; //not needed
-    top->alu_src = 0; //not needed, we are selecting register file
+    top->alu_src = 1; //not needed, we are selecting register file
     top->imm_op = 0xFF;//dont care
     top->alu_ctrl = 001; //for beq
     
