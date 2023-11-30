@@ -17,7 +17,7 @@ int main(int argc, char **argv, char **env) {
     tfp->open("alu_top.vcd"); 
 
 
-   //testing bne: rs1=rs2 - works, verified on GTKWave
+   //testing beq: rs1=rs2 - works, verified on GTKWave
     top->clk = 1; //clk is high
     top->rs1 = 0x0; //00000
     top->rs2 = 0x0; //00000
@@ -27,7 +27,7 @@ int main(int argc, char **argv, char **env) {
     top->imm_op = 5; //dont care for this case
     top->alu_ctrl = 001; //for beq
 
-    //testing bne: rs1 = immediate- works, verified on GTKWave
+    //testing beq: rs1 = immediate- works, verified on GTKWave
     top->clk = 1; //clk is high
     top->rs1 = 0x0; //00000
     top->rs2 = 0x5; //dont care for this case
