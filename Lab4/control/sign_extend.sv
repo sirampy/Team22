@@ -2,7 +2,6 @@ module sign_extend #(
     parameter DATA_WIDTH = 32,
               IMM_WIDTH = 12
 )(
-    input logic clk,
     input   [DATA_WIDTH-1:0] instr,
     input   [1:0]       imm_src,
     output reg [IMM_WIDTH-1:0] imm_ext 

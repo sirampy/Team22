@@ -1,8 +1,8 @@
 rm -rf obj_dir
-rm -f sign_extend.vcd
+rm -f control_top.vcd
 
-verilator -Wall --cc --trace  sign_extend.sv --exe sign_ext_tb.cpp
+verilator -Wall --cc --trace  control_top.sv --exe control_tb.cpp
 
-make -j -C obj_dir/ -f Vsign_extend.mk Vsign_extend
+make -j -C obj_dir/ -f Vcontrol_top.mk Vcontrol_top
 
-obj_dir/Vsign_extend
+obj_dir/Vcontrol_top

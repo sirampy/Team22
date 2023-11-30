@@ -7,7 +7,8 @@ module main_decoder (
     output logic          alu_src,      // select rd2 or imm
     output logic [1:0]    imm_src,      // imm select
     output logic          reg_write,    // register write enable
-    output logic [1:0]    alu_op        // to input into alu decoder
+    output logic [1:0]    alu_op,        // to input into alu decoder
+    output logic          branch
 );
 
 always_comb
