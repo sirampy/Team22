@@ -26,7 +26,7 @@ int main(int argc, char **argv, char **env) {
     top->reg_write = 0; //not needed
     top->alu_src = 0; //not needed, we are selecting register file
     top->imm_op = 0xFF;//dont care
-    top->alu_ctrl = 001; //for bne
+    top->alu_ctrl = 001; //for beq
     
 
     for (i=0; i<300; i++){
