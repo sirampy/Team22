@@ -6,7 +6,7 @@ then
     printf "Invalid usage! Please do:\n"
     printf "./run.sh [lab_directory] [top_sv_file] [include_directories... ]\n"
     printf "e.g. ./run.sh Lab4 top Dir1 Dir2 Dir3...\n"
-    printf "Please note: Given a top sv file of top.sv, you want your testbench to be top_tb.cpp and the include to be Vtop.h"
+    printf "Please note: Given a top sv file of top.sv, you want your testbench to be top_tb.cpp and the include to be Vtop.h\n"
     exit 1
 fi
 
