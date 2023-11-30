@@ -14,20 +14,28 @@ int main(int argc, char **argv, char **env) {
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("alu_top.vcd"); //C++ executable of the system verilog file
+    tfp->open("alu_top.vcd"); 
 
 
-   //testing bne
-   //expected output: eq = 1, a1 != a0
+   //testing bne: rs1=rs2 - works, verified on GTKWave
     top->clk = 1; //clk is high
-    top->rs1 = 0x1; //00000
-    top->rs2 = 0x1; //00001
+    top->rs1 = 0x0; //00000
+    top->rs2 = 0x0; //00000
     top->rd = 0x3; //dont care, register not being rewritten
     top->reg_write = 0; //not needed
-    top->alu_src = 0; //not needed, we are selecting register file
-    top->imm_op = 0xFF;//dont care
+    top->alu_src = 0;
+    top->imm_op = 5; //dont care for this case
     top->alu_ctrl = 001; //for beq
-    
+
+    //testing bne: rs1 = immediate- works, verified on GTKWave
+    top->clk = 1; //clk is high
+    top->rs1 = 0x0; //00000
+    top->rs2 = 0x5; //dont care for this case
+    top->rd = 0x3; //dont care, register not being rewritten
+    top->reg_write = 0; //not needed
+    top->alu_src = 1;
+    top->imm_op = 5; 
+    top->alu_ctrl = 001; //for beq   
 
     for (i=0; i<300; i++){
 
