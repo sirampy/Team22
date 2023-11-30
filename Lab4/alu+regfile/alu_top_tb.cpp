@@ -25,9 +25,11 @@ int main(int argc, char **argv, char **env) {
     top->reg_write = 0; //not needed
     top->alu_src = 0;
     top->imm_op = 5; //dont care for this case
+    top->alu_src = 1; 
+    top->imm_op = 0xFF;//dont care
     top->alu_ctrl = 001; //for beq
 
-    //testing beq: rs1 = immediate- works, verified on GTKWave
+    //testing beq: rs1 = immediate - works, verified on GTKWave
     top->clk = 1; //clk is high
     top->rs1 = 0x0; //00000
     top->rs2 = 0x5; //dont care for this case

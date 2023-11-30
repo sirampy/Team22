@@ -29,7 +29,7 @@ reg_file regfile (
     .rd2 (reg_op2)
 );
 
-assign alu_op2 = alu_src ? reg_op2 : imm_op;
+assign alu_op2 = alu_src ? imm_op : reg_op2; //1 for imm_op and 0 for reg_op2
 
 alu alu (
     .aluOp1 (alu_op1),
