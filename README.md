@@ -1,5 +1,4 @@
 # Team 22 - RISC-V RV32I Processor
-## Joint Statement
 
 ### Group Details
 ---
@@ -63,7 +62,8 @@ currently incomplete list of modules:
 
 LEGEND :       `x` = full/main responsibility;  `p` = partial contribution; 
 
-### Explanation of 
+
+## Joint Statement 
 as a team, we encounted some troubles when it came to creating the top file and putting the whole CPU together; as we had not previously discussed naming conventions. However, with a short discussion and a few simple changes these problems were easily overcome.
 
 
