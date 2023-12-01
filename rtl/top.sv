@@ -72,6 +72,14 @@ module top #(
         .pc(pc)
     );
 
+    // pipelining flipflops
+    // to-do: need to add wires for all pipelined inputs/outputs
+    // so that the signals pass through the flip flops one at a time  
+
+    flip_flop1 ff1 (
+        .clk_i(clk),
+        
+    )
 
 
 endmodule
