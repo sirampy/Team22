@@ -17,7 +17,7 @@ module flip_flop3 #(
 
     // main outputs
     output logic [DATA_WIDTH-1:0]    alu_resultM_o, // alu output (memory)
-    output logic [ADDRESS_WIDTH-1:0] pcM_o,         // pc (m)
+    output logic                     write_dataM_o, // data mem write enable (m)
     output logic [11:7]              rdM_o,         // write register address (m)
     output logic [ADDRESS_WIDTH-1:0] pc_plus4M_o    // pc+4 (m)
 
@@ -30,7 +30,7 @@ module flip_flop3 #(
 always_ff @(posedge clk)
     begin
         alu_resultE_i <= alu_resultM_o;
-        write_dataE_i <= pcM_o;
+        write_dataE_i <= write_dataM_o;
         rdE_i         <= rdM_o;
         pc_plus4E_i   <= pc_plus4M_o;
         reg_writeE_i  <= reg_writeM_o;
