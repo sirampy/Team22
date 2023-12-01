@@ -37,7 +37,7 @@ Note: Testbenches written by Person 1, but all other members utilize and change 
 * Mateusv:
     * Cache
 
-*Sophie:
+* Sophie:
     * Control Unit
     * PC
 
