@@ -18,6 +18,9 @@ module control_top #(
     output logic [1:0]    alu_ctrl,     // input to alu
     output logic [31:0]   imm_op,       //sign extended imm
     output logic [1:0]    imm_src,
+    output logic [INSTR_WIDTH-1:0]   instr,    //instruction from mem
+    output logic [1:0]               alu_op,   // select alu operation
+
 
 // parts of instruction
     output logic [REG_ADDR_WIDTH-1:0]    rs1,
@@ -25,9 +28,8 @@ module control_top #(
     output logic [REG_ADDR_WIDTH-1:0]    rd
 );
 
-logic [INSTR_WIDTH-1:0]   instr;    //instruction from mem
+
 //logic [1:0]               imm_src;  // imm select - depends on if I/S/B type
-logic [1:0]               alu_op;   // select alu operation
 
 assign rs1 = instr[19:15];
 assign rs2 = instr[24:20];
