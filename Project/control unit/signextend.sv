@@ -1,6 +1,6 @@
 module signextend(
     input logic [1:0] imm_src,
-    input logic [31:0] intr,
+    input logic [31:7] intr,
     output logic [31:0] imm_exit
 
 )
