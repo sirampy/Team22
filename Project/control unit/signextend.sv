@@ -1,9 +1,9 @@
 module signextend(
     input logic [1:0] imm_src,
-    input logic [31:7] intr,
+    input logic [31:7] instr,
     output logic [31:0] imm_exit
 
-)
+);
 always_comb
     case(imm_src)
         default : imm_exit = 32'b0; 
