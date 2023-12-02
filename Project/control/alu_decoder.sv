@@ -19,6 +19,6 @@ module aludecoder(
               3'b111: alu_control=010;  //and for and
             endcase
 
-    end case
+    endcase
 
 endmodule
