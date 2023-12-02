@@ -1,4 +1,4 @@
-#include "Vsignextend.h"
+#include "Vsign_extend.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include <iostream>
@@ -9,7 +9,7 @@ int main(int argc, char **argv, char **env) {
     int clk;
 
     Verilated::commandArgs(argc, argv);
-    Vsignextend* top = new Vsignextend;
+    Vsign_extend* top = new Vsign_extend;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
