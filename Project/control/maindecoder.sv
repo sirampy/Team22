@@ -54,6 +54,23 @@ case(op)
                 result_src = 1'b0;
                 branch = 1'b1;
                 alu_op = 2'b01;
+    7'b1101111: //jump and link instruction
+                reg_write = 1'b1;
+                imm_src = 2'b11;
+                alu_src = 1'b0;
+                mem_write = 1'b0;
+                result_src = 1'b0;
+                branch = 1'b1;
+                alu_op = 2'b00;
+    7'b0110111: //load upper immediate
+                reg_write = 1'b1;
+                imm_src = 3'b100;
+                alu_src = 1'b1;
+                mem_write = 1'b0;
+                result_src = 1'b0;
+                branch = 1'b1;
+                alu_op = 2'b11;
+
 end case
 assign pc_src= branch&zero;
 
