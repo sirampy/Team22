@@ -10,9 +10,14 @@ void printBinary(int value, int bits) {
     }
 }
 
+void printOpBit5(Valu_decoder* top) {
+    std::cout << "op[5]: " << ((top->op >> 5) & 1) << std::endl;
+}
+
+
 void verify(Valu_decoder* top){
     std::cout << "FUNCT3:    " << std::bitset<3>(top->funct3)
-    << "\nFUNCT7:    " << std::bitset<1>(top->funct7) 
+    << "\nOPFUNCT7:    " << std::bitset<2>(top->opfunct7) 
     << "\nALU_OP:    " << std::bitset<2>(top->alu_op) << std::endl;
     std::cout << "ALU_CONTROL: ";
     printBinary(top->alu_control, 3);
@@ -46,18 +51,18 @@ int main(int argc, char **argv, char **env) {
 
     for (int funct3 : funct3_cases) {
         for (int alu_op : alu_op_cases) {
-            for (int funct7 = 0; funct7 <= 1; ++funct7) {
+            for (int opfunct7 = 0; opfunct7 <= 1; ++opfunct7) {
                 top->funct3 = funct3;
-                top->funct7 = funct7;
+                top->opfunct7 = opfunct7;
                 top->alu_op = alu_op;
+                top->op = 0b0110011;
 
                 top->eval();
                 verify(top);
+                printOpBit5(top);
             }
         }
     }
-
-
 
     if (Verilated::gotFinish()) 
         exit(0); // exit if finish OR 'q' pressed
