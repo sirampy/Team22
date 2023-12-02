@@ -3,7 +3,7 @@ module aludecoder(
     input  logic          funct7,
     input  logic [1:0]    alu_op,
     input  logic[6:0]     op,
-    output logic[2:0]     alucode    
+    output logic[2:0]     alu_control    
     );
  always_comb
     case (alu_op)   
