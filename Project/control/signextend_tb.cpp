@@ -14,7 +14,7 @@ int main(int argc, char **argv, char **env) {
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("signextend.vcd");
+    tfp->open("sign_extend.vcd");
 
     //test case for 2'b01, imm_src = 1;
     /*top->instr = 0x12345678; //test case value
