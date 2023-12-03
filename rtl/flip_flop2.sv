@@ -9,7 +9,7 @@ module flip_flop2 #(
     input  logic [DATA_WIDTH-1:0]    rd2D_i,      // read register 2 (d)
     input  logic [ADDRESS_WIDTH-1:0] pcD_i,       // pc (d)
     input  logic [11:7]              rdD_i,       // write register address (d)
-    input  logic [DATA_WIDTH-1:0] imm_extD_i,     //imm extend (d)
+    input  logic [DATA_WIDTH-1:0]    imm_extD_i,  // imm extend (d)
     input  logic [ADDRESS_WIDTH-1:0] pc_plus4D_i, // pc+4 (d)
 
     // control unit inputs
@@ -24,8 +24,9 @@ module flip_flop2 #(
     // main outputs
     output logic [DATA_WIDTH-1:0]    rd1E_o,    // read register 1 (execute)
     output logic [DATA_WIDTH-1:0]    rd2E_o,    // read register 2 (e)
-    output logic [ADDRESS_WIDTH-1:0] pcE_o,       // pc (e)
-    output logic [11:7]              rdE_o,       // write register address (e)
+    output logic [ADDRESS_WIDTH-1:0] pcE_o,     // pc (e)
+    output logic [11:7]              rdE_o,     // write register address (e)
+    output logic [DATA_WIDTH-1:0]    imm_extE_o,
     output logic [ADDRESS_WIDTH-1:0] pc_plus4E_o  // pc+4 (e)
 
     // control unit outputs
@@ -44,6 +45,7 @@ always_ff @(posedge clk)
         rd2E_o      <= rd2D_i;
         pcE_o       <= pcD_i;
         rdE_o       <= rdD_i;
+        imm_extD_i  <= imm_extE_o;
         pc_plus4E_o <= pc_plus4D_i;
         reg_writeD_i  <= reg_writeE_o;
         result_srcD_i <= result_srcE_o;

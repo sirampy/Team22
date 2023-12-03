@@ -10,7 +10,7 @@ module hazard_unit #(
     input logic reg_writeW_i, // write enable (w)
 
     output logic [1:0] forward_aE_o, // forward select for register 1 (execute)
-    output logic [1:0] forward_bE_o // forward select for register 2
+    output logic [1:0] forward_bE_o // forward select for register 2 (execute)
 );
 
     always_comb begin
