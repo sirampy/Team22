@@ -8,10 +8,18 @@ module hazard_unit #(
     input  logic [ADDR_WIDTH-1:0] rdW_i,        // write register address (writeback)
     input  logic                  reg_writeM_i, // write enable (m)
     input  logic                  reg_writeW_i, // write enable (w)
+    input  logic                  result_srcE_i,
+    input  logic [19:15]          rs1D_i,       // to check for lw
+    input  logic [24:20]          rs2D_i,       // to check for lw
 
     output logic [1:0] forward_aE_o, // forward select for register 1 (execute)
-    output logic [1:0] forward_bE_o  // forward select for register 2 (execute)
+    output logic [1:0] forward_bE_o, // forward select for register 2 (execute)
+    output logic       stallF_o,     // stall fetch register (ff0)
+    output logic       stallD_o,     // stall decode register (ff1)
+    output logic       flushE_o,     // clear execute register (ff2)
 );
+
+    logic lw_stall;
 
     always_comb begin
         // for rs1:
@@ -25,6 +33,10 @@ module hazard_unit #(
         if (((rs2E_i == rdM_i) & reg_writeM_i) & (rs2E_i != 0)) forward_bE_o = 2'b10;
         else if (((rs2E_i == rdW_i) & reg_writeW_i) & (rs2E_i != 0)) forward_bE_o = 2'b01;
         else forward_bE_o = 2'b00;
+
+        // dealing with lw stalls
+        lw_stall = result_srcE_i & ((rs1D_i == rdE_i) | (rs2D_i == rdE_i));
+        stallF_o = stallD_o = flushE_o = lw_stall;
     end
 
 endmodule

@@ -9,6 +9,7 @@ module flip_flop3 #(
     input logic                      write_dataE_i, // data mem write enable (e)
     input logic [11:7]               rdE_i,         // write register address (e)
     input logic [ADDRESS_WIDTH-1:0]  pc_plus4E_i,
+    input logic                      clr,           // clears execute register
 
     // control unit inputs
     input logic reg_writeE_i,
@@ -29,13 +30,24 @@ module flip_flop3 #(
 
 always_ff @(posedge clk)
     begin
-        alu_resultE_i <= alu_resultM_o;
-        write_dataE_i <= write_dataM_o;
-        rdE_i         <= rdM_o;
-        pc_plus4E_i   <= pc_plus4M_o;
-        reg_writeE_i  <= reg_writeM_o;
-        result_srcE_i <= result_srcM_o;
-        mem_writeE_i  <= mem_writeM_o;
+        if (clr) begin // reset
+            alu_resultM_o <= 0;
+            write_dataM_o <= 0;
+            rdM_o         <= 0;
+            pc_plus4M_o   <= 0;
+            reg_writeM_o  <= 0;
+            result_srcM_o <= 0;
+            mem_writeM_o  <= 0;
+        end
+        else begin
+            alu_resultM_o <= alu_resultE_i;
+            write_dataM_o <= write_dataE_i;
+            rdM_o         <= rdE_i;
+            pc_plus4M_o   <= pc_plus4E_i;
+            reg_writeM_o  <= reg_writeE_i;
+            result_srcM_o <= result_srcE_i;
+            mem_writeM_o  <= mem_writeE_i;
+        end
     end
 
 endmodule

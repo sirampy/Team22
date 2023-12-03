@@ -4,6 +4,7 @@ module flip_flop1 #(
               DATA_WIDTH = 32
 )(
     input  logic                     clk_i,       // clock
+    input  logic                     en,          //stall enable
     input  logic [DATA_WIDTH-1:0]    rd_i,        // rd from instr mem
     input  logic [ADDRESS_WIDTH-1:0] pcF_i,       // pc (fetch)
     input  logic [ADDRESS_WIDTH-1:0] pc_plus4F_i, // pc+4 (fetch)
@@ -15,9 +16,11 @@ module flip_flop1 #(
 
 always_ff @(posedge clk)
     begin
+        if (!en) begin
         instrD_o <= rd_i;
         pcD_o <= pcF_i;
         pc_plus4D_o <= pc_plus4F_i;
+        end
     end
 
 endmodule
