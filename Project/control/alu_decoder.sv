@@ -1,10 +1,11 @@
-module aludecoder( 
+module alu_decoder( 
     input  logic [2:0]    funct3,
     input  logic          funct7,
     input  logic [1:0]    alu_op,
     input  logic[6:0]     op,
-    output logic[2:0]     alucode    
+    output logic[2:0]     alu_control    
     );
+  
  always_comb
     case (alu_op)   
         2'b00: alu_control = 000;  //add for sw,lw
@@ -19,6 +20,6 @@ module aludecoder(
               3'b111: alu_control=010;  //and for and
             endcase
 
-    end case
+    endcase
 
 endmodule
