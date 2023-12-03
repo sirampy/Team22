@@ -11,9 +11,9 @@ module alu_decoder(
         2'b00: alu_control_o = 000;  //add for sw,lw
         2'b01: alu_control_o = 001;  //subtract for beq
         2'b10:
-            case(funct3)
+            case(funct3_i)
               3'b000:
-                if (op[5]==1 & funct7==1) 
+                if (op_i[5]==1 & funct7_i==1) 
                 alu_control_o = 4'b0001;  //subtract for sub
                 else alu_control_o=4'b0000;  //add
               3'b010: alu_control_o=4'b0101;  //slt
@@ -22,10 +22,9 @@ module alu_decoder(
               3'b001: alu_control_o=4'b0100; //sll
               3'b101: if(funct7_i == 0) alu_control_o = 4'b0110 //srl
               else alu_control_o = 4'b0110; //sra
-              3'b100: alu_control_o = 4'b1001;
-
+              3'b100: alu_control_o = 4'b1001; //xor
+              default: alu_control_o = 4'b0000;
             endcase
-
+        default: alu_control_o = 4'b0000; // default case for alu_op_i        
     endcase
-
 endmodule
