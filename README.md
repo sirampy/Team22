@@ -22,13 +22,13 @@ Main Sections
 Note: Testbenches written by Person 1, but all other members utilize and change testbenches as needed when testing their own portion
 
 ### CPU tasks allocations (main responsibilities):
-**Alex:** ALU, Data Mem, Implement F1 Lights algorithm
+**Alex:** Cache 
 
 **Beth:** Pipelining
 
 **Dell:** Testbench and verification of design
 
-**Mateusv:** Cache
+**Mateusv:** ALU, Data Mem, Implement F1 Lights algorithm
 
 **Sophie:** Control Unit, PC
 
