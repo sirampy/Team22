@@ -15,8 +15,10 @@ module alu_top #(
 
 logic [DATA_WIDTH-1:0] alu_op1;   // input 1
 logic [DATA_WIDTH-1:0] alu_op2;   // input 2
-logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
+logic [DATA_WIDTH-1:0] alu_result;   // output of ALU
 logic [DATA_WIDTH-1:0] reg_op2;   // second register
+logic [DATA_WIDTH-1:0] read_data; // data_mem output
+logic [DATA_WIDTH-1:0] result;    // data_mem or alu output
 
 reg_file regfile (
     .clk_i (clk_i),
@@ -24,7 +26,7 @@ reg_file regfile (
     .ad2_i (rs2_i),
     .ad3_i (rd_i),
     .we3_i (reg_write_i), //write enable
-    .wd3_i (alu_out), //write data
+    .wd3_i (result), //write data
     .rd1_o (alu_op1),
     .rd2_o (reg_op2)
 );
@@ -35,8 +37,17 @@ alu alu (
     .aluOp1_i (alu_op1),
     .aluOp2_i (alu_op2),
     .aluCtrl_i (alu_ctrl_i),
-    .sum_o (alu_out),
+    .sum_o (alu_result),
     .eq_o (eq_o)
 );
+
+data_mem data_mem (
+    .a_i(alu_result),
+    .wd_i('b0), // not yet used
+    .wen_i(1'b0), // not yet used - tie down to disable writing
+    .d_o(read_data)
+)
+
+result = result_src_o ? read_data : alu_result;
 
 endmodule
