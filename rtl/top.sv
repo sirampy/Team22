@@ -212,6 +212,9 @@ module top #(
         .result_srcW_o (result_srcW)
     );
 
+    logic [1:0] forward_aE;
+    logic [1:0] forward_bE;
+
     hazard_unit hazard_unit (
         .rs1E_i (rs1E), // register 1 address (e)
         .rs2E_i (rs2E), // resister 2 address (e)
@@ -219,8 +222,21 @@ module top #(
         .rdW_i (rdW),
         .reg_writeM_i (reg_writeM),
         .reg_writeW_i (reg_writeW),
-        .forward_aE_o (), // forward select for register 1 (e)
-        .forward_bE_o () // forward select for register 2 (e)
+        .forward_aE_o (forward_aE), // forward select for register 1 (e)
+        .forward_bE_o (forward_bE) // forward select for register 2 (e)
     )
+
+    always_comb begin
+        case (forward_aE)
+            2'b00: alu_op1 = rd1E; // value of register 1 (no fowarding)
+            2'b01: alu_op1 = resultW; // final result of writeback
+            2'b10: alu_op1 = alu_resultM; // alu result of mem
+        endcase
+        case (forward_bE)
+            2'b00: alu_op2 = rd2E; // value of register 1 (no fowarding)
+            2'b01: alu_op2 = resultW; // final result of writeback
+            2'b10: alu_op2 = alu_resultM; // alu result of mem
+        endcase
+    end
 
 endmodule
