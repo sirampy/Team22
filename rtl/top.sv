@@ -64,11 +64,13 @@ module top #(
     );
 
     //program counter
-    pc_top pc_module (
-        .imm_op(imm_op),
+    assign pc_plus4 = pc + 4;
+    assign next_pc = pc_src ? pc+imm_op : pc_plus4;
+
+    pc_reg pc_module (
         .clk(clk),
         .rst(rst),
-        .pc_src(pc_src),
+        .next_pc(next_pc),
         .pc(pc)
     );
 
@@ -83,7 +85,7 @@ module top #(
         .clk_i (clk),
         .rd_i (rd),     // read instr mem
         .pcF_i (pc),
-        .pc_plus4F_i (pc),  //FIX THIS PART - split up pc top
+        .pc_plus4F_i (pc_plus4), 
         .instrD_o (instrD),
         .pcD_o (pcD),
         .pc_plus4D_o ()
