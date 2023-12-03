@@ -1,0 +1,1 @@
+this folder should contain data.mem and program.mem, which will be loaded into the respective memories on simulation.
