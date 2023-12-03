@@ -8,8 +8,12 @@ module alu_decoder(
   
  always_comb
     case (alu_op)   
-        2'b00: alu_control_o = 000;  //add for sw,lw
-        2'b01: alu_control_o = 001;  //subtract for beq
+        2'b00: alu_control_o = 4'b0000;  //add for sw,lw
+        2'b01: 
+            case(funct3_i)
+            3'b000: alu_control_o = 4'b0001; //beq
+            //could add more b-type instructions
+            endcase
         2'b10:
             case(funct3_i)
               3'b000:
