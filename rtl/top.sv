@@ -1,6 +1,7 @@
 module top #(
     parameter ADDR_WIDTH = 5,  //address width for reg
               DATA_WIDTH = 32, //
+              PC_WIDTH = 16
 )(
     input logic clk,      
     input logic rst,
@@ -71,39 +72,37 @@ module top #(
         .pc(pc)
     );
 
-    // pipelining flipflops
-    // to-do: need to add wires for all pipelined inputs/outputs
-    // so that the signals pass through the flip flops one at a time  
+    // pipelining 
 
     // fetch stage:
-    logic [] pcD; 
-    logic [] instrD;
-    logic pc_plus4D;
+    logic [PC_WIDTH-1:0] pcD; 
+    logic [PC_WIDTH-1:0] instrD;
+    logic [PC_WIDTH-1:0] pc_plus4D;
 
     flip_flop1 ff1 (
         .clk_i (clk),
         .rd_i (rd),     // read instr mem
         .pcF_i (pc),
-        .pc_plus4F_i (pc),  //IDK FIX THIS PART
+        .pc_plus4F_i (pc),  //FIX THIS PART - split up pc top
         .instrD_o (instrD),
         .pcD_o (pcD),
         .pc_plus4D_o ()
     );
  
     // decode stage:
-    logic rd1E;
-    logic rd2E;
-    logic pcE;
-    logic rdE;
-    logic imm_extE;
-    logic pc_plus4E;
+    logic [ADDR_WIDTH-1:0] rd1E;
+    logic [ADDR_WIDTH-1:0] rd2E;
+    logic [PC_WIDTH-1:0] pcE;
+    logic [ADDR_WIDTH-1:0] rdE;
+    logic [DATA_WIDTH-1:0] imm_extE;
+    logic [PC_WIDTH-1:0] pc_plus4E;
 
     logic reg_writeE;
     logic result_srcE;
     logic mem_writeE;
     logic jumpE;
     logic branchE;
-    logic alu_ctrlE;
+    logic [1:0] alu_ctrlE;
     logic alu_srcE;
 
     flip_flop1 ff2 (
@@ -142,10 +141,10 @@ module top #(
 
 
     // execute stage:
-    logic alu_resultM;
+    logic [DATA_WIDTH-1:0] alu_resultM;
     logic write_dataM;
-    logic rdM;
-    logic pc_plus4M;
+    logic [ADDR_WIDTH-1:0] rdM;
+    logic [PC_WIDTH-1:0] pc_plus4M;
 
     logic reg_writeM;
     logic result_srcM;
@@ -170,11 +169,11 @@ module top #(
     );
 
     // memory stage:
-    logic alu_resultW;
+    logic [DATA_WIDTH-1:0] alu_resultW;
     logic read_dataW;
-    logic rdW;
+    logic [ADDR_WIDTH-1:0] rdW;
     logic write_dataM_o;
-    logic pc_plus4W;
+    logic [PC_WIDTH-1:0] pc_plus4W;
 
     logic reg_writeW;
     logic result_srcW;
