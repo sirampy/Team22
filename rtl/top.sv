@@ -32,17 +32,33 @@ module top #(
     logic [15:0] next_pc;
     logic [DATA_WIDTH-1:0] instr;
 
-    //alu+regfile
-    alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
-        .clk(clk),
-        .rs1(rs1),
-        .rs2(rs2),
-        .rd(rd),
-        .reg_write(reg_write),
-        .imm_op(imm_op),
-        .alu_src(alu_src),
-        .alu_ctrl(alu_ctrl),
-        .eq(eq)
+    logic [DATA_WIDTH-1:0] alu_op1;   // input 1
+    logic [DATA_WIDTH-1:0] alu_op2;   // input 2
+    logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
+    logic [DATA_WIDTH-1:0] reg_op2;   // second register
+
+    // register file
+    reg_file regfile (
+        .clk (clk),
+        .ad1 (rs1),
+        .ad2 (rs2),
+        .ad3 (rd),
+        .we3 (reg_write), //write enable
+        .wd3 (alu_out), //write data
+        .rd1 (alu_op2),
+        .rd2 (reg_op2)
+    );
+
+    // determines second input
+    assign alu_op2 = alu_src ? imm_op : reg_op2; //1 for imm_op and 0 for reg_op2
+
+    // alu
+    alu alu (
+        .aluOp1 (alu_op1),
+        .aluOp2 (alu_op2),
+        .aluCtrl (alu_ctrl),
+        .sum (alu_out),
+        .eq (eq)
     );
 
     //control: 
@@ -154,7 +170,7 @@ module top #(
 
     flip_flop1 ff3 (
         .clk_i(clk),
-        .alu_resultE_i (alu_out), //NOTE: need to break up alu top to include this
+        .alu_resultE_i (alu_out),
         .write_dataE_i (rd2E),
         .rdE_i (rdE),
         .pc_plus4E_i (pc_plus4E),
