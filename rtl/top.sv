@@ -81,5 +81,15 @@ module top #(
         
     )
 
+    hazard_unit hazard_unit (
+        .rs1E_i (rs1E), // register 1 address (e)
+        .rs2E_i (rs2E), // resister 2 address (e)
+        .rdM_i (rdM),
+        .rdW_i (rdW),
+        .reg_writeM_i (reg_writeM),
+        .reg_writeW_i (reg_writeW),
+        .forward_aE_o (), // forward select for register 1 (e)
+        .forward_bE_o () // forward select for register 2 (e)
+    )
 
 endmodule
