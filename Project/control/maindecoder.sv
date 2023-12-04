@@ -1,19 +1,19 @@
 module maindecoder(
-    input logic [6:0] op,
-    input logic zero,
-    output logic result_src,
-    output logic mem_write,
-    output logic alu_src,
-    output logic[1:0] imm_src,
-    output logic reg_write,
-    output logic [1:0] alu_op,
-    output logic  pc_src
+    input logic [6:0]   op_i,
+    input logic     zero_i,
+    output logic    result_src_o,
+    output logic    mem_write_o,
+    output logic    alu_src_o,
+    output logic[2:0]   imm_src_o,
+    output logic    reg_write_o,
+    output logic [1:0]  alu_op_o,
+    output logic    pc_src_o,
+    output logic    branch_o
 );
-logic branch;
 always_comb
 case(op)
     default: begin
-                reg_write = 1'b0;
+                reg_write = 1'b0; //default case
                 imm_src = 2'b00;
                 alu_src = 1'b0;
                 mem_write = 1'b0;
@@ -64,7 +64,7 @@ case(op)
                 alu_op = 2'b00;
     7'b0110111: //load upper immediate
                 reg_write = 1'b1;
-                imm_src = 3'b100;
+                imm_src = ;
                 alu_src = 1'b1;
                 mem_write = 1'b0;
                 result_src = 1'b0;
