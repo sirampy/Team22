@@ -1,6 +1,6 @@
 module top #(
     parameter ADDR_WIDTH = 5,  //address width for reg
-              DATA_WIDTH = 32, //
+              DATA_WIDTH = 32,
               PC_WIDTH = 16
 )(
     input logic clk,      
@@ -16,20 +16,18 @@ module top #(
 
     // instr mem signals
     logic [DATA_WIDTH-1:0] instr;
-    logic [31:0] imm_op; // idk what this is - NOTE: CHECK CTRL UNIT
     logic [11:0] imm_ext;
 
     // reg file signals
-    logic reg_write; // write enable - NPTE TO SELF: make it regwrite (w)
-    logic [DATA_WIDTH-1:0] reg_op1; // contents of register 1 - NOTE might need to rename stuff
+    logic reg_write; // write enable
+    logic [DATA_WIDTH-1:0] reg_op1; // contents of register 1
     logic [DATA_WIDTH-1:0] reg_op2; // contents of register 2
 
     // control signals
-    // NOTE TO SELF - change width of this for everything else
     logic [1:0] result_src; // select what data to write
     logic mem_write;
-    logic jump; // NOTE need to create logic 
-    logic branch; // branch ''
+    logic jump;
+    logic branch;
     logic [2:0] alu_ctrl;
     logic alu_src;
     logic [1:0] imm_src;
@@ -43,9 +41,6 @@ module top #(
     // data mem contents
     logic read_data; 
 
-    // pipelining signals
-    logic stallF;
-
     logic [PC_WIDTH-1:0] pcD; 
     logic [PC_WIDTH-1:0] instrD;
     logic [PC_WIDTH-1:0] pc_plus4D;
@@ -58,7 +53,7 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4E;
 
     logic reg_writeE;
-    logic result_srcE;
+    logic [1:0] result_srcE;
     logic mem_writeE;
     logic jumpE;
     logic branchE;
@@ -162,22 +157,6 @@ module top #(
         .alu_srcE_o (alu_srcE),
     );
 
-    logic alu_op2_a; // to use for alu_op2 mux
-
-    // mux for forwarding
-    always_comb begin
-        case (forward_aE)
-            2'b00: alu_op1 = rd1E;
-            2'b01: alu_op1 = resultW;
-            2'b10: alu_op1 = alu_resultM;
-        endcase
-        case (forward_bE)
-            2'b00: alu_op2_a = rd2E;
-            2'b01: alu_op2_a = resultW;
-            2'b10: alu_op2_a = alu_resultM;
-        endcase
-    end
-
     // alu
     alu alu (
         .aluOp1_i (alu_op1),
@@ -192,7 +171,6 @@ module top #(
 
     // mux for alu_op2
     assign alu_op2 = alu_src ? imm_ext : reg_op2; // 1 for imm_ext and 0 for reg_op2
- 
 
     // execute stage:
     logic [DATA_WIDTH-1:0] alu_resultM;
@@ -201,14 +179,14 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4M;
 
     logic reg_writeM;
-    logic result_srcM;
+    logic [1:0] result_srcM;
     logic mem_writeM;
 
     flip_flop1 ff3 (
         // main input
         .clk_i(clk),
         .alu_resultE_i (alu_out),
-        .write_dataE_i (alu_op2_a),
+        .write_dataE_i (reg_op2),
         .rdE_i (rdE),
         .pc_plus4E_i (pc_plus4E),
         // control input
@@ -243,7 +221,7 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4W;
 
     logic reg_writeW;
-    logic result_srcW;
+    logic [1:0] result_srcW;
 
     flip_flop1 ff4 (
         .clk_i(clk),
@@ -268,28 +246,5 @@ module top #(
             2'b10: resultW = pc_plus4W;
         endcase
     end
-
-    // hazard handling
-    logic [1:0] forward_aE;
-    logic [1:0] forward_bE;
-
-    hazard_unit hazard_unit (
-        .rs1E_i (rd1E), // register 1 address (e)
-        .rs2E_i (rd2E), // resister 2 address (e)
-        .rdM_i (rdM),
-        .rdW_i (rdW),
-        .reg_writeM_i (reg_writeM),
-        .reg_writeW_i (reg_writeW),
-        .result_srcE_i (result_srcE),
-        .rs1D_i (rs1),
-        .rs2D_i (rs2),
-        .pc_srcE_i (pc_srcE) // NOTE: pc src logic not implemented yet
-        .forward_aE_o (forward_aE), // forward select for register 1 (e)
-        .forward_bE_o (forward_bE) // forward select for register 2 (e)
-        .stallF_o (stallF),
-        .stallD_o (stallD),
-        .flushD_o (flushD),
-        .flushE_o (flushE) //NOTE: need to update flip flops for this
-    )
 
 endmodule
