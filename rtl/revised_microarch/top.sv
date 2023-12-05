@@ -22,8 +22,8 @@ alu7_t alu7;
 
 src1_t src1;
 src2_t src2;
-wire [4:0]    rs1,
-wire [4:0]    rs2,
+wire [4:0]   rs1,
+wire [4:0]   rs2,
 wire [11:0]  imm12,
 wire [19:0]  imm20,
 
@@ -34,17 +34,26 @@ logic data_read,
 logic data_write, 
 next_pc_t pc_control,
 
-wire [31:0] imm;
-
 // input signals
+wire [31:0] imm;
 logic [31:0] reg_data_1;
 logic [31:0] reg_data_2;
 logic [31:0] alu_src_1;
 logic [31:0] alu_src_2;
 
+// data_mem wrapper
+logic [31:0] bytes_selector_in;
+logic [31:0] bytes_selector_out;
+logic [31:0] data_mem_rd;
+
 // result signals
-logic [31:0] wd3;
+logic [31:0] alu_out;
+logic [31:0] read_data;
+logic jump;
 logic [31:0] result;
+logic [31:0] wd3;
+
+//TODO: pc reg / selection logic + instruction mem
 
 decoder decoder(
     .instr_i(instr),
@@ -76,6 +85,7 @@ sign_extend sign_extend(
     .imm_o(imm)
 );
 
+
 assign wd3 = (srcr == NEXT_PC) ? pc_inced : result;
 
 reg_file reg_file(
@@ -92,10 +102,48 @@ reg_file reg_file(
     .rd2_o(reg_data_2)
 );
 
+
 assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? pc_inced : -1; // last term should never occour
 assign alu_src_2 = (src2 == RS2) ? rs2 : imm;
 
+alu alu(
+    .src1_i(alu_src_1),
+    .src2_i(alu_src_2),
+
+    .alu3_i(alu3),
+    .alu7_i(alu7),
+
+    .result_o(alu_out)
+);
+
+branch_tester branch_tester(
+    .src1_i(rs1),
+    .src2_i(rs2),
+
+    .branch3_i(funct3),
+    .next_pc_i(pc_control),
+
+    .jump_o(jump)
+);
 
 
+data_mem data_mem(
+   .a_i(alu_out),
+   .wd_i(bytes_selector_out),
+   .wen_i(data_write),
+
+   .rd_o(data_mem_rd)
+);
+
+bytes_selector_in = data_read ? data_mem_rd : alu_out;
+
+bytes_selector bytes_selector( // may need 2 of these for pipelining, but for now I think its cool that we can re-use only one of these
+    .load3_i(funct3);
+    .data_i(bytes_selector_in);
+
+    .data_o(bytes_selector_out);
+);
+
+result = data_read ? bytes_selector_out : alu_out;
 
 endmodule
