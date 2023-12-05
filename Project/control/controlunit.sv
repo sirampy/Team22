@@ -7,8 +7,8 @@ module controlunit(
     output logic[1:0] imm_src,
     output logic reg_write,
     output logic  pc_src,
-    output logic[3:0]  alu_control_o
-   
+    output logic[3:0]  alu_control_o,
+    output logic[1:0]  jump
 );
 //split up the instruction into its needed parts
 logic op[6:0] = instr[6:0];

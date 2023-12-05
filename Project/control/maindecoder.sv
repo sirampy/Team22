@@ -21,6 +21,7 @@ case(op)
                 result_src = 1'b0;
                 branch = 1'b0;
                 alu_op = 2'b00;
+                jump = 2'b00;
             end
     7'b0000011: //lw intruction
                 reg_write = 1'b1;
@@ -30,6 +31,7 @@ case(op)
                 result_src = 1'b1;
                 branch = 1'b0;
                 alu_op = 2'b00;
+                jump = 2'b00;
 
     7'b0100011: //sw instruction
                 reg_write = 1'b0;
@@ -39,6 +41,8 @@ case(op)
                 result_src = 1'b0;
                 branch = 1'b0;
                 alu_op = 2'b00;
+                jump = 2'b00;
+
     7'b0110011: //r-type instruction
                 reg_write = 1'b1;
                 imm_src = 2'b000;
@@ -47,6 +51,8 @@ case(op)
                 result_src = 1'b0;
                 branch = 1'b0;
                 alu_op = 2'b10;
+                jump = 2'b00;
+
     7'b1100011: //beq instruction
                 reg_write = 1'b0;
                 imm_src = 3'b010;
@@ -55,6 +61,8 @@ case(op)
                 result_src = 1'b0;
                 branch = 1'b1;
                 alu_op = 2'b01;
+                jump = 2'b00;
+
     7'b0110111: //u-type
                 reg_write = 1'b1;
                 imm_src = 3'b100;
@@ -63,18 +71,30 @@ case(op)
                 result_src = 2'b00; 
                 branch = 1'b0; 
                 alu_op = 2'b11;
+                jump = 2'b00;
+
     7'b1101111: //jump and link instruction
                 reg_write = 1'b1;
-                imm_src = 3'b11;
+                imm_src = 3'b011;
                 alu_src = 1'bx; //dont care as alu isnt used
                 mem_write = 1'b0; //instruction isnt a store
                 result_src = 2'b10; //to write pc+4 into rd
                 branch = 1'b0; //not a branch
                 alu_op = 2'bxx;// dont care as alu isnt used
+                jump = 2'b01;
+    7'b1101111: //jump and link instruction
+                reg_write = 1'b1;
+                imm_src = 3'b111;
+                alu_src = 1'b1; //dont care as alu isnt used
+                mem_write = 1'b0; //instruction isnt a store
+                result_src = 2'b00; //to write pc+4 into rd
+                branch = 1'b0; //not a branch
+                alu_op = 2'b10;// dont care as alu isnt used
+                jump = 2'b10;
 
     
 
-end case
+endcase
 assign pc_src= branch&zero;
 
 endmodule
