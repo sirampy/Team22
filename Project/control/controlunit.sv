@@ -18,6 +18,8 @@ logic alu_op[1:0];
 maindecoder maindecoder(
     .op(op),
     .zero(zero),
+    .branch(branch),
+    .jump(jump),
     .result_src(result_src),
     .mem_write(mem_write),
     .alu_src(alu_src),
@@ -27,7 +29,7 @@ maindecoder maindecoder(
     );
 aludecoder aludecoder
 (
-    .op(op),
+    .op(op[5]),
     .funct3(funct3),
     .funct7(funct7),
     .alu_op(alu_op),

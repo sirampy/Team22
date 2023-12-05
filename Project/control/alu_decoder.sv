@@ -29,6 +29,6 @@ module alu_decoder(
               3'b100: alu_control_o = 4'b1001; //xor
               default: alu_control_o = 4'b0000; 
             endcase
-        default: alu_control_o = 4'b0000; // default case for alu_op_i        
+        default: alu_control_o = 4'b0000; // default case for alu_op_i - jalr
     endcase
 endmodule
