@@ -7,7 +7,8 @@ module controlunit(
     output logic[1:0] imm_src,
     output logic reg_write,
     output logic  pc_src,
-    output logic[2:0]     alucode
+    output logic[3:0]  alu_control_o
+   
 );
 //split up the instruction into its needed parts
 logic op[6:0] = instr[6:0];
@@ -29,11 +30,11 @@ maindecoder maindecoder(
     );
 aludecoder aludecoder
 (
-    .op(op[5]),
-    .funct3(funct3),
-    .funct7(funct7),
-    .alu_op(alu_op),
-    .alu_control(alu_control)
+    .op_i(op_i[5]),
+    .funct3_i(funct3_i),
+    .funct7_i(funct7_i),
+    .alu_op_i(alu_op_i),
+    .alu_control_o(alu_control_o)
 );
 
 
