@@ -21,12 +21,10 @@ initial begin
 end;
 
 always_comb begin
+
+    if (wen_i) rom_array[a_resized] = wd_i;
+
     rd_o = rom_array[a_resized];
-
-    if (wen_i) begin
-        rom_array[a_resized] = wd_i;
-    end
-
 end
 
 endmodule
