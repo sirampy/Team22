@@ -1,7 +1,7 @@
 module alu_decoder( 
     input  logic [2:0]    funct3_i,
     input  logic          funct7_i,
-    input  logic [1:0]    alu_op_i,
+    input  logic[1:0]    alu_op,
     input  logic[6:0]     op_i,
     output logic[3:0]     alu_control_o   //4 bit width to account for other instructions
     );
@@ -24,7 +24,7 @@ module alu_decoder(
               3'b110: alu_control_o=4'b0011;  //or
               3'b111: alu_control_o=4'b0010;  //and
               3'b001: alu_control_o=4'b0100; //sll
-              3'b101: if(funct7_i == 0) alu_control_o = 4'b0110 //srl
+              3'b101: if(funct7_i == 0) alu_control_o = 4'b0110; //srl
               else alu_control_o = 4'b0110; //sra
               3'b100: alu_control_o = 4'b1001; //xor
               default: alu_control_o = 4'b0000; 

@@ -44,10 +44,10 @@ int main(int argc, char **argv, char **env) {
     for(int i = 0; i < 8; i++){
         top->funct3_i = funct3[i];
         if (funct3[i] == 0b101){
-            top->funct7bit_i = 0b1;
+            top->funct7_i = 0b1;
             top->eval();
             display(top);
-            top->funct7bit_i = 0b0;
+            top->funct7_i = 0b0;
         }
         top->eval();
         display(top);
@@ -59,10 +59,10 @@ int main(int argc, char **argv, char **env) {
     for(int i = 0; i < 8; i++){
         top->funct3_i = funct3[i];
         if (funct3[i] == 0b101){
-            top->funct7bit_i = 0b1;
+            top->funct7_i = 0b1;
             top->eval();
             display(top);
-            top->funct7bit_i = 0b0;
+            top->funct7_i = 0b0;
         }
         top->eval();
         display(top);
@@ -72,7 +72,7 @@ int main(int argc, char **argv, char **env) {
 
     top->op_i = 0b0000011;  //I-Type Load Instructions
     for(int i = 0; i < 5; i++){
-        top->funct3_i = funct3_load_store[i];
+        top->funct3_i = funct3_ls[i];
         top->eval();
         display(top);
     }
@@ -81,7 +81,7 @@ int main(int argc, char **argv, char **env) {
 
     top->op_i = 0b0100011;  //I-Type Store Instructions
     for(int i = 0; i < 3; i++){
-        top->funct3_i = funct3_load_store[i];
+        top->funct3_i = funct3_l[i];
         top->eval();
         display(top);
     }

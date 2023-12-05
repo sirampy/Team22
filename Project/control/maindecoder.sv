@@ -1,24 +1,24 @@
 module maindecoder(
-    input logic [6:0]   op,
+    input logic [6:0]   op_i,
     input logic     zero,
-    output logic    result_src,
+    output logic[1:0]    result_src,
     output logic    mem_write,
     output logic    alu_src,
     output logic[2:0]   imm_src,
     output logic    reg_write,
-    output logic [1:0]  alu_op,
+    output logic[1:0]  alu_op,
     output logic    pc_src,
     output logic    branch,
-    output logic    jump
+    output logic[1:0]    jump
 );
 always_comb
-case(op)
+case(op_i)
     default: begin
                 reg_write = 1'b0; //default case
                 imm_src = 3'b000;
                 alu_src = 1'b0;
                 mem_write = 1'b0;
-                result_src = 1'b0;
+                result_src = 2'b00;
                 branch = 1'b0;
                 alu_op = 2'b00;
                 jump = 2'b00;
@@ -28,7 +28,7 @@ case(op)
                 imm_src = 3'b000;
                 alu_src = 1'b1;
                 mem_write = 1'b0;
-                result_src = 1'b1;
+                result_src = 2'b01;
                 branch = 1'b0;
                 alu_op = 2'b00;
                 jump = 2'b00;
@@ -38,17 +38,17 @@ case(op)
                 imm_src = 3'b001;
                 alu_src = 1'b1;
                 mem_write = 1'b1;
-                result_src = 1'b0;
+                result_src = 2'b00;
                 branch = 1'b0;
                 alu_op = 2'b00;
                 jump = 2'b00;
     end 
     7'b0110011: begin //r-type instruction
                 reg_write = 1'b1;
-                imm_src = 2'b000;
+                imm_src = 3'b000;
                 alu_src = 1'b0;
                 mem_write = 1'b0;
-                result_src = 1'b0;
+                result_src = 2'b00;
                 branch = 1'b0;
                 alu_op = 2'b10;
                 jump = 2'b00;
@@ -58,7 +58,7 @@ case(op)
                 imm_src = 3'b010;
                 alu_src = 1'b0;
                 mem_write = 1'b0;
-                result_src = 1'b0;
+                result_src = 2'b00;
                 branch = 1'b1;
                 alu_op = 2'b01;
                 jump = 2'b00;
