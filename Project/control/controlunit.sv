@@ -18,7 +18,7 @@ module controlunit(
 //logic op_i[6:0] = instr[6:0];
 //logic funct3_i[2:0] = instr[14:12];
 //logic funct7_i = instr[30];
-logic alu_op[1:0];
+logic alu_op;
 logic branch;
 
 maindecoder maindecoder(

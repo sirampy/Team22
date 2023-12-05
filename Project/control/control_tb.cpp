@@ -1,7 +1,7 @@
 #include "Vcontrolunit.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "vbuddy.cpp"
+#include <iostream>
 using namespace std;
 void display(Vcontrolunit* top) {
     cout << "\nINPUTS\n\n";
@@ -24,7 +24,6 @@ void display(Vcontrolunit* top) {
 
 int main(int argc, char **argv, char **env) {
     int i;
-    int clk;
 
     Verilated::commandArgs(argc, argv);
     Vcontrolunit* top = new Vcontrolunit;
@@ -81,7 +80,7 @@ int main(int argc, char **argv, char **env) {
 
     top->op_i = 0b0100011;  //I-Type Store Instructions
     for(int i = 0; i < 3; i++){
-        top->funct3_i = funct3_l[i];
+        top->funct3_i = funct3_ls[i];
         top->eval();
         display(top);
     }
@@ -106,20 +105,7 @@ int main(int argc, char **argv, char **env) {
     display(top);
 
 
-    for (i=0; i<300; i++){
 
-        for (clk=0; clk<2; clk++){
-            tfp->dump (2*i + clk);
-            top->clk = !top->clk;
-            top->eval();
-        }   
-
-
-        if (Verilated::gotFinish()) 
-            exit(0);                // ... exit if finish OR 'q' pressed
-        
-
-    }
     tfp->close();
     exit(0);
 }
