@@ -1,9 +1,7 @@
 module main_decoder (
-    input  logic          eq_i,           // equal/zero flag
     input  logic [6:0]    op_i,           // opcode
     
-    output logic          pc_src_o,       // select pc next
-    output logic          result_src_o,   // select write input
+    output logic [1:0]    result_src_o,   // select write input
     output logic          mem_write_o,    // memory write enable
     output logic          alu_src_o,      // select rd2 or imm
     output logic [1:0]    imm_src_o,      // imm select
@@ -57,7 +55,5 @@ always_comb
             alu_op_o = 2'b00;
         end
     endcase
-
-assign pc_src_o = branch_o & eq_i;
 
 endmodule

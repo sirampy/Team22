@@ -11,11 +11,13 @@ module hazard_unit #(
     input  logic                  result_srcE_i,
     input  logic [19:15]          rs1D_i,       // to check for lw
     input  logic [24:20]          rs2D_i,       // to check for lw
+    input  logic                  pc_srcE_i,    // to check for branch instructions
 
     output logic [1:0] forward_aE_o, // forward select for register 1 (execute)
     output logic [1:0] forward_bE_o, // forward select for register 2 (execute)
     output logic       stallF_o,     // stall fetch register (ff0)
     output logic       stallD_o,     // stall decode register (ff1)
+    output logic       flushD_o,     // clear decode register (ff1) - for control hazards
     output logic       flushE_o,     // clear execute register (ff2)
 );
 
@@ -36,7 +38,9 @@ module hazard_unit #(
 
         // dealing with lw stalls
         lw_stall = result_srcE_i & ((rs1D_i == rdE_i) | (rs2D_i == rdE_i));
-        stallF_o = stallD_o = flushE_o = lw_stall;
+        stallF_o = stallD_o = lw_stall;
+        flushD_o = pc_srcE_i;
+        flushE_o = lw_stall | pc_srcE_i;
     end
 
 endmodule

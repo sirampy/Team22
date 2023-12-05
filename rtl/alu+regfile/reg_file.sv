@@ -14,7 +14,7 @@ module reg_file #(
     output [DATA_WDTH - 1 : 0]rd1_o,
     output [DATA_WDTH - 1 : 0]rd2_o
 );
-//    logic [ ((2**ADDR_WDTH -1) * DATA_WDTH) -1 : 0] reg_data;
+
     logic [DATA_WDTH-1:0] reg_data [32];    //32 regs of 32-bits
 
     //synchronous write port
@@ -23,7 +23,7 @@ module reg_file #(
     end
 
     // read ports of the register file should be asychronous
-    assign rd1_o = reg_data[ad1_i] * (ad1_1 != 0);
+    assign rd1_o = reg_data[ad1_i] * (ad1_1 != 0); // if a0 do not write
     assign rd2_o = reg_data[ad2_i] * (ad2_i != 0);
 
 endmodule
