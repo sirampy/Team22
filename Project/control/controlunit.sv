@@ -1,5 +1,5 @@
 module controlunit(
-    input logic [31:0] instr;
+    input logic [31:0] instr,
     input logic zero,
     output logic result_src,
     output logic mem_write,
