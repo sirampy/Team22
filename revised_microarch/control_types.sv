@@ -1,4 +1,4 @@
-package control_types;
+// package control_types;
 
 // all of these should be put into a package
 typedef enum logic [6:0] { 
@@ -46,15 +46,10 @@ typedef enum logic [2:0] {
     GEU = 7
 } branch3_t;
 
-typedef enum logic [2:0] {
-    ZERO = 0
-} zero3_t; // used to verify instructions like JALR, ECALL, EBREAK
-
 typedef union packed {
     alu3_t alu;
     load3_t load;
     branch3_t branch;
-    zero3_t zero;
 } funct3_t;
 
 typedef enum logic [6:0] { 
@@ -62,11 +57,12 @@ typedef enum logic [6:0] {
     I_NEG = 7'h20,  // Intiger -> negative (for SUB and ASL)
     I_MUL = 7'h01   // multiply extension example (unimplemented)
  } alu7_t; 
+// we dont need a union for alu7_t as they are only used in R instructions my I and M (as far as i know) 
 
-typedef enum logic[0] { 
+typedef enum logic [1:0] { 
     RS1 = 0,
     ZERO = 1,
-    PC = 2,
+    PC = 2
   } src1_t;
 
  typedef enum logic[2:0] { 
@@ -77,15 +73,15 @@ typedef enum logic[0] {
     J_IMM = 4 // this is the least efficient use of 3 bits possible with an enum :(
   } src2_t;
 
-typedef enum logic [0] { 
+typedef enum logic { 
     RESULT = 0, // alu / data_mem
     NEXT_PC = 1
  } srcr_t;
 
- typedef enum logic [1:0] {
+typedef enum logic [1:0] {
     NEXT = 0,
     BRANCH = 1,
-    JUMP = 2; // unconditional branch
+    JUMP = 2 // unconditional branch
  } next_pc_t;
 
-endpackage
+// endpackage

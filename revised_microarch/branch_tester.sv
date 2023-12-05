@@ -1,17 +1,18 @@
-import control_types::* ;
+
 
 module branch_tester(
-    input [31:0] signed src1_i,
-    input [31:0] signed src2_i,
+    input signed [31:0] src1_i,
+    input signed [31:0] src2_i,
 
     input branch3_t branch3_i,
     input next_pc_t pc_control_i,
 
     output jump_o // we could use an enum, but that would be overcomplecating things
-)
+);
 
+always_comb
 case(pc_control_i)
-    NEXT: jump_o = 0
+    NEXT: jump_o = 0;
 
     BRANCH: begin
 
