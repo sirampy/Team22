@@ -56,7 +56,7 @@ logic [31:0] result;
 logic [31:0] wd3;
 
 
-assign next_pc [PC_WIDTH-1:0] = jump ? result : pc_inced;
+assign next_pc [PC_WIDTH-1:0] = jump ? result[PC_WIDTH-1:0] : pc_inced;
 
 pc_reg pc_reg(
     .clk_i(clk_i),
@@ -102,7 +102,7 @@ sign_extend sign_extend(
 );
 
 
-assign wd3 = (srcr == NEXT_PC) ? pc_inced : result;
+assign wd3 = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result; // not properly parameterised
 
 reg_file reg_file(
     .clk_i(clk_i),
@@ -119,8 +119,8 @@ reg_file reg_file(
 );
 
 
-assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? pc_inced : -1; // last term should never occour
-assign alu_src_2 = (src2 == RS2) ? rs2 : imm;
+assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? {16'b0, pc_inced} : -1; // last term should never occour
+assign alu_src_2 = (src2 == RS2) ? reg_data_2 : imm;
 
 alu alu(
     .src1_i(alu_src_1),
@@ -133,8 +133,8 @@ alu alu(
 );
 
 branch_tester branch_tester(
-    .src1_i(rs1),
-    .src2_i(rs2),
+    .src1_i(reg_data_1),
+    .src2_i(reg_data_2),
 
     .branch3_i(funct3),
     .pc_control_i(pc_control),
@@ -144,7 +144,7 @@ branch_tester branch_tester(
 
 
 data_mem data_mem(
-   .a_i(alu_out),
+   .a_i(alu_out[15:0]),
    .wd_i(bytes_selector_out),
    .wen_i(data_write),
 
