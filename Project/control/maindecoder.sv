@@ -23,7 +23,7 @@ case(op)
                 alu_op = 2'b00;
                 jump = 2'b00;
             end
-    7'b0000011: //lw intruction
+    7'b0000011: begin//lw intruction
                 reg_write = 1'b1;
                 imm_src = 3'b000;
                 alu_src = 1'b1;
@@ -32,8 +32,8 @@ case(op)
                 branch = 1'b0;
                 alu_op = 2'b00;
                 jump = 2'b00;
-
-    7'b0100011: //sw instruction
+    end
+    7'b0100011: begin //sw instruction
                 reg_write = 1'b0;
                 imm_src = 3'b001;
                 alu_src = 1'b1;
@@ -42,8 +42,8 @@ case(op)
                 branch = 1'b0;
                 alu_op = 2'b00;
                 jump = 2'b00;
-
-    7'b0110011: //r-type instruction
+    end 
+    7'b0110011: begin //r-type instruction
                 reg_write = 1'b1;
                 imm_src = 2'b000;
                 alu_src = 1'b0;
@@ -52,8 +52,8 @@ case(op)
                 branch = 1'b0;
                 alu_op = 2'b10;
                 jump = 2'b00;
-
-    7'b1100011: //beq instruction
+    end 
+    7'b1100011: begin //beq instruction
                 reg_write = 1'b0;
                 imm_src = 3'b010;
                 alu_src = 1'b0;
@@ -62,8 +62,8 @@ case(op)
                 branch = 1'b1;
                 alu_op = 2'b01;
                 jump = 2'b00;
-
-    7'b0110111: //u-type
+    end 
+    7'b0110111: begin//u-type
                 reg_write = 1'b1;
                 imm_src = 3'b100;
                 alu_src = 1'b1; 
@@ -72,8 +72,8 @@ case(op)
                 branch = 1'b0; 
                 alu_op = 2'b11;
                 jump = 2'b00;
-
-    7'b1101111: //jump and link instruction
+    end 
+    7'b1101111: begin //jump and link instruction
                 reg_write = 1'b1;
                 imm_src = 3'b011;
                 alu_src = 1'bx; //dont care as alu isnt used
@@ -82,7 +82,8 @@ case(op)
                 branch = 1'b0; //not a branch
                 alu_op = 2'bxx;// dont care as alu isnt used
                 jump = 2'b01;
-    7'b1101111: //jalr
+    end
+    7'b1101111: begin //jalr
                 reg_write = 1'b1;
                 imm_src = 3'b111;
                 alu_src = 1'b1;
@@ -91,7 +92,7 @@ case(op)
                 branch = 1'b0; //not a branch
                 alu_op = 2'b10;
                 jump = 2'b10;
-
+    end 
     
 
 endcase
