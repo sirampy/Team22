@@ -12,6 +12,7 @@ module rv32i #(
 // PC signals
 logic [PC_WIDTH-1:0] pc;
 assign logic [PC_WIDTH-1:0 ]pc_inced = PC + 4; // this logic must be replaced my a more extensive module if when the extensions that require it are implemented.
+logic [PC_WIDTH-1:0] next_pc; 
 
 // control signals
 logic [31:0] instr;
@@ -54,6 +55,16 @@ logic [31:0] result;
 logic [31:0] wd3;
 
 //TODO: pc reg / selection logic + instruction mem
+
+next_pc = jump ? result : next_pc;
+
+pc_reg pc_reg(
+    .clk_i(clk_i),
+    .rst_i(rst_i),
+    .next_pc_i(next_pc),
+
+    .pc_o(pc)
+);
 
 decoder decoder(
     .instr_i(instr),
