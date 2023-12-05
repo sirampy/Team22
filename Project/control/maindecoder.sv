@@ -82,14 +82,14 @@ case(op)
                 branch = 1'b0; //not a branch
                 alu_op = 2'bxx;// dont care as alu isnt used
                 jump = 2'b01;
-    7'b1101111: //jump and link instruction
+    7'b1101111: //jalr
                 reg_write = 1'b1;
                 imm_src = 3'b111;
-                alu_src = 1'b1; //dont care as alu isnt used
-                mem_write = 1'b0; //instruction isnt a store
-                result_src = 2'b00; //to write pc+4 into rd
+                alu_src = 1'b1;
+                mem_write = 1'b0;
+                result_src = 2'b00; 
                 branch = 1'b0; //not a branch
-                alu_op = 2'b10;// dont care as alu isnt used
+                alu_op = 2'b10;
                 jump = 2'b10;
 
     
