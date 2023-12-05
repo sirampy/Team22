@@ -46,11 +46,10 @@ logic [31:0] alu_src_2;
 // data_mem wrapper
 logic [31:0] bytes_selector_in;
 logic [31:0] bytes_selector_out;
-logic [31:0] data_mem_rd;
 
 // result signals
 logic [31:0] alu_out;
-//logic [31:0] read_data;
+logic [31:0] data_mem_rd;
 logic jump;
 logic [31:0] result;
 logic [31:0] wd3;
@@ -67,7 +66,7 @@ pc_reg pc_reg(
 );
 
 instr_mem instr_mem(
-    .a_i(pc),
+    .a_i(pc[7:0]), // TODO: parameterise correctly
     .rd_o(instr)
 );
 

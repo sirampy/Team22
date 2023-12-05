@@ -1,6 +1,5 @@
 module data_mem #(
-    parameter   ADDRESS_WIDTH = 16,
-                USED_ADDRESS_WIDTH = 8,
+    parameter   ADDRESS_WIDTH = 8,
                 DATA_WIDTH = 32
 )(
     input logic [ADDRESS_WIDTH-1:0] a_i,
@@ -10,7 +9,7 @@ module data_mem #(
     output logic [DATA_WIDTH-1:0]   rd_o
 );
 
-logic [USED_ADDRESS_WIDTH-1:0] a_resized;
+logic [ADDRESS_WIDTH-1:0] a_resized;
 assign a_resized= a_i[USED_ADDRESS_WIDTH-1:0];
 
 logic [DATA_WIDTH-1:0] rom_array [2**USED_ADDRESS_WIDTH-1:0];
