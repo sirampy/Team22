@@ -7,3 +7,7 @@
 - Implemented BNE;
 - Implemented I-type instructions;
 - Fixed instruction register, making it byte addressed, not word addressed, and an issue with it being too large;
+
+To run, enter Team22 directory and write:
+
+`./run.sh Lab4 top alu+regfile control pc`
