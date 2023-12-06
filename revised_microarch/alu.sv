@@ -33,11 +33,11 @@ always_comb begin
                 ADD: result_o = src1_i - src2_i;
                 R_SHIFT: = src1_i >>> src2_i [4:0];
 
-                default: $error("ALU didn't recognise alu3 - you may be using an unsupported extensoin");
+                default: $error("ALU didn't recognise alu3 - you may be using an unsupported extension");
             endcase
         end
 
-        default: $error("ALU didn't recognise alu7 - you may be using an unsupported extensoin");
+        default: $error("ALU didn't recognise alu7 - you may be using an unsupported extension");
     endcase
 
 end

@@ -1,7 +1,7 @@
 rm -rf obj_dir
-rm -f control_top.vcd
+rm -f alu.vcd
 
-verilator -Wall --cc --trace decoder.sv --exe hi
+verilator -Wall --cc --trace decoder.sv --exe a
 
 make -j -C obj_dir/ -f Vcontrol_top.mk Vcontrol_top
 

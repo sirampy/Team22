@@ -58,8 +58,8 @@ typedef union packed {
 } funct3_t;
 
 typedef enum logic [6:0] { 
-    I_STD = 0,      // Intiger -> standard
-    I_NEG = 7'h20,  // Intiger -> negative (for SUB and ASL)
+    I_STD = 0,      // Integer -> standard
+    I_NEG = 7'h20,  // Integer -> negative (for SUB and ASL)
     I_MUL = 7'h01   // multiply extension example (unimplemented)
  } alu7_t; 
 
