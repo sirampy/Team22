@@ -1,7 +1,6 @@
 #include "Valu.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "control_types.sv"
 
 int main(int argc, char **argv, char **env) {
     Verilated::commandArgs(argc, argv);
@@ -24,32 +23,83 @@ int main(int argc, char **argv, char **env) {
             tfp->dump(2*i + clk);
             top->clk = !top->clk;
 
-            // Set inputs for each cycle
             top->src1_i = src1;
             top->src2_i = src2;
 
-            // Set ALU operation (you need to define these based on your control_types)
-            top->alu3_i = control_types::ADD; // Replace with actual control signal for ADD
-            top->alu7_i = I_STD; // Replace with actual control signal for I_STD
+            top->alu3_i = control_types::ADD; 
+            top->alu7_i = control_types::I_STD; 
 
             top->eval();
 
-            // Check the result for each operation
-            if (clk == 1) { // Check on the falling edge
-                if (top->result_o != (src1 + src2)) {
-                    std::cerr << "Test failed for ADD operation" << std::endl;
+        //checking result
+        if (clk == 1) { 
+            switch (top->alu3_i) {
+                case control_types::ADD:
+                    if (top->result_o != (src1 + src2)) {
+                        std::cerr << "Test failed for ADD operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::L_SHIFT:
+                    if (top->result_o != (src1 << (src2 & 0x1F))) {
+                        std::cerr << "Test failed for L_SHIFT operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::SLT:
+                    if (top->result_o != (src1 < src2 ? 1 : 0)) {
+                        std::cerr << "Test failed for SLT operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::U_SLT:
+                    if (top->result_o != (static_cast<uint32_t>(src1) < static_cast<uint32_t>(src2) ? 1 : 0)) {
+                        std::cerr << "Test failed for U_SLT operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::XOR:
+                    if (top->result_o != (src1 ^ src2)) {
+                        std::cerr << "Test failed for XOR operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::R_SHIFT:
+                    if (top->result_o != (src1 >> (src2 & 0x1F))) {
+                        std::cerr << "Test failed for R_SHIFT operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::OR:
+                    if (top->result_o != (src1 | src2)) {
+                        std::cerr << "Test failed for OR operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                case control_types::AND:
+                    if (top->result_o != (src1 & src2)) {
+                        std::cerr << "Test failed for AND operation" << std::endl;
+                        return -1;
+                    }
+                    break;
+
+                default:
+                    std::cerr << "Unknown ALU operation" << std::endl;
                     return -1;
-                }
-
-                // Add similar checks for other operations
-                // ...
-
             }
         }
-
-        if (Verilated::gotFinish()) 
-            exit(0);
     }
+
+    if (Verilated::gotFinish()) 
+        exit(0);
+}
 
     tfp->close();
     delete top;

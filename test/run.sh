@@ -1,8 +1,8 @@
 rm -rf obj_dir
-rm -f control_top.vcd
+rm -f alu.vcd
 
-verilator -Wall --cc --trace ../revised_microarch/top.sv --exe top_tp.cpp -y ../revised_microarch
+verilator -Wall --cc --trace alu.sv --exe alu_tb.cpp 
 
-make -j -C obj_dir/ -f Vcontrol_top.mk Vcontrol_top
+make -j -C obj_dir/ -f Valu.mk Valu
 
-obj_dir/Vcontrol_top
+obj_dir/Valu
