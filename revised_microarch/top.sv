@@ -50,7 +50,7 @@ logic [31:0] data_mem_rd;
 
 // result signals
 logic [31:0] alu_out;
-logic [31:0] read_data;
+//logic [31:0] read_data;
 logic jump;
 logic [31:0] result;
 logic [31:0] wd3;

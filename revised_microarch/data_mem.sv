@@ -20,7 +20,7 @@ initial begin
         $readmemh("../../rom_bin/data.mem", rom_array);
 end;
 
-always_comb begin
+always_latch begin
 
     if (wen_i) rom_array[a_resized] = wd_i;
 

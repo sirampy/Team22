@@ -1,5 +1,7 @@
 {
     "files.associations": {
         "ostream": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "/home/dellsaxena/Documents/iac/Team22",
+    "C_Cpp.default.configurationProvider": "ms-vscode.makefile-tools"
 }

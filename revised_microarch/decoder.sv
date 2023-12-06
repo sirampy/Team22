@@ -48,7 +48,7 @@ logic [11:0] s_imm = {instr_i[31:25], instr_i[11:7]};
 logic [11:0] b_imm = {instr_i[31], instr_i[7], instr_i[30:25], instr_i[11:8]}; // will get shifted by extender
 
 // this is where the magic happens
-always_comb begin
+always_latch begin
     case(opc)
         R: begin
 
