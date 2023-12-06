@@ -16,7 +16,7 @@ int main(int argc, char **argv, char **env) {
     tfp->open("control_top.vcd");
     
     //testing addi a1, a1, 1
-    top->op = 0x13; //opcode is the last 7 bits of the instruction
+    top->op = 0x33; //opcode is the last 7 bits of the instruction
     top->funct3 = 000;
     top->funct7 = 0; //not relevant
 

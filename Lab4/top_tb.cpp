@@ -1,11 +1,8 @@
 #include "Vtop.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "vbuddy.cpp"
 
 int main(int argc, char **argv, char **env) {
-    int i;
-    int clk;
 
     Verilated::commandArgs(argc, argv);
     Vtop* top = new Vtop;
@@ -17,20 +14,19 @@ int main(int argc, char **argv, char **env) {
 
     top->rst = 0;
 
-    for (i=0; i<1000; i++){
+    for (int i = 0; i < 1000; ++i) {
 
-        for (clk=0; clk<2; clk++){
-            tfp->dump (2*i + clk);
+        for (int clk = 0; clk < 2; ++clk){
+            tfp->dump (2 * i + clk);
             top->clk = !top->clk;
             top->eval();
-        }   
+        }
 
-
-        if (Verilated::gotFinish()) 
-            exit(0);                // ... exit if finish OR 'q' pressed
+        if (Verilated::gotFinish()) break;
         
-
     }
+
     tfp->close();
     exit(0);
+
 }

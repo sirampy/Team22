@@ -1,7 +1,7 @@
 module pc_top #(
-    parameter PC_WIDTH = 16
+    parameter PC_WIDTH = 32
 )(
-    input logic [31:0] imm_op,
+    input logic [PC_WIDTH-1:0] imm_op,
     input logic clk,
     input logic rst,
     input logic pc_src,

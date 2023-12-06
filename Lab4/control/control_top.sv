@@ -2,11 +2,11 @@ module control_top #(
     parameter INSTR_WIDTH = 32,
     parameter REG_ADDR_WIDTH = 5
 )(
-    input logic           clk,
-    input  logic [6:0]    op,
-    input  logic [2:0]    funct3,
-    input  logic          funct7,
-    input  logic [15:0]   pc,           // program counter
+//    input logic           clk,          // Why is this here?
+    input  logic [6:0]    op,                                                   // Note: Why is this input?
+    input  logic [2:0]    funct3,                                               // Note: Why is this input?
+    input  logic          funct7,                                               // Note: Why is this input?
+    input  logic [31:0]   pc,           // program counter                      Note: Why was this previously 16 bit?
     input  logic          eq,           // equal/zero flag
 
 // control output signals
@@ -15,11 +15,11 @@ module control_top #(
     output logic          mem_write,    // memory write enable
     output logic          alu_src,      // select rd2 or imm
     output logic          reg_write,    // register write enable
-    output logic [1:0]    alu_ctrl,     // input to alu
+    output logic [2:0]    alu_ctrl,     // input to alu                         Note: Why was this previously 2 bit?
     output logic [31:0]   imm_op,       //sign extended imm
     output logic [1:0]    imm_src,
-    output logic [INSTR_WIDTH-1:0]   instr,    //instruction from mem
-    output logic [1:0]               alu_op,   // select alu operation
+    output logic [INSTR_WIDTH-1:0]   instr,    //instruction from mem           Note: Why is this output? 
+//    output logic [1:0]               alu_op,   // select alu operation        Note: Why do we output this? It isn't used by any other sheet
 
 
 // parts of instruction
@@ -28,6 +28,7 @@ module control_top #(
     output logic [REG_ADDR_WIDTH-1:0]    rd
 );
 
+logic [1:0] alu_op; // See line 22
 
 //logic [1:0]               imm_src;  // imm select - depends on if I/S/B type
 
@@ -49,7 +50,9 @@ main_decoder main_decoder (
     .alu_src (alu_src),
     .imm_src (imm_src),
     .reg_write (reg_write),
-    .alu_op (alu_op)
+    .alu_op (alu_op),
+    
+    .funct3 (funct3)
 );
 
 alu_decoder alu_decoder (
@@ -61,7 +64,8 @@ alu_decoder alu_decoder (
 );
 
 sign_extend sign_extend (
-    .instr (instr[31:0]),
+    .instr31_20 (instr[31:20]),
+    .instr11_7 (instr[11:7]),
     .imm_src (imm_src),
     .imm_ext (imm_op)
 );

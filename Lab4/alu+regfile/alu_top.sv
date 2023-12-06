@@ -10,7 +10,9 @@ module alu_top #(
     input logic [DATA_WIDTH-1:0]    imm_op,        // immediate value
     input logic                     alu_src,       // selects second input
     input logic [2:0]               alu_ctrl,      // determines operation in alu
-    output logic                    eq             // equal flag
+    output logic                    eq,             // equal flag
+    
+    output logic [DATA_WIDTH-1:0] a0 // Output for top sheet
 );
 
 logic [DATA_WIDTH-1:0] alu_op1;   // input 1
@@ -25,16 +27,17 @@ reg_file regfile (
     .ad3 (rd),
     .we3 (reg_write), //write enable
     .wd3 (alu_out), //write data
-    .rd1 (alu_op2),
-    .rd2 (reg_op2)
+    .rd1 (alu_op1),
+    .rd2 (reg_op2),
+    .a0(a0)
 );
 
 assign alu_op2 = alu_src ? imm_op : reg_op2; //1 for imm_op and 0 for reg_op2
 
 alu alu (
-    .aluOp1 (alu_op1),
-    .aluOp2 (alu_op2),
-    .aluCtrl (alu_ctrl),
+    .alu_op1 (alu_op1),
+    .alu_op2 (alu_op2),
+    .alu_ctrl (alu_ctrl),
     .sum (alu_out),
     .eq (eq)
 );

@@ -1,5 +1,5 @@
 module pc_reg #(
-    parameter PC_WIDTH = 16
+    parameter PC_WIDTH = 32
 )(
     input  logic         clk,
     input  logic         rst,

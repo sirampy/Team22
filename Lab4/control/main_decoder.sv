@@ -8,8 +8,12 @@ module main_decoder (
     output logic [1:0]    imm_src,      // imm select
     output logic          reg_write,    // register write enable
     output logic [1:0]    alu_op,        // to input into alu decoder
-    output logic          branch
+//    output logic          branch      // Note: Why is this output? It isn't used by any other sheet
+
+    input logic[2:0] funct3
 );
+
+logic branch; // See line 11
 
 always_comb
     case (op)
@@ -22,8 +26,9 @@ always_comb
             branch = 1'b0;
             alu_op = 2'b00;
         end
-        7'b0010011: begin // arithmetic operations
+        7'b0110011: begin // arithmetic operations
             reg_write = 1'b1;
+            imm_src = 2'b00; // always_comb requires write every case
             alu_src = 1'b0;
             mem_write = 1'b0;
             result_src = 1'b0;
@@ -35,15 +40,26 @@ always_comb
             imm_src = 2'b01;
             alu_src = 1'b1;
             mem_write = 1'b1;
+            result_src = 1'b0; // always_comb requires write every case
             branch = 1'b0;
             alu_op = 2'b00;
+        end
+        7'b0010011: begin // I instruction
+            reg_write = 1'b1;
+            imm_src = 2'b00;
+            alu_src = 1'b1;
+            mem_write = 1'b0;
+            result_src = 1'b0;
+            branch = 1'b0;
+            alu_op = 2'b10;
         end
         7'b1100011: begin // branch
             reg_write = 1'b0;
             imm_src = 2'b10;
             alu_src = 1'b0;
             mem_write = 1'b0;
-            branch = 1'b0;
+            result_src = 1'b0; // always_comb requires write every case
+            branch = 1'b1;
             alu_op = 2'b01;
         end
         default: begin
@@ -57,6 +73,13 @@ always_comb
         end
     endcase
 
-assign pc_src = branch & eq;
+always_comb
+    case (funct3)
+    3'b000: // Branch if equal
+        pc_src = branch & eq;
+    3'b001: // Branch if not equal
+        pc_src = branch & !eq;
+    default: pc_src = 0;
+endcase
 
 endmodule
