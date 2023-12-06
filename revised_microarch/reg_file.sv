@@ -23,7 +23,7 @@ module reg_file #(
     end
 
     // read ports of the register file should be asychronous
-    assign rd1_o = reg_data[ad1_i] * (ad1_1 != 0);
+    assign rd1_o = reg_data[ad1_i] * (ad1_i != 0);
     assign rd2_o = reg_data[ad2_i] * (ad2_i != 0);
 
 endmodule
