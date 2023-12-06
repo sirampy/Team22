@@ -16,20 +16,18 @@ module top #(
 
     // instr mem signals
     logic [DATA_WIDTH-1:0] instr;
-    logic [31:0] imm_op; // idk what this is - NOTE: CHECK CTRL UNIT
     logic [11:0] imm_ext;
 
     // reg file signals
-    logic reg_write; // write enable - NPTE TO SELF: make it regwrite (w)
-    logic [DATA_WIDTH-1:0] reg_op1; // contents of register 1 - NOTE might need to rename stuff
+    logic reg_write; // write enable
+    logic [DATA_WIDTH-1:0] reg_op1; // contents of register 1 
     logic [DATA_WIDTH-1:0] reg_op2; // contents of register 2
 
     // control signals
-    // NOTE TO SELF - change width of this for everything else
     logic [1:0] result_src; // select what data to write
     logic mem_write;
-    logic jump; // NOTE need to create logic 
-    logic branch; // branch ''
+    logic jump;
+    logic branch;
     logic [2:0] alu_ctrl;
     logic alu_src;
     logic [1:0] imm_src;
@@ -38,7 +36,7 @@ module top #(
     logic [DATA_WIDTH-1:0] alu_op1;   // input 1
     logic [DATA_WIDTH-1:0] alu_op2;   // input 2
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
-    logic zero; // zero flag - NOTE: RENAME the eq stuff down below
+    logic zero; // zero flag
 
     // data mem contents
     logic read_data; 
@@ -58,7 +56,7 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4E;
 
     logic reg_writeE;
-    logic result_srcE;
+    logic [1:0] result_srcE;
     logic mem_writeE;
     logic jumpE;
     logic branchE;
@@ -86,6 +84,8 @@ module top #(
     // fetch stage pipeling:
     flip_flop1 ff1 (
         .clk_i (clk),
+        .en (stallD),
+        .clr (flushD),
         .rd_i (instr),              // read data from instr mem
         .pcF_i (pc),
         .pc_plus4F_i (pc_plus4), 
@@ -131,6 +131,7 @@ module top #(
     flip_flop1 ff2 (
         // main inputs
         .clk_i(clk),
+        .clr (flushE),
         .rd1D_i (reg_op1), // read reg 1
         .rd2D_i (reg_op2), // read reg 2
         .pcD_i (pcD), 
@@ -201,7 +202,7 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4M;
 
     logic reg_writeM;
-    logic result_srcM;
+    logic [1:0] result_srcM;
     logic mem_writeM;
 
     flip_flop1 ff3 (
@@ -243,7 +244,7 @@ module top #(
     logic [PC_WIDTH-1:0] pc_plus4W;
 
     logic reg_writeW;
-    logic result_srcW;
+    logic [1:0] result_srcW;
 
     flip_flop1 ff4 (
         .clk_i(clk),

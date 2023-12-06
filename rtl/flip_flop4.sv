@@ -12,7 +12,7 @@ module flip_flop4 #(
 
     // control unit inputs
     input logic reg_writeM_i,
-    input logic result_srcM_i,
+    input logic [1:0] result_srcM_i,
 
     // main outputs
     output logic [DATA_WIDTH-1:0]    alu_resultW_o, // alu output (memory)
@@ -22,7 +22,7 @@ module flip_flop4 #(
 
     // control unit outputs
     output logic reg_writeW_o,
-    output logic result_srcW_o,
+    output logic [1:0] result_srcW_o,
 );
 
 always_ff @(negedge clk)    // writeback happens on fall edge not rising

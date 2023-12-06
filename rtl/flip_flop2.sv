@@ -5,6 +5,7 @@ module flip_flop2 #(
 )(
     // main inputs
     input  logic                     clk_i,       // clock
+    input  logic                     clr,         // flush register 
     input  logic [DATA_WIDTH-1:0]    rd1D_i,      // read register 1 (decode)
     input  logic [DATA_WIDTH-1:0]    rd2D_i,      // read register 2 (d)
     input  logic [ADDRESS_WIDTH-1:0] pcD_i,       // pc (d)
@@ -14,7 +15,7 @@ module flip_flop2 #(
 
     // control unit inputs
     input logic       reg_writeD_i,  // write enable (d) 
-    input logic       result_srcD_i, // select write input (d)
+    input logic [1:0] result_srcD_i, // select write input (d)
     input logic       mem_writeD_i,  // mem write enable (d)
     input logic       jumpD_i,
     input logic       branchD_i,
@@ -31,7 +32,7 @@ module flip_flop2 #(
 
     // control unit outputs
     output logic       reg_writeE_o,
-    output logic       result_srcE_o,
+    output logic [1:0] result_srcE_o,
     output logic       mem_writeE_o,
     output logic       jumpE_o,
     output logic       branchE_o,
@@ -41,19 +42,36 @@ module flip_flop2 #(
 
 always_ff @(posedge clk)
     begin
-        rd1E_o      <= rd1D_i;
-        rd2E_o      <= rd2D_i;
-        pcE_o       <= pcD_i;
-        rdE_o       <= rdD_i;
-        imm_extD_i  <= imm_extE_o;
-        pc_plus4E_o <= pc_plus4D_i;
-        reg_writeD_i  <= reg_writeE_o;
-        result_srcD_i <= result_srcE_o;
-        mem_writeD_i  <= mem_writeE_o;
-        jumpD_i       <= jumpE_o;
-        branchD_i     <= branchE_o;
-        alu_ctrlD_i   <= alu_ctrlE_o;
-        alu_srcD_i    <= alu_srcE_o;
+        if (clr) begin
+            rd1E_o      <= {DATA_WIDTH{1'b0}};
+            rd2E_o      <= {DATA_WIDTH{1'b0}};
+            pcE_o       <= {ADDRESS_WIDTH{1'b0}};
+            rdE_o       <= 5'b0;
+            imm_extD_i  <= {DATA_WIDTH{1'b0}};
+            pc_plus4E_o <= {ADDRESS_WIDTH{1'b0}};
+            reg_writeD_i  <= 1'b0;
+            result_srcD_i <= 2'b00;
+            mem_writeD_i  <= 1'b0;
+            jumpD_i       <= 1'b0;
+            branchD_i     <= 1'b0;
+            alu_ctrlD_i   <= 2'b00;
+            alu_srcD_i    <= 1'b0;
+        end
+        else begin
+            rd1E_o      <= rd1D_i;
+            rd2E_o      <= rd2D_i;
+            pcE_o       <= pcD_i;
+            rdE_o       <= rdD_i;
+            imm_extD_i  <= imm_extE_o;
+            pc_plus4E_o <= pc_plus4D_i;
+            reg_writeD_i  <= reg_writeE_o;
+            result_srcD_i <= result_srcE_o;
+            mem_writeD_i  <= mem_writeE_o;
+            jumpD_i       <= jumpE_o;
+            branchD_i     <= branchE_o;
+            alu_ctrlD_i   <= alu_ctrlE_o;
+            alu_srcD_i    <= alu_srcE_o;
+        end
     end
 
 endmodule

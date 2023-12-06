@@ -19,13 +19,13 @@ module flip_flop1 #(
 always_ff @(posedge clk)
     begin
         if (clr) begin
-            instrD_o <= 0;
-            pcD_o <= 0;
-            pc_plus4D_o <= 0;
+            instrD_o    <= {DATA_WIDTH{1'b0}};
+            pcD_o       <= {ADDRESS_WIDTH{1'b0}};
+            pc_plus4D_o <= {ADDRESS_WIDTH{1'b0}};;
         end
         else if (!en) begin
-            instrD_o <= rd_i;
-            pcD_o <= pcF_i;
+            instrD_o    <= rd_i;
+            pcD_o       <= pcF_i;
             pc_plus4D_o <= pc_plus4F_i;
         end
     end
