@@ -1,6 +1,6 @@
 module sign_extend #(
     parameter DATA_WIDTH = 32,
-              IMM_WIDTH = 12
+              IMM_WIDTH = 32
 )(
     input                   clk,
     input   [DATA_WIDTH-1:7] instr,

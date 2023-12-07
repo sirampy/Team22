@@ -14,16 +14,16 @@ module flip_flop2 #(
 
     // control unit inputs
     input logic       reg_writeD_i,  // write enable (d) 
-    input logic       result_srcD_i, // select write input (d)
+    input logic [1:0]      result_srcD_i, // select write input (d)
     input logic       mem_writeD_i,  // mem write enable (d)
-    input logic       jumpD_i,
+    input logic [1:0] jumpD_i,
     input logic       branchD_i,
-    input logic [1:0] alu_ctrlD_i,
+    input logic [2:0] alu_ctrlD_i,
     input logic       alu_srcD_i,
 
     // main outputs
-    output logic [DATA_WIDTH-1:0]    rd1E_o,    // read register 1 (execute)
-    output logic [DATA_WIDTH-1:0]    rd2E_o,    // read register 2 (e)
+    output logic [5:0]    rd1E_o,    // read register 1 (execute)
+    output logic [5:0]    rd2E_o,    // read register 2 (e)
     output logic [ADDRESS_WIDTH-1:0] pcE_o,     // pc (e)
     output logic [11:7]              rdE_o,     // write register address (e)
     output logic [DATA_WIDTH-1:0]    imm_extE_o,
@@ -31,11 +31,11 @@ module flip_flop2 #(
 
     // control unit outputs
     output logic       reg_writeE_o,
-    output logic       result_srcE_o,
+    output logic [1:0] result_srcE_o,
     output logic       mem_writeE_o,
-    output logic       jumpE_o,
+    output logic [1:0] jumpE_o,
     output logic       branchE_o,
-    output logic [1:0] alu_ctrlE_o,
+    output logic [2:0] alu_ctrlE_o,
     output logic       alu_srcE_o
 );
 

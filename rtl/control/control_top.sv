@@ -1,7 +1,5 @@
-module control_top #(
-    parameter INSTR_WIDTH = 32,
-    parameter REG_ADDR_WIDTH = 5
-)(
+module control_top (
+
     input logic [6:0]    op_i,
     input logic [2:0]    funct3_i,
     input logic          funct7_i,
@@ -11,9 +9,9 @@ module control_top #(
     output logic         mem_write_o,     // memory write enable
     output logic         alu_src_o,       // select rd2 or imm
     output logic         reg_write_o,     // register write enable
-    output logic [1:0]   alu_ctrl_o,      // input to alu
+    output logic [2:0]   alu_ctrl_o,      // input to alu
     output logic [1:0]   imm_src_o,
-    output logic         jump_o, // not yet set up
+    output logic [1:0]   jump_o, // not yet set up
     output logic         branch_o
 );
 
@@ -29,7 +27,8 @@ module control_top #(
         .imm_src_o (imm_src_o),
         .reg_write_o (reg_write_o),
         .alu_op_o (alu_op),
-        .branch_o (branch_o)
+        .branch_o (branch_o),
+        .jump_o(jump_o)
     );
 
     alu_decoder alu_decoder (

@@ -1,7 +1,7 @@
 module top #(
     parameter ADDR_WIDTH = 5,  //address width for reg
               DATA_WIDTH = 32,
-              PC_WIDTH = 16
+              PC_WIDTH = 32
 )(
     input logic clk_i,      
     input logic rst,
@@ -16,7 +16,7 @@ module top #(
 
     // instr mem signals
     logic [DATA_WIDTH-1:0] instr;
-    logic [11:0] imm_ext;
+    logic [DATA_WIDTH-1:0] imm_ext;
 
     // reg file signals
     logic reg_write; // write enable
@@ -26,7 +26,7 @@ module top #(
     // control signals
     logic [1:0] result_src; // select what data to write
     logic mem_write;
-    logic jump;
+    logic [1:0] jump;
     logic branch;
     logic [2:0] alu_ctrl;
     logic alu_src;
@@ -39,7 +39,7 @@ module top #(
     logic zero; // zero flag - NOTE: RENAME the eq stuff down below
 
     // data mem contents
-    logic read_data; 
+    logic [DATA_WIDTH-1:0] read_data; 
 
     logic [PC_WIDTH-1:0] pcD; 
     logic [PC_WIDTH-1:0] instrD;
@@ -173,7 +173,7 @@ module top #(
 
     // execute stage:
     logic [DATA_WIDTH-1:0] alu_resultM;
-    logic write_dataM;
+    logic [DATA_WIDTH-1:0] write_dataM;
     logic [ADDR_WIDTH-1:0] rdM;
     logic [PC_WIDTH-1:0] pc_plus4M;
 
@@ -203,20 +203,18 @@ module top #(
         .mem_writeM_o (mem_writeM)
     );
 
-    logic read_dataM;
-
     data_mem data_mem (
         .a_i (alu_resultM),
         .wd_i (write_dataM),
         .wen_i (mem_writeM),
-        .rd_o (read_dataM)
+        .rd_o (read_data)
     );
 
     // memory stage:
     logic [DATA_WIDTH-1:0] alu_resultW;
-    logic read_dataW;
+    logic [DATA_WIDTH-1:0] read_dataW;
     logic [ADDR_WIDTH-1:0] rdW;
-    logic write_dataM_o;
+    logic [DATA_WIDTH-1:0] write_dataM_o;
     logic [PC_WIDTH-1:0] pc_plus4W;
 
     logic reg_writeW;

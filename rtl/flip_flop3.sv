@@ -4,26 +4,26 @@ module flip_flop3 #(
               DATA_WIDTH = 32
 )(
     // main inputs
-    input  logic                     clk_i,         // clock
+    input logic                     clk_i,         // clock
     input logic [DATA_WIDTH-1:0]     alu_resultE_i, // alu output (execute)
-    input logic                      write_dataE_i, // data mem write enable (e)
+    input logic [DATA_WIDTH-1:0]                     write_dataE_i, // data mem write enable (e)
     input logic [11:7]               rdE_i,         // write register address (e)
     input logic [ADDRESS_WIDTH-1:0]  pc_plus4E_i,
 
     // control unit inputs
     input logic reg_writeE_i,
-    input logic result_srcE_i,
+    input logic [1:0] result_srcE_i,
     input logic mem_writeE_i,
 
     // main outputs
     output logic [DATA_WIDTH-1:0]    alu_resultM_o, // alu output (memory)
-    output logic                     write_dataM_o, // data mem write enable (m)
+    output logic [DATA_WIDTH-1:0]                    write_dataM_o, // data mem write enable (m)
     output logic [11:7]              rdM_o,         // write register address (m)
     output logic [ADDRESS_WIDTH-1:0] pc_plus4M_o,    // pc+4 (m)
 
     // control unit outputs
     output logic reg_writeM_o,
-    output logic result_srcM_o,
+    output logic[1:0] result_srcM_o,
     output logic mem_writeM_o
 );
 

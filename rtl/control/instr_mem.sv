@@ -1,5 +1,5 @@
 module instr_mem #(
-    parameter   ADDRESS_WIDTH = 16,
+    parameter   ADDRESS_WIDTH = 32,
                 USED_ADDRESS_WIDTH = 8,
                 DATA_WIDTH = 32
 )(
