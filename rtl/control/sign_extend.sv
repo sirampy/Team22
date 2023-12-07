@@ -3,7 +3,7 @@ module sign_extend #(
 )(
     input   [DATA_WIDTH-1:7]    instr_i,
     input   [1:0]               imm_src_i,
-    output  [DATA_WIDTH-1:0]    imm_ext_o
+    output  logic [DATA_WIDTH-1:0]    imm_ext_o
 );
 
     always_comb begin  
