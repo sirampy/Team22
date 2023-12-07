@@ -11,4 +11,4 @@ verilator -Wall --cc --trace  top.sv  --exe lab4_tb.cpp
 make -j -C obj_dir/ -f Vtop.mk Vtop
 
 #run executable simlulation file
-obj_dir/Vdhfj
+obj_dir/Vtop
