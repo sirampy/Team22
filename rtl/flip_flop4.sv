@@ -25,7 +25,7 @@ module flip_flop4 #(
     output logic result_srcW_o,
 );
 
-always_ff @(negedge clk)    // writeback happens on fall edge not rising
+always_ff @(posedge clk) 
     begin
         alu_resultM_i <= alu_resultW_o;
         read_dataM_i  <= pcW_o;
