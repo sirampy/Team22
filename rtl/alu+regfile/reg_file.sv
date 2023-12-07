@@ -11,8 +11,8 @@ module reg_file #(
     input                     we3_i,
     input [DATA_WDTH - 1 : 0] wd3_i,
 
-    output [DATA_WDTH - 1 : 0]rd1_o,
-    output [DATA_WDTH - 1 : 0]rd2_o
+    output [DATA_WDTH - 1 : 0] rd1_o,
+    output [DATA_WDTH - 1 : 0] rd2_o
 );
 
     logic [DATA_WDTH-1:0] reg_data [32];    //32 regs of 32-bits

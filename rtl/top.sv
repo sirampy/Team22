@@ -33,7 +33,6 @@ module top #(
     logic [1:0] imm_src;
 
     // alu signals
-    logic [DATA_WIDTH-1:0] alu_op1;   // input 1
     logic [DATA_WIDTH-1:0] alu_op2;   // input 2
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
     logic zero; // zero flag - NOTE: RENAME the eq stuff down below
@@ -45,8 +44,8 @@ module top #(
     logic [PC_WIDTH-1:0] instrD;
     logic [PC_WIDTH-1:0] pc_plus4D;
 
-    logic [ADDR_WIDTH-1:0] rd1E;
-    logic [ADDR_WIDTH-1:0] rd2E;
+    logic [DATA_WIDTH-1:0] rd1E;
+    logic [DATA_WIDTH-1:0] rd2E;
     logic [PC_WIDTH-1:0] pcE;
     logic [ADDR_WIDTH-1:0] rdE;
     logic [DATA_WIDTH-1:0] imm_extE;
@@ -55,9 +54,9 @@ module top #(
     logic reg_writeE;
     logic [1:0] result_srcE;
     logic mem_writeE;
-    logic jumpE;
+    logic [1:0] jumpE;
     logic branchE;
-    logic [1:0] alu_ctrlE;
+    logic [2:0] alu_ctrlE;
     logic alu_srcE;
 
 
@@ -158,18 +157,19 @@ module top #(
 
     // alu
     alu alu (
-        .aluOp1_i (alu_op1),
+        .aluOp1_i (rd1E),
         .aluOp2_i (alu_op2),
-        .aluCtrl_i (alu_ctrl),
+        .aluCtrl_i (alu_ctrlE),
         .sum_o (alu_out),
         .eq_o (zero)
     ); 
 
     // mux for pc src
     assign pc_src = (jumpE) | (zero & branchE);
+    assign pc_target = pcE + imm_extE;
 
     // mux for alu_op2
-    assign alu_op2 = alu_src ? imm_ext : reg_op2; // 1 for imm_ext and 0 for reg_op2
+    assign alu_op2 = alu_srcE ? imm_extE : rd2E; // 1 for imm_extE and 0 for rd2E
 
     // execute stage:
     logic [DATA_WIDTH-1:0] alu_resultM;
@@ -214,7 +214,6 @@ module top #(
     logic [DATA_WIDTH-1:0] alu_resultW;
     logic [DATA_WIDTH-1:0] read_dataW;
     logic [ADDR_WIDTH-1:0] rdW;
-    logic [DATA_WIDTH-1:0] write_dataM_o;
     logic [PC_WIDTH-1:0] pc_plus4W;
 
     logic reg_writeW;
@@ -223,7 +222,7 @@ module top #(
     flip_flop4 ff4 (
         .clk_i(clk_i),
         .alu_resultM_i (alu_resultM),
-        .read_dataM_i (read_dataM),
+        .read_dataM_i (read_data),
         .rdM_i (rdM),
         .pc_plus4M_i (pc_plus4M),
         .reg_writeM_i (reg_writeM),
@@ -240,7 +239,7 @@ module top #(
 
     always_comb begin
         case (result_srcW)
-            2'b00: resultW = alu_resultM;
+            2'b00: resultW = alu_resultW;
             2'b01: resultW = read_dataW;
             2'b10: resultW = pc_plus4W;
         endcase
