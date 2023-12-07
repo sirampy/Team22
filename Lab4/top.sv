@@ -38,6 +38,9 @@ module top #(
 //    logic [31:0] next_pc;           // Next PC value                              Note: Why was this 16 bit? Why is this in this sheet?
 //    logic [DATA_WIDTH-1:0] instr;   // Current instruction
 
+    logic[31:0] memory_read;
+    logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
+
     //alu+regfile
     alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
         .clk(clk),
@@ -49,7 +52,10 @@ module top #(
         .alu_src(alu_src),
         .alu_ctrl(alu_ctrl),
         .eq(eq),
-        .a0(a0)
+        .a0(a0),
+        .memory_read_value(memory_read),
+        .register_write_source(result_src),
+        .alu_out(alu_out)
     );
 
     //control: 
@@ -83,13 +89,12 @@ module top #(
         .pc(pc)
     );
 
-
-/*
-For lw:
-
-If result_src == 1, want to write memory value to alu reg. Requires modifying ALU
-
-
-*/
+    main_memory main_mem (
+        .clk(clk),
+        .address_i(alu_out), // want alu_out = I add
+        .write_enable_i(mem_write),
+        .write_value_i(pc), // Not used in scope of lab 4, so random wire attached. Actual wire would be register value of address rs2, requires new output from alu_top
+        .read_value_o(memory_read)
+    );
 
 endmodule

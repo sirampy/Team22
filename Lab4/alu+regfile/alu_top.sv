@@ -12,12 +12,14 @@ module alu_top #(
     input logic [2:0]               alu_ctrl,      // determines operation in alu
     output logic                    eq,             // equal flag
     
-    output logic [DATA_WIDTH-1:0] a0 // Output for top sheet
+    output logic [DATA_WIDTH-1:0] a0, // Output for top sheet
+    input logic [DATA_WIDTH-1:0] memory_read_value,
+    input logic register_write_source,
+    output logic [DATA_WIDTH-1:0] alu_out   // output of ALU
 );
 
 logic [DATA_WIDTH-1:0] alu_op1;   // input 1
 logic [DATA_WIDTH-1:0] alu_op2;   // input 2
-logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
 logic [DATA_WIDTH-1:0] reg_op2;   // second register
 
 reg_file regfile (
@@ -26,7 +28,7 @@ reg_file regfile (
     .ad2 (rs2),
     .ad3 (rd),
     .we3 (reg_write), //write enable
-    .wd3 (alu_out), //write data
+    .wd3 (register_write_source ? memory_read_value : alu_out), //write data
     .rd1 (alu_op1),
     .rd2 (reg_op2),
     .a0(a0)
