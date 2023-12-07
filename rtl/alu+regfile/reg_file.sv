@@ -18,7 +18,7 @@ module reg_file #(
     logic [DATA_WDTH-1:0] reg_data [32];    //32 regs of 32-bits
 
     //synchronous write port
-    always_ff @ (posedge clk_i) begin
+    always_ff @ (negedge clk_i) begin // negedge for writeback to happen in first half
         if (we3_i) reg_data[ad3_i] <= wd3_i;
     end
 
