@@ -42,14 +42,12 @@ logic [31:0] reg_data_1;
 logic [31:0] reg_data_2;
 logic [31:0] alu_src_1;
 logic [31:0] alu_src_2;
-
-// data_mem wrapper
-logic [31:0] bytes_selector_in;
-logic [31:0] bytes_selector_out;
+logic [31:0] data_mem_wd;
 
 // result signals
 logic [31:0] alu_out;
 logic [31:0] data_mem_rd;
+logic [31:0] data_mem_rd_selected;
 logic jump;
 logic [31:0] result;
 logic [31:0] wd3;
@@ -141,25 +139,28 @@ branch_tester branch_tester(
     .jump_o(jump)
 );
 
+bytes_selector write_selector(
+    .load3_i(alu3),
+    .data_i(alu_out),
+
+    .data_o(data_mem_wd)
+);
 
 data_mem data_mem(
-   .a_i(alu_out[15:0]),
-   .wd_i(bytes_selector_out),
+   .a_i(alu_out[7:0]),
+   .wd_i(data_mem_wd),
    .wen_i(data_write),
 
    .rd_o(data_mem_rd)
 );
 
-assign bytes_selector_in = data_read ? data_mem_rd : alu_out;
+bytes_selector read_selector(
+    .load3_i(alu3),
+    .data_i(data_mem_rd),
 
-bytes_selector bytes_selector( // may need 2 of these for pipelining, but for now I think its cool that we can re-use only one of these
-    .load3_i(funct3),
-    .data_i(bytes_selector_in),
-
-    .data_o(bytes_selector_out)
+    .data_o(data_mem_rd_selected)
 );
 
-assign result = data_read ? bytes_selector_out : alu_out;
+assign result = (data_read == 1) ? data_mem_rd_selected : alu_out;
 
 endmodule
-

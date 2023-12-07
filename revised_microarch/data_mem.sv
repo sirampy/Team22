@@ -10,9 +10,9 @@ module data_mem #(
 );
 
 logic [ADDRESS_WIDTH-1:0] a_resized;
-assign a_resized= a_i[USED_ADDRESS_WIDTH-1:0];
+assign a_resized= a_i[ADDRESS_WIDTH-1:0];
 
-logic [DATA_WIDTH-1:0] rom_array [2**USED_ADDRESS_WIDTH-1:0];
+logic [DATA_WIDTH-1:0] rom_array [2**ADDRESS_WIDTH-1:0];
 
 initial begin
         $display("loading rom.");

@@ -1,5 +1,3 @@
-
-
 module bytes_selector (
     input load3_t load3_i,
     input [31:0] data_i,

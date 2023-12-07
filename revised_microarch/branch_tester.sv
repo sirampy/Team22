@@ -30,6 +30,8 @@ case(pc_control_i)
     end
 
     JUMP: jump_o = 1; 
+    default: $error("pc control signal");
+
 endcase
 
 endmodule

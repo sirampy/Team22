@@ -201,11 +201,20 @@ always_latch begin
             $error("env calls not implemented - no interrupt routine implemented - priveleged extension not implemented");
             //TODO: some form of no-op that makes sense (eg sends signal to top sheet)
         end
+
         FENCE:begin
             $error("out of order excecution not implemented");
             //TODO: some form of no-op that makes sense (eg sends signal to pipeline to be ignored)
         end 
-        default: $error("unrecognised opcode");
+
+        default: begin
+            $display("unrecognised opcode");
+            reg_write_o = 0;
+            data_read_o = 0;
+            data_write_o = 0;
+            pc_control_o = NEXT;
+        end
+
     endcase
 end
 
