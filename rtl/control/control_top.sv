@@ -14,15 +14,15 @@ module control_top #(
     output logic [1:0]   alu_ctrl_o,      // input to alu
     output logic [1:0]   imm_src_o,
     output logic         jump_o, // not yet set up
-    output logic         branch_o,
+    output logic         branch_o
 );
 
-    logic [1:0]          alu_op,   // select alu operation
+    logic [1:0]          alu_op;   // select alu operation
 
     main_decoder main_decoder (
-        .eq_i (eq_i),
+       // .eq_i (eq_i),
         .op_i (op_i),
-        .pc_src_o (pc_src_o),
+       // .pc_src_o (pc_src_o),
         .result_src_o (result_src_o),
         .mem_write_o (mem_write_o),
         .alu_src_o (alu_src_o),

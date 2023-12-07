@@ -17,7 +17,7 @@ always_comb
             imm_src_o = 2'b00;
             alu_src_o = 1'b1;
             mem_write_o = 1'b0;
-            result_src_o = 1'b1;
+            result_src_o = 2'b1;
             branch_o = 1'b0;
             alu_op_o = 2'b00;
         end

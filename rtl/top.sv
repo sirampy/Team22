@@ -3,9 +3,9 @@ module top #(
               DATA_WIDTH = 32,
               PC_WIDTH = 16
 )(
-    input logic clk,      
+    input logic clk_i,      
     input logic rst,
-    output logic [DATA_WIDTH-1:0] a0,
+    output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
     logic [PC_WIDTH-1:0] pc; // pcf
@@ -66,9 +66,8 @@ module top #(
     assign next_pc = pc_src ? pc_target : pc_plus4;
 
     pc_reg pc_module (
-        .clk_i (clk),
+        .clk_i (clk_i),
         .rst_i (rst),
-        .en (stallF),
         .next_pc_i (next_pc),
         .pc_o (pc)
     );
@@ -80,7 +79,7 @@ module top #(
 
     // fetch stage pipeling:
     flip_flop1 ff1 (
-        .clk_i (clk),
+        .clk_i (clk_i),
         .rd_i (instr),              // read data from instr mem
         .pcF_i (pc),
         .pc_plus4F_i (pc_plus4), 
@@ -91,10 +90,10 @@ module top #(
 
     // register file
     reg_file regfile (
-        .clk_i (clk),
+        .clk_i (clk_i),
         .ad1_i (instrD[19:15]), // address of register 1
         .ad2_i (instrD[24:20]), // address of register 2
-        .ad3_i (rd),            // address of write register
+        .ad3_i (rdW),            // address of write register
         .we3_i (reg_writeW), //write enable
         .wd3_i (resultW), //write data
         .rd1_o (reg_op1),
@@ -123,9 +122,9 @@ module top #(
     );
 
     // decode stage pipelining
-    flip_flop1 ff2 (
+    flip_flop2 ff2(
         // main inputs
-        .clk_i(clk),
+        .clk_i(clk_i),
         .rd1D_i (reg_op1), // read reg 1
         .rd2D_i (reg_op2), // read reg 2
         .pcD_i (pcD), 
@@ -142,7 +141,7 @@ module top #(
         .alu_srcD_i (alu_src),
         // main outputs
         .rd1E_o (rd1E),
-        .rd1E_o (rd2E),
+        .rd2E_o (rd2E),
         .pcE_o (pcE),
         .rdE_o (rdE),
         .imm_extE_o (imm_extE),
@@ -154,7 +153,7 @@ module top #(
         .jumpE_o (jumpE),
         .branchE_o (branchE),
         .alu_ctrlE_o (alu_ctrlE),
-        .alu_srcE_o (alu_srcE),
+        .alu_srcE_o (alu_srcE)
     );
 
     // alu
@@ -182,9 +181,9 @@ module top #(
     logic [1:0] result_srcM;
     logic mem_writeM;
 
-    flip_flop1 ff3 (
+    flip_flop3 ff3 (
         // main input
-        .clk_i(clk),
+        .clk_i(clk_i),
         .alu_resultE_i (alu_out),
         .write_dataE_i (reg_op2),
         .rdE_i (rdE),
@@ -223,8 +222,8 @@ module top #(
     logic reg_writeW;
     logic [1:0] result_srcW;
 
-    flip_flop1 ff4 (
-        .clk_i(clk),
+    flip_flop4 ff4 (
+        .clk_i(clk_i),
         .alu_resultM_i (alu_resultM),
         .read_dataM_i (read_dataM),
         .rdM_i (rdM),
@@ -238,6 +237,8 @@ module top #(
         .reg_writeW_o (reg_writeW),
         .result_srcW_o (result_srcW)
     );
+
+    logic [DATA_WIDTH-1:0] resultW;
 
     always_comb begin
         case (result_srcW)

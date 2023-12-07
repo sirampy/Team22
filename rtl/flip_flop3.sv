@@ -19,15 +19,15 @@ module flip_flop3 #(
     output logic [DATA_WIDTH-1:0]    alu_resultM_o, // alu output (memory)
     output logic                     write_dataM_o, // data mem write enable (m)
     output logic [11:7]              rdM_o,         // write register address (m)
-    output logic [ADDRESS_WIDTH-1:0] pc_plus4M_o    // pc+4 (m)
+    output logic [ADDRESS_WIDTH-1:0] pc_plus4M_o,    // pc+4 (m)
 
     // control unit outputs
     output logic reg_writeM_o,
     output logic result_srcM_o,
-    output logic mem_writeM_o,
+    output logic mem_writeM_o
 );
 
-always_ff @(posedge clk)
+always_ff @(posedge clk_i)
     begin
         alu_resultM_o <= alu_resultE_i;
         write_dataM_o <= write_dataE_i;

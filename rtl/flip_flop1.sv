@@ -14,7 +14,7 @@ module flip_flop1 #(
     output logic [ADDRESS_WIDTH-1:0] pc_plus4D_o  // pc+4 (decode)
 );
 
-always_ff @(posedge clk)
+always_ff @(posedge clk_i)
     begin
         instrD_o <= rd_i;
         pcD_o <= pcF_i;
