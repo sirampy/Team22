@@ -10,7 +10,7 @@
 
 To run, enter Team22 directory and write:
 
-`./run.sh Lab4 top alu+regfile control pc`
+`./run.sh Lab4 top alu+regfile control pc memory`
 
 # Stretch goal complete
 
