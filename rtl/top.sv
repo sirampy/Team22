@@ -68,7 +68,7 @@ module top #(
     pc_reg pc_module (
         .clk_i (clk),
         .rst_i (rst),
-        .en (stallF)
+        .en (stallF),
         .next_pc_i (next_pc),
         .pc_o (pc)
     );
