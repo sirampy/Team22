@@ -27,7 +27,7 @@ module flip_flop2 #(
     output logic [ADDRESS_WIDTH-1:0] pcE_o,     // pc (e)
     output logic [11:7]              rdE_o,     // write register address (e)
     output logic [DATA_WIDTH-1:0]    imm_extE_o,
-    output logic [ADDRESS_WIDTH-1:0] pc_plus4E_o  // pc+4 (e)
+    output logic [ADDRESS_WIDTH-1:0] pc_plus4E_o,  // pc+4 (e)
 
     // control unit outputs
     output logic       reg_writeE_o,
@@ -36,24 +36,25 @@ module flip_flop2 #(
     output logic       jumpE_o,
     output logic       branchE_o,
     output logic [1:0] alu_ctrlE_o,
-    output logic       alu_srcE_o,
+    output logic       alu_srcE_o
 );
 
-always_ff @(posedge clk)
+always_ff @(posedge clk_i)
     begin
         rd1E_o      <= rd1D_i;
         rd2E_o      <= rd2D_i;
         pcE_o       <= pcD_i;
         rdE_o       <= rdD_i;
-        imm_extD_i  <= imm_extE_o;
         pc_plus4E_o <= pc_plus4D_i;
-        reg_writeD_i  <= reg_writeE_o;
-        result_srcD_i <= result_srcE_o;
-        mem_writeD_i  <= mem_writeE_o;
-        jumpD_i       <= jumpE_o;
-        branchD_i     <= branchE_o;
-        alu_ctrlD_i   <= alu_ctrlE_o;
-        alu_srcD_i    <= alu_srcE_o;
+
+        imm_extE_o <= imm_extD_i;
+        result_srcE_o <= result_srcD_i;
+        mem_writeE_o <= mem_writeD_i;
+        jumpE_o <= jumpD_i;
+        branchE_o <= branchD_i;
+        alu_ctrlE_o <= alu_ctrlD_i;
+        alu_srcE_o <= alu_srcD_i;
+
     end
 
 endmodule
