@@ -77,7 +77,7 @@ module top #(
     );
 
     // fetch stage pipeling:
-    flip_flop1 ff1 (
+    pipe_reg1 pipe_reg1 (
         .clk_i (clk_i),
         .rd_i (instr),              // read data from instr mem
         .pcF_i (pc),
@@ -121,7 +121,7 @@ module top #(
     );
 
     // decode stage pipelining
-    flip_flop2 ff2(
+    pipe_reg2 pipe_reg2(
         // main inputs
         .clk_i(clk_i),
         .rd1D_i (reg_op1), // read reg 1
@@ -181,7 +181,7 @@ module top #(
     logic [1:0] result_srcM;
     logic mem_writeM;
 
-    flip_flop3 ff3 (
+    pipe_reg3 pipe_reg3 (
         // main input
         .clk_i(clk_i),
         .alu_resultE_i (alu_out),
@@ -219,7 +219,7 @@ module top #(
     logic reg_writeW;
     logic [1:0] result_srcW;
 
-    flip_flop4 ff4 (
+    pipe_reg4 pipe_reg4 (
         .clk_i(clk_i),
         .alu_resultM_i (alu_resultM),
         .read_dataM_i (read_data),

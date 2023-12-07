@@ -1,5 +1,5 @@
-// pipelining flip flop 4 -> delays from memory to writeback
-module flip_flop4 #(
+// pipelining register 4 -> delays from memory to writeback
+module pipe_reg4 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(

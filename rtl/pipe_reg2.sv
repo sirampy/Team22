@@ -1,5 +1,5 @@
-// pipelining flip flop 2 -> delays from decode to execute
-module flip_flop2 #(
+// pipelining register 2 -> delays from decode to execute
+module pipe_reg2 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(

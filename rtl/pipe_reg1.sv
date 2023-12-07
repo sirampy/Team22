@@ -1,5 +1,5 @@
-// pipelining flip flop 1 -> delays from fetch to decode
-module flip_flop1 #(
+// pipelining register 1 -> delays from fetch to decode
+module pipe_reg1 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(

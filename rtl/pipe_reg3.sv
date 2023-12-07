@@ -1,5 +1,5 @@
-// pipelining flip flop 3 -> delays from execute to memory
-module flip_flop3 #(
+// pipelining register 3 -> delays from execute to memory
+module pipe_reg3 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(
