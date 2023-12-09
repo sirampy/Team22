@@ -16,7 +16,7 @@ module pipe_reg2 #(
     input logic       reg_writeD_i,  // write enable (d) 
     input logic [1:0]      result_srcD_i, // select write input (d)
     input logic       mem_writeD_i,  // mem write enable (d)
-    input logic [1:0] jumpD_i,
+    input logic jumpD_i,
     input logic       branchD_i,
     input logic [2:0] alu_ctrlD_i,
     input logic       alu_srcD_i,
@@ -33,7 +33,7 @@ module pipe_reg2 #(
     output logic       reg_writeE_o,
     output logic [1:0] result_srcE_o,
     output logic       mem_writeE_o,
-    output logic [1:0] jumpE_o,
+    output logic jumpE_o,
     output logic       branchE_o,
     output logic [2:0] alu_ctrlE_o,
     output logic       alu_srcE_o

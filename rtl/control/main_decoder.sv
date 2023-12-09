@@ -7,7 +7,7 @@ module main_decoder(
     output logic   reg_write_o,
     output logic[1:0] alu_op_o,
     output logic    branch_o,
-    output logic[1:0]   jump_o
+    output logic   jump_o
 );
 always_comb
 case(op_i)
@@ -19,7 +19,7 @@ case(op_i)
                 result_src_o = 2'b00;
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
-                jump_o = 2'b00;
+                jump_o = 1'b0;
             end
     7'b0000011: begin//lw intruction
                 reg_write_o = 1'b1;
@@ -29,7 +29,7 @@ case(op_i)
                 result_src_o = 2'b01;
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
-                jump_o = 2'b00;
+                jump_o = 1'b0;
     end
     7'b0100011: begin //sw instruction
                 reg_write_o = 1'b0;
@@ -39,7 +39,7 @@ case(op_i)
                 result_src_o = 2'b00;
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
-                jump_o = 2'b00;
+                jump_o = 1'b0;
     end 
     7'b0110011: begin //r-type instruction
                 reg_write_o = 1'b1;
@@ -49,7 +49,7 @@ case(op_i)
                 result_src_o = 2'b00;
                 branch_o = 1'b0;
                 alu_op_o = 2'b10;
-                jump_o = 2'b00;
+                jump_o = 1'b0;
     end 
     7'b1100011: begin //beq instruction
                 reg_write_o = 1'b0;
@@ -59,7 +59,7 @@ case(op_i)
                 result_src_o = 2'b00;
                 branch_o = 1'b1;
                 alu_op_o = 2'b01;
-                jump_o = 2'b00;
+                jump_o = 1'b0;
     end 
 /*    7'b0110111: begin//u-type
                 reg_write_o = 1'b1;
@@ -80,7 +80,7 @@ case(op_i)
                 result_src_o = 2'b10; //to write pc+4 into rd
                 branch_o = 1'b0; //not a branch_o
                 alu_op_o = 2'bxx;// dont care as alu isnt used
-                jump_o = 2'b01;
+                jump_o = 1'b1;
     end
  /*   7'b1101111: begin //jalr
                 reg_write_o = 1'b1;

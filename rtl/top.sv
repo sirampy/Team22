@@ -4,8 +4,8 @@ module top #(
               PC_WIDTH = 32
 )(
     input logic clk_i,      
-    input logic rst,
-    output logic [DATA_WIDTH-1:0] a0
+    input logic rst
+  //  output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
     logic [PC_WIDTH-1:0] pc; // pcf
@@ -26,7 +26,7 @@ module top #(
     // control signals
     logic [1:0] result_src; // select what data to write
     logic mem_write;
-    logic [1:0] jump;
+    logic  jump;
     logic branch;
     logic [2:0] alu_ctrl;
     logic alu_src;
@@ -54,7 +54,7 @@ module top #(
     logic reg_writeE;
     logic [1:0] result_srcE;
     logic mem_writeE;
-    logic [1:0] jumpE;
+    logic  jumpE;
     logic branchE;
     logic [2:0] alu_ctrlE;
     logic alu_srcE;
@@ -242,6 +242,7 @@ module top #(
             2'b00: resultW = alu_resultW;
             2'b01: resultW = read_dataW;
             2'b10: resultW = pc_plus4W;
+            default: $error ("unsupported"); 
         endcase
     end
 

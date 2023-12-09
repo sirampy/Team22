@@ -11,7 +11,7 @@ module control_top (
     output logic         reg_write_o,     // register write enable
     output logic [2:0]   alu_ctrl_o,      // input to alu
     output logic [1:0]   imm_src_o,
-    output logic [1:0]   jump_o, // not yet set up
+    output logic   jump_o, 
     output logic         branch_o
 );
 

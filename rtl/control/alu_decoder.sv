@@ -9,20 +9,22 @@ module alu_decoder (
 logic [1:0] op5_funct7;
 assign op5_funct7 = {op5_i, funct7_i};
 
-always_comb
+always_comb begin
     case (alu_op_i)
         2'b00: alu_control_o = 3'b000;       //add for lw, sw
         2'b01: alu_control_o = 3'b001;       //subtract for beq
-        2'b10: case (funct3_i)
+        2'b10: 
+        case (funct3_i)
         3'b000: begin
                 if (op5_funct7 != 2'b11) alu_control_o = 3'b000;  //add
                 else alu_control_o = 3'b001;                     //subtract
         end
         3'b010: alu_control_o = 3'b101;  //slt
         3'b110: alu_control_o = 3'b011;  //or
-        3'b010: alu_control_o = 3'b111;  //and
+        3'b111: alu_control_o = 3'b111;  //and
         default: $error ("unsupported instruction");
         endcase
+        default: alu_control_o = 3'b000;
     endcase
-
+end 
 endmodule
