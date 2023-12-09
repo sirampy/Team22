@@ -1,12 +1,11 @@
 module top #(
-    parameter ADDR_WIDTH = 5,  //address width for reg
-              DATA_WIDTH = 32 //
+    parameter ADDR_WIDTH = 5,  
+              DATA_WIDTH = 32 
 )(
     input logic clk,      
     input logic rst,
     output logic reg_write,
     output logic [DATA_WIDTH-1:0] a0,
-//    output logic reg_write,           Note: Repeat output declaration? Is this supposed to be a different variable?
     output logic eq,
     output logic alu_src,
     output logic [2:0] alu_ctrl,
@@ -23,23 +22,14 @@ module top #(
     logic [ADDR_WIDTH-1:0] rs1;     // ALU registers read address 1
     logic [ADDR_WIDTH-1:0] rs2;     // ALU registers read address 2
     logic [ADDR_WIDTH-1:0] rd;      // ALU registers write address
-//    logic reg_write;                // Enable write to ALU registers              Note: Already defined in outputs, hence commented
-//    logic alu_src;                  // [0] - use rd2, [1] - use imm               Note: Already defined in outputs, hence commented
-//    logic eq;                       // rd1 == rd2                                 Note: Already defined in outputs, hence commented
     logic pc_src;                   // [0] - Increment PC as usual, [1] - Write imm to PC
-//    logic result_src;               // [0] - Write ALU output to rd, [1] - Write memory value to rd 
-//    logic mem_write;                // Enable write to memory. Not used in scope of Lab4. Included for completeness' sake
-////    logic [31:0] alu_out;           // Output from ALU
-//    logic [2:0] alu_ctrl;           // Select ALU mathematical operation          Note: Already defined in outputs, hence commented
-//    logic [31:0] imm_op;            // Immediate value                            Note: Already defined in outputs, hence commented
-//    logic [11:0] imm_ext;           // Sign extended immediate value? Why is it 12 bits? Not used in sheet, can this be removed?
-//    logic [1:0] imm_src;            // Select which extend to perform             Note: Why is this in this sheet?
-    logic [31:0] pc;                // Current PC value                             Note: Why was this 16 bit?
-//    logic [31:0] next_pc;           // Next PC value                              Note: Why was this 16 bit? Why is this in this sheet?
-//    logic [DATA_WIDTH-1:0] instr;   // Current instruction
-
+    logic [31:0] pc;                // Current PC value           
+    logic [31:0] next_pc;
+    logic [31:0] pc_plus4;
+    logic jalr_pc_src;
     logic[31:0] memory_read;
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
+
 
     //alu+regfile
     alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
@@ -81,19 +71,36 @@ module top #(
     );
 
     //program counter
-    pc_top #(.PC_WIDTH(DATA_WIDTH)) pc_module (
+ /*   pc_top #(.PC_WIDTH(DATA_WIDTH)) pc_module (
         .imm_op(imm_op),
         .clk(clk),
         .rst(rst),
         .pc_src(pc_src),
         .pc(pc)
+    );*/
+
+    pc_reg pc_reg(
+        .pc(pc),
+        .next_pc (next_pc),
+        .clk (clk),
+        .rst (rst)
+    );
+
+    pc_mux pc_mux(
+        .pc(pc),
+        .imm_op(imm_op),
+        .pc_jalr(alu_out),
+        .pc_src(pc_src),
+        .jalr_pc_src(jalr_pc_src),
+        .next_pc(next_pc),
+        .pc_plus4(pc_plus4)
     );
 
     main_memory main_mem (
         .clk(clk),
-        .address_i(alu_out), // want alu_out = I add
+        .address_i(alu_out), 
         .write_enable_i(mem_write),
-        .write_value_i(pc), // Not used in scope of lab 4, so random wire attached. Actual wire would be register value of address rs2, requires new output from alu_top
+        .write_value_i(pc), 
         .read_value_o(memory_read)
     );
 

@@ -14,10 +14,6 @@ always_comb
         3'b001: sum = alu_op1 - alu_op2;          // subtract
         3'b010: sum = alu_op1 & alu_op2;          // and
         3'b011: sum = alu_op1 | alu_op2;          // or
-        // Note on following line:
-        // Previously, the condition was alu_op1-alu_op2 < 0
-        // But output is unsigned, so < 0 is always false.
-        // Instead checking MSB
         3'b101: sum = ((alu_op1-alu_op2) >= 2**(DATA_WIDTH-1)) ? {{DATA_WIDTH-1{1'b0}}, 1'b1} : {DATA_WIDTH{1'b0}};  // slt
         default: sum = 0;
     endcase    

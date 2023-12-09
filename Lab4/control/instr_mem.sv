@@ -1,5 +1,5 @@
 module instr_mem #(
-    parameter   ADDRESS_WIDTH = 32, // This was previously 8? But PC is 32 bit? Was this intentional?
+    parameter   ADDRESS_WIDTH = 32,
                 DATA_WIDTH = 32
 )(
     input logic [ADDRESS_WIDTH-1:0] a,
@@ -19,6 +19,6 @@ initial begin
 end;
 
 // We split PC into 16 bit because of smaller rom, and we have to remember to divide by 4
-assign rd = rom_array[(a[31:16] + a[15:0]) / 4]; // Note: Why was this previously in an always_comb?
+assign rd = rom_array[(a[31:16] + a[15:0]) / 4]; 
 
 endmodule
