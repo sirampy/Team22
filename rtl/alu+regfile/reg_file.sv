@@ -1,35 +1,32 @@
 module reg_file #(
-    parameter ADDR_WDTH = 5,
-    parameter DATA_WDTH = 32
-)(
-    input                     clk,
 
-    input [ADDR_WDTH - 1 : 0] ad1,
-    input [ADDR_WDTH - 1 : 0] ad2,
-    input [ADDR_WDTH - 1 : 0] ad3,
+    parameter ADDR_WIDTH = 5,
+    parameter DATA_WIDTH = 32
 
-    input                     we3,
-    input [DATA_WDTH - 1 : 0] wd3,
+) (
 
-    output [DATA_WDTH - 1 : 0]rd1,
-    output [DATA_WDTH - 1 : 0]rd2,
-    
-    output logic [DATA_WDTH-1:0] a0 // Output for top sheet
+    input                         clk_i, // Clock
+    input [ ADDR_WIDTH - 1 : 0 ]  ad1_i, // Read address 1
+    input [ ADDR_WIDTH - 1 : 0 ]  ad2_i, // Read address 2
+    input [ ADDR_WIDTH - 1 : 0 ]  ad3_i, // Write address
+    input                         we3_i, // Write enable
+    input [ DATA_WIDTH - 1 : 0 ]  wd3_i, // Write data
+
+    output [ DATA_WIDTH - 1 : 0 ] rd1_o, // Value at ad1
+    output [ DATA_WIDTH - 1 : 0 ] rd2_o, // Value at ad2
+    // output logic [ DATA_WIDTH - 1 : 0 ] a0 // Output for top sheet
 
 );
-//    logic [ ((2**ADDR_WDTH -1) * DATA_WDTH) -1 : 0] reg_data;
-    logic [DATA_WDTH-1:0] reg_data [2 ** ADDR_WDTH - 1 : 0];    //32 regs of 32-bits
 
-    assign reg_data[0] = {DATA_WDTH{1'b0}};    //zero register
+logic [ DATA_WIDTH - 1 : 0 ] reg_data [ 2 ** ADDR_WIDTH - 1 : 0 ];
 
-    //synchronous write port
-    always_ff @ (posedge clk)
-        if (we3) reg_data[ad3] <= wd3;
+assign reg_data[0] = { DATA_WIDTH{1'b0} }; // Zero register
 
-    // read ports of the register file should be asychronous
-    assign rd1 = reg_data[ad1];
-    assign rd2 = reg_data[ad2];
-    
-    assign a0 = reg_data[10];
+always_ff @(posedge clk)
+    if (we3_i) reg_data[ad3_i] <= wd3_i;
+
+assign rd1_o = reg_data[ad1_i];
+assign rd2_o = reg_data[ad2_i];
+//assign a0_o = reg_data[10];
 
 endmodule

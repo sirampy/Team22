@@ -29,25 +29,30 @@ logic [ DATA_WIDTH - 1 : 0 ] rs2_val; // Value at rs2
 // logic [ DATA_WIDTH - 1 : 0 ] alu_op2; // ALU input 2. Is this really needed?
 
 reg_file regfile (
-    .clk ( clk_i ),
-    .ad1 ( rs1_i ),
-    .ad2 ( rs2_i ),
-    .ad3 ( rd_i ),
-    .we3 ( reg_write_i ),
-    .wd3 ( reg_write_src_i ? mem_read_val_i : alu_out_o ),
-    .rd1 ( rs1_val ),
-    .rd2 ( rs2_val ),
-    .a0  ( a0_o )
+
+    .clk_i ( clk_i ),
+    .ad1_i ( rs1_i ),
+    .ad2_i ( rs2_i ),
+    .ad3_i ( rd_i ),
+    .we3_i ( reg_write_i ),
+    .wd3_i ( reg_write_src_i ? mem_read_val_i : alu_out_o ),
+    
+    .rd1_o ( rs1_val ),
+    .rd2_o ( rs2_val )
+    //.a0  ( a0_o )
 );
 
 // assign alu_op2 = alu_src ? imm_op : reg_op2; 
 
 alu alu (
-    .alu_op1  ( rs1_val ),
-    .alu_op2  ( alu_src_i ? imm_op_i : rs2_val ); // alu_op2),
-    .alu_ctrl ( alu_ctrl_i ),
-    .sum      ( alu_out_o ),
-    .eq       ( eq_o )
+
+    .op1_i  ( rs1_val ),
+    .op2_i  ( alu_src_i ? imm_op_i : rs2_val ); // alu_op2),
+    .ctrl_i ( alu_ctrl_i ),
+
+    .out_o  ( alu_out_o ),
+    .eq_o   ( eq_o )
+
 );
 
 endmodule
