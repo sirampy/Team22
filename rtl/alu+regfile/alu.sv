@@ -1,23 +1,35 @@
 module alu #(
+
     parameter DATA_WIDTH = 32
-)(
-    input  logic [DATA_WIDTH-1:0]    alu_op1,     // RD1 
-    input  logic [DATA_WIDTH-1:0]    alu_op2,     // either RD2 or imm
-    input  logic [2:0]               alu_ctrl,    // alu selection of instruction
-    output logic [DATA_WIDTH-1:0]    sum,         // output
-    output logic                     eq           // equal/zero flag
+
+) (
+
+    input  logic [ DATA_WIDTH - 1 : 0 ]  op1_i,  // ALU input 1: Always rs1
+    input  logic [ DATA_WIDTH - 1 : 0 ]  op2_i,  // ALU input 2: Either rs2 or imm
+    input  logic [ 3 : 0 ]               ctrl_i, // ALU operation
+
+    output logic [ DATA_WIDTH - 1 : 0 ]  out_o,  // ALU output
+    output logic                         eq_o    // Equal/zero flag: (ALU output == 0)
+
 );
 
 always_comb 
-    case (alu_ctrl)
-        3'b000: sum = alu_op1 + alu_op2;          // add
-        3'b001: sum = alu_op1 - alu_op2;          // subtract
-        3'b010: sum = alu_op1 & alu_op2;          // and
-        3'b011: sum = alu_op1 | alu_op2;          // or
-        3'b101: sum = ((alu_op1-alu_op2) >= 2**(DATA_WIDTH-1)) ? {{DATA_WIDTH-1{1'b0}}, 1'b1} : {DATA_WIDTH{1'b0}};  // slt
-        default: sum = 0;
-    endcase    
+    case ( ctrl_i )
+        4'b0000: out_o = op1 + op2; // ADD
+        4'b0001: out_o = op1 - op2; // SUB
+        4'b0010: out_o = op1 & op2; // AND
+        4'b0011: out_o = op1 | op2; // OR
+        // 4'b0100: // SLL
+        4'b0101: out_o = ( ( op1 - op2 ) >= 2 ** ( DATA_WIDTH - 1 ) ) // SLT
+                         ? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
+                         : { DATA_WIDTH { 1'b0 } };
+        // 4'b0110: // SRL/SRA
+        // 4'b0111: // Undefined?
+        // 4'b1000: // Undefined?
+        // 4'b1001: // XOR
+        default: out_o = 0;
+    endcase
 
-assign eq = (sum == 0) ? 1'b1 : 1'b0;             //outputs 1 if equal
+assign eq_o = (out_o == 0) ? 1'b1 : 1'b0; // Computes equal flag
 
 endmodule
