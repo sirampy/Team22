@@ -18,8 +18,8 @@ int main(int argc, char **argv, char **env) {
     if (vbdOpen()!=1) return (-1);
     vbdHeader("F1 Lights");
 
-    top->clk = 1;
-    top->rst = 1;
+    top->clk = 0;
+    top->rst = 0;
 
 
     vbdSetMode(1);
@@ -32,7 +32,15 @@ int main(int argc, char **argv, char **env) {
             top->eval();                // Evaluate the counter module with the new clock value.
 
         }
+        top->rst = 0;
+        vbdHex(4, (int(top->a0) >> 16) & 0xF);
+        vbdHex(3, (int(top->a0) >> 8) & 0xF);
+        vbdHex(2, (int(top->a0) >> 4) & 0xF);
+        vbdHex(1, int(top->a0) & 0xF);
+        vbdCycle(i+1);
         vbdBar(top->a0 & 0xFF);
+        top->rst = vbdFlag();
+
 
         if (Verilated::gotFinish()){     
             tfp->close();
