@@ -51,7 +51,7 @@ main_decoder main_decoder (
     .result_src_o (result_src_o),
     .mem_write_o (mem_write_o),
     .alu_src_o (alu_src_o),
-    .imm_src_o (imm_src_o),
+    .imm_src_o (imm_src),
     .reg_write_o (reg_write_o),
     .jalr_pc_src_o (jalr_pc_src_o),
     .alu_op_o (alu_op),
@@ -64,7 +64,7 @@ alu_decoder alu_decoder (
     .funct3_i (funct3_i),
     .funct7_i (funct7_i),
     .alu_op_i (alu_op),
-    
+
     .alu_control_o (alu_ctrl_o)
 
 );
@@ -72,7 +72,7 @@ alu_decoder alu_decoder (
 sign_extend sign_extend (
 
     .instr31_7_i ( instr[ 31 : 7 ] ),
-    .imm_src_i   ( imm_src_o ),
+    .imm_src_i   ( imm_src ),
     
     .imm_ext_o   ( imm_op_o )
 
