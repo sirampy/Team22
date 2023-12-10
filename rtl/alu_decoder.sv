@@ -40,10 +40,10 @@ always_comb
                 3'b110: alu_control_o = 4'b0011;        // OR
                 3'b111: alu_control_o = 4'b0010;        // AND
         
-                default: alu_control_o = 4'b0000;
+                default: alu_control_o = 4'b????;
             endcase
         
-        default: alu_control_o = 4'b0000; 
+        default: alu_control_o = 4'b????; 
     endcase
 
 endmodule
