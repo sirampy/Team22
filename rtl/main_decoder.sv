@@ -1,7 +1,7 @@
 module main_decoder (
     input  logic                 eq_i,           // the Zero Flag
     input  logic   [ 6 : 0 ]     op_i,           // Opcode
-    input logic    [ 2 : 0 ]     funct3_i        // selects what type of arithmetic for ALU
+    input logic    [ 2 : 0 ]     funct3_i,        // selects what type of arithmetic for ALU
     output logic                 pc_src_o,       // selects next value for pc: [0] next instruction from mem, [1] jump & branch instructions 
     output logic                 result_src_o,   // selects data write into register : [0] from ALU ouput, [1] from datamem
     output logic                 mem_write_o,    // [1] to enable write to memory
@@ -9,7 +9,7 @@ module main_decoder (
     output logic   [ 2 : 0 ]     imm_src_o,      // used to select what type of instruction and its needed extension
     output logic                 reg_write_o,    // [1] to enable write to registers
     output logic   [ 1 : 0 ]    alu_op_o,        // to select what type of opertion ALU completes
-    output logic                jalr_pc_src_o,   //selcts if jalr instructionj: [1] jalr, [0] if not
+    output logic                jalr_pc_src_o   //selcts if jalr instructionj: [1] jalr, [0] if not
 
     
 );
