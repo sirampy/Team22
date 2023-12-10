@@ -18,12 +18,12 @@ endfunction
 
 logic [ 8 : 0 ] byte_array [ ( 2 ** ACTUAL_ADDRESS_WIDTH ) - 1 : 0 ];
 
-/*
+
 initial begin
         $display("Loading instructions into ROM.");
         $readmemh("control/program.mem", byte_array); // Choose correct .mem location
 end;
-*/
+
 
 assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Little endian. May want to change if loaded instructions are big endian?
                 byte_array[ convert_address( addr_i ) + 2 ],

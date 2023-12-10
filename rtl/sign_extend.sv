@@ -1,10 +1,14 @@
 module sign_extend #(
-    parameter IMM_WIDTH = 32
-)(
-    input logic [ 31 : 7 ]            instr31_7_i, // Instruction [ 31 : 7 ], to use for immediate values
-    input logic [ 1 : 0 ]              imm_src_i,  // Immediate value type
 
-    output logic [ IMM_WIDTH - 1 : 0 ] imm_ext_o   // Immediate value
+    parameter IMM_WIDTH = 32
+
+) (
+
+    input logic [ 31 : 7 ]             instr31_7_i, // Instruction [ 31 : 7 ], to use for immediate values
+    input logic [ 1 : 0 ]              imm_src_i,   // Immediate value type
+
+    output logic [ IMM_WIDTH - 1 : 0 ] imm_ext_o    // Immediate value
+
 );
 
 always_comb
