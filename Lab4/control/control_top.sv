@@ -14,11 +14,11 @@ module control_top #(
     output logic          mem_write,    // memory write enable
     output logic          alu_src,      // select rd2 or imm
     output logic          reg_write,    // register write enable
+    output logic          jalr_pc_src,
     output logic [2:0]    alu_ctrl,     // input to alu                       
     output logic [31:0]   imm_op,       //sign extended imm
     output logic [1:0]    imm_src,
-    output logic [INSTR_WIDTH-1:0]   instr,    //instruction from mem        
-
+    output logic [INSTR_WIDTH-1:0]   instr,    //instruction from mem   
 // parts of instruction
     output logic [REG_ADDR_WIDTH-1:0]    rs1,
     output logic [REG_ADDR_WIDTH-1:0]    rs2,
@@ -26,9 +26,8 @@ module control_top #(
 );
 
 logic [1:0] alu_op; 
-logic branch;
-logic jal;
-
+//logic branch;
+//logic jal;
 
 assign rs1 = instr[19:15];
 assign rs2 = instr[24:20];
@@ -48,8 +47,9 @@ main_decoder main_decoder (
     .alu_src (alu_src),
     .imm_src (imm_src),
     .reg_write (reg_write),
+    .jalr_pc_src (jalr_pc_src),
     .alu_op (alu_op),
-    .jal(jal),
+ //   .jal(jal),
     .funct3 (funct3)
 );
 

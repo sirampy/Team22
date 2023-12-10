@@ -25,8 +25,7 @@ module top #(
     logic pc_src;                   // [0] - Increment PC as usual, [1] - Write imm to PC
     logic [31:0] pc;                // Current PC value           
     logic [31:0] next_pc;
-    logic [31:0] pc_plus4;
-    logic jalr_pc_src;
+    logic jalr_pc_src; 
     logic[31:0] memory_read;
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
 
@@ -57,6 +56,7 @@ module top #(
         .op (instr[6:0]),
         .funct3 (instr[14:12]),
         .funct7(instr[30]),
+        .jalr_pc_src(jalr_pc_src),
         .eq(eq),
         .pc_src(pc_src),
         .result_src(result_src),
@@ -92,8 +92,7 @@ module top #(
         .pc_jalr(alu_out),
         .pc_src(pc_src),
         .jalr_pc_src(jalr_pc_src),
-        .next_pc(next_pc),
-        .pc_plus4(pc_plus4)
+        .next_pc(next_pc)
     );
 
     main_memory main_mem (
