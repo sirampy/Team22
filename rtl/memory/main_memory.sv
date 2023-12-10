@@ -31,7 +31,7 @@ initial begin
 end
 */
 
-always_ff @(posedge clk, posedge write_enable_i)
+always_ff @(posedge clk_i, posedge write_enable_i)
     if (write_enable_i)
     begin
         memory_bytes[ convert_address(address_i) + 3 ] <= write_value_i[ 31 : 24 ]; // Little endian

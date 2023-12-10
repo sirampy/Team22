@@ -15,12 +15,12 @@ module alu #(
 
 always_comb 
     case ( ctrl_i )
-        4'b0000: out_o = op1 + op2; // ADD
-        4'b0001: out_o = op1 - op2; // SUB
-        4'b0010: out_o = op1 & op2; // AND
-        4'b0011: out_o = op1 | op2; // OR
+        4'b0000: out_o = op1_i + op2_i; // ADD
+        4'b0001: out_o = op1_i - op2_i; // SUB
+        4'b0010: out_o = op1_i & op2_i; // AND
+        4'b0011: out_o = op1_i | op2_i; // OR
         // 4'b0100: // SLL
-        4'b0101: out_o = ( ( op1 - op2 ) >= 2 ** ( DATA_WIDTH - 1 ) ) // SLT
+        4'b0101: out_o = ( ( op1_i - op2_i ) >= 2 ** ( DATA_WIDTH - 1 ) ) // SLT
                          ? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
                          : { DATA_WIDTH { 1'b0 } };
         // 4'b0110: // SRL/SRA

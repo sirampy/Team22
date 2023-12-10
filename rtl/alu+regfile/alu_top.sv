@@ -18,7 +18,7 @@ module alu_top #(
 
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
     
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o,            // Program output. Is this still needed in lab 5?
+   // output logic [ DATA_WIDTH - 1 : 0 ] a0_o,            // Program output. Is this still needed in lab 5?
     output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o        // ALU output. Does this still need to be output?
 
 );
@@ -47,7 +47,7 @@ reg_file regfile (
 alu alu (
 
     .op1_i  ( rs1_val ),
-    .op2_i  ( alu_src_i ? imm_op_i : rs2_val ); // alu_op2),
+    .op2_i  ( alu_src_i ? imm_op_i : rs2_val ), // alu_op2),
     .ctrl_i ( alu_ctrl_i ),
 
     .out_o  ( alu_out_o ),
