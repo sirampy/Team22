@@ -8,7 +8,7 @@ module top #(
     input logic clk,      
     input logic rst,
     output logic reg_write,
-    //output logic [DATA_WIDTH-1:0] a0_o,
+    output logic [DATA_WIDTH-1:0] a0_o,
     output logic eq,
     output logic alu_src,
     output logic [3:0] alu_ctrl,
@@ -48,7 +48,7 @@ alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
     .alu_src_i(alu_src),
     .alu_ctrl_i(alu_ctrl),
     .eq_o(eq),
-    //.a0_o(a0_o),
+    .a0_o(a0_o),
     .mem_read_val_i(memory_read),
     .reg_write_src_i(result_src),
     .alu_out_o(alu_out)
@@ -60,7 +60,7 @@ control_top #(.INSTR_WIDTH(DATA_WIDTH), .REG_ADDR_WIDTH(ADDR_WIDTH)) control_uni
 
     .pc_i(pc),
     .imm_src_o(imm_src),
-    .instr(instr_o),
+    .instr_o(instr_o),
     .jalr_pc_src_o(jalr_pc_src),
     .eq_i(eq),
     .pc_src_o(pc_src),
