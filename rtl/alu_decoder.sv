@@ -14,12 +14,12 @@ assign op5_funct7 = { op5_i, funct7_i };
 
 always_comb
     case ( alu_op_i )
-        2'b00: alu_control_o = 4'b0000;                 // LW/SW - Want to ADD
+        2'b00: alu_control_o = 4'b0000; // LW/SW - Want to ADD
         2'b01:
             case ( funct3_i )
-                3'b000: alu_control_o = 4'b0001;        // BEQ - Want to SUB
-                3'b001: alu_control_o = 4'b0001;        // BNE - Want to SUB
-                default: alu_control_o = 4'b???; //dont care condition/signal unknown
+                3'b000: alu_control_o = 4'b0001;  // BEQ - Want to SUB
+                3'b001: alu_control_o = 4'b0001;  // BNE - Want to SUB
+                default: alu_control_o = 4'b????; // Don't care condition/signal unknown
                 // 3'b100: // BLT
                 // 3'b101: // BGE
                 // 3'b110: // BLTU
@@ -40,10 +40,10 @@ always_comb
                 3'b110: alu_control_o = 4'b0011;        // OR
                 3'b111: alu_control_o = 4'b0010;        // AND
         
-                default: alu_control_o = 4'b0000;
+                default: alu_control_o = 4'b????;
             endcase
         
-        default: alu_control_o = 4'b0000; 
+        default: alu_control_o = 4'b????; 
     endcase
 
 endmodule
