@@ -17,9 +17,6 @@ module control_top #(
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
     output logic [ INSTR_WIDTH - 1 : 0 ]    instr_o,       // Current instruction to execute
-    output logic [ REG_ADDR_WIDTH - 1 : 0 ] rs1_o,              // ALU operand register address 1
-    output logic [ REG_ADDR_WIDTH - 1 : 0 ] rs2_o,              // ALU operand register address 2
-    output logic [ REG_ADDR_WIDTH - 1 : 0 ] rd_o                // Register write address
 
 );
 
@@ -28,11 +25,6 @@ logic [ 1 : 0 ] imm_src; // Immediate value type
 logic [ 6 : 0 ] op,      // Instruction operand
 logic [ 2 : 0 ] funct3,  // Operator select
 logic           funct7,  // Operator select
-
-
-assign rs1 = instr_o [ 19 : 15 ];      // Move to top
-assign rs2 = instr_o [ 24 : 20 ];      // Move to top
-assign rd = instr_o [ 11 : 7 ];        // Move to top
 
 assign op = instr_o [ 6 : 0 ];
 assign funct3 = instr_o [ 14 : 12 ];
