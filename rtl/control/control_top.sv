@@ -26,8 +26,7 @@ module control_top #(
 );
 
 logic [1:0] alu_op; 
-//logic branch;
-//logic jal;
+
 
 assign rs1 = instr[19:15];
 assign rs2 = instr[24:20];
@@ -49,7 +48,6 @@ main_decoder main_decoder (
     .reg_write (reg_write),
     .jalr_pc_src (jalr_pc_src),
     .alu_op (alu_op),
- //   .jal(jal),
     .funct3 (funct3)
 );
 
