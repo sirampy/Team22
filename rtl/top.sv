@@ -5,7 +5,7 @@ module top #(
     input logic clk,      
     input logic rst,
     output logic reg_write,
-    //output logic [DATA_WIDTH-1:0] a0,
+    output logic [DATA_WIDTH-1:0] a0,
     output logic eq,
     output logic alu_src,
     output logic [3:0] alu_ctrl,
@@ -41,7 +41,7 @@ module top #(
         .alu_src_i(alu_src),
         .alu_ctrl_i(alu_ctrl),
         .eq_o(eq),
-      //  .a0_o(a0),
+        .a0_o(a0),
         .mem_read_val_i(memory_read),
         .reg_write_src_i(result_src),
         .alu_out_o(alu_out)

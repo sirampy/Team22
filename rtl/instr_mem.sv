@@ -15,7 +15,7 @@ logic [DATA_WIDTH-1:0] rom_array [((2**16)/4)-1:0];
 
 initial begin
         $display("loading rom.");
-        $readmemh("control/program.mem", rom_array);
+        $readmemh("f1_program.mem", rom_array);
 end;
 
 // We split PC into 16 bit because of smaller rom, and we have to remember to divide by 4
