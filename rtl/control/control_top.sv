@@ -9,12 +9,12 @@ module control_top #(
     input  logic          eq,           // equal/zero flag
 
 // control output signals
-    output logic          pc_src,       // select pc next
+    output logic          pc_src,       // control signal for JAL and branch
     output logic          result_src,   // select write input
     output logic          mem_write,    // memory write enable
     output logic          alu_src,      // select rd2 or imm
     output logic          reg_write,    // register write enable
-    output logic          jalr_pc_src,
+    output logic          jalr_pc_src,  //control signal for JALR
     output logic [2:0]    alu_ctrl,     // input to alu                       
     output logic [31:0]   imm_op,       //sign extended imm
     output logic [1:0]    imm_src,
