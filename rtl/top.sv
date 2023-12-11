@@ -28,7 +28,7 @@ logic pc_src;                   // [0] - Increment PC as usual, [1] - Write imm 
 logic [31:0] pc;                // Current PC value           
 logic [31:0] next_pc;
 logic jalr_pc_src; 
-logic[31:0] memory_read;
+logic [31:0] memory_read;
 logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
 
 assign rs1 = instr_o [ 19 : 15 ];
