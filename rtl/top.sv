@@ -16,20 +16,20 @@ module top #(
 
     output logic result_src,
     output logic mem_write,
-    output logic[2:0] imm_src,
+    //output logic [ 2 : 0 ] imm_src,
     output logic [DATA_WIDTH-1:0] instr_o
 
 );
     
-logic [ADDR_WIDTH-1:0] rs1;     // ALU registers read address 1
-logic [ADDR_WIDTH-1:0] rs2;     // ALU registers read address 2
-logic [ADDR_WIDTH-1:0] rd;      // ALU registers write address
-logic pc_src;                   // [0] - Increment PC as usual, [1] - Write imm to PC
-logic [31:0] pc;                // Current PC value           
-logic [31:0] next_pc;
+logic [ ADDR_WIDTH - 1 : 0 ] rs1;     // ALU registers read address 1
+logic [ ADDR_WIDTH - 1 : 0 ] rs2;     // ALU registers read address 2
+logic [ ADDR_WIDTH - 1 : 0 ] rd;      // ALU registers write address
+logic pc_src;                         // [0] - Increment PC as usual, [1] - Write imm to PC
+logic [ 31 : 0 ] pc;                  // Current PC value           
+logic [ 31 : 0 ] next_pc;             // Write value for PC
 logic jalr_pc_src; 
-logic [31:0] memory_read;
-logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
+logic [ 31 : 0 ] memory_read;         // Value read from memory
+logic [ DATA_WIDTH - 1 : 0 ] alu_out; // output of ALU
 
 assign rs1 = instr_o [ 19 : 15 ];
 assign rs2 = instr_o [ 24 : 20 ];
@@ -37,7 +37,7 @@ assign rd = instr_o [ 11 : 7 ];
 
 
 //alu+regfile
-alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
+alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
     .clk_i(clk),
     .rs1_i(rs1),
@@ -56,34 +56,35 @@ alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
 );
 
 //control: 
-control_top #(.INSTR_WIDTH(DATA_WIDTH)) control_unit (
+control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
 
-    .pc_i(pc),
-    .imm_src_o(imm_src),
-    .instr_o(instr_o),
-    .jalr_pc_src_o(jalr_pc_src),
-    .eq_i(eq),
-    .pc_src_o(pc_src),
-    .result_src_o(result_src),
-    .mem_write_o(mem_write),
-    .alu_src_o(alu_src),
-    .reg_write_o(reg_write),
-    .alu_ctrl_o(alu_ctrl),
-    .imm_op_o(imm_op)
+    .pc_i          ( pc ),
+    .eq_i          ( eq ),
 
-);
-
-pc_reg pc_reg(
-
-    .clk_i     (clk),
-    .rst_i     (rst),
-    .next_pc_i (next_pc),
-
-    .pc_o      (pc)
+    .pc_src_o      ( pc_src ),
+    .result_src_o  ( result_src ),
+    .mem_write_o   ( mem_write ),
+    .alu_src_o     ( alu_src ),
+    .reg_write_o   ( reg_write ),
+    .jalr_pc_src_o ( jalr_pc_src ),
+    .alu_ctrl_o    ( alu_ctrl ),
+    .imm_op_o      ( imm_op ),
+    //.imm_src_o(imm_src),
+    .instr_o       ( instr_o )
 
 );
 
-pc_mux pc_mux(
+pc_reg pc_reg (
+
+    .clk_i     ( clk ),
+    .rst_i     ( rst ),
+    .next_pc_i ( next_pc ),
+
+    .pc_o      ( pc )
+
+);
+
+pc_mux pc_mux (
 
     .pc_i(pc),
     .imm_op_i(imm_op),

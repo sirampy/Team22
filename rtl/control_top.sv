@@ -15,8 +15,8 @@ module control_top #(
     output logic                            jalr_pc_src_o, // [0] - ?, [1] - ?
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
-    output logic [ 2 : 0 ]                  imm_src_o, // Immediate value type - need this on top level sheet 
-    output logic [ INSTR_WIDTH - 1 : 0 ]    instr_o       // Current instruction to execute
+    //output logic [ 2 : 0 ]                  imm_src_o,     // Immediate value type 
+    output logic [ INSTR_WIDTH - 1 : 0 ]    instr_o        // Current instruction to execute
 
 );
 
@@ -32,6 +32,7 @@ assign funct7 = instr_o [ 30 ];
 instr_mem instr_mem (
 
     .addr_i (pc_i),
+
     .rd_o   (instr_o)
 
 );
@@ -66,7 +67,7 @@ alu_decoder alu_decoder (
 
 sign_extend sign_extend (
 
-    .instr31_7_i ( instr_o[ 31 : 7 ] ),
+    .instr31_7_i ( instr_o [ 31 : 7 ] ),
     .imm_src_i   ( imm_src_o ),
     
     .imm_ext_o   ( imm_op_o )
