@@ -17,16 +17,14 @@ module alu_top #(
     input logic [ 3 : 0 ]               alu_ctrl_i,      // ALU operation select
 
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
-    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o,        // ALU output
+    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o,       // ALU output
+    output logic [ DATA_WIDTH - 1 : 0 ] rs2_val_o,       // Value at rs2, output for memory write
 
-     output logic [ DATA_WIDTH - 1 : 0 ] a0_o // UNCOMMENT ONLY IF NEEDED - NEED IT FOR TESTING
+    output logic [ DATA_WIDTH - 1 : 0 ] a0_o
 
 );
 
 logic [ DATA_WIDTH - 1 : 0 ] rs1_val; // Value at rs1
-logic [ DATA_WIDTH - 1 : 0 ] rs2_val; // Value at rs2
-
-
 
 reg_file regfile (
 
@@ -38,8 +36,8 @@ reg_file regfile (
     .wd3_i ( reg_write_src_i ? mem_read_val_i : alu_out_o ),
     
     .rd1_o ( rs1_val ),
-    .rd2_o ( rs2_val ),
-    .a0_o  ( a0_o ) // UNCOMMENT ONLY IF NECESSARY - NEED IT FOR TESTING
+    .rd2_o ( rs2_val_o ),
+    .a0_o  ( a0_o )
 );
 
 // assign alu_op2 = alu_src ? imm_op : reg_op2; 
@@ -47,7 +45,7 @@ reg_file regfile (
 alu alu (
 
     .op1_i  ( rs1_val ),
-    .op2_i  ( alu_src_i ? imm_op_i : rs2_val ), // alu_op2),
+    .op2_i  ( alu_src_i ? imm_op_i : rs2_val_o ), // alu_op2),
     .ctrl_i ( alu_ctrl_i ),
 
     .out_o  ( alu_out_o ),

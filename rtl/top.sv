@@ -7,16 +7,16 @@ module top #(
 
     input logic clk,
     input logic rst,
+
     output logic reg_write,
     output logic eq,
     output logic alu_src,
     output logic [3:0] alu_ctrl,
     output logic[DATA_WIDTH-1:0]  imm_op,
-
     output logic result_src,
     output logic mem_write,
-    output logic [DATA_WIDTH-1:0] instr_o
-    //output logic [DATA_WIDTH-1:0] a0_o, UNCOMMENT ONLY IF NEEDED
+    output logic [DATA_WIDTH-1:0] instr_o,
+    output logic [DATA_WIDTH-1:0] a0_o
 
 );
     
@@ -29,6 +29,7 @@ logic [ 31 : 0 ]             next_pc;     // Write value for PC
 logic                        jalr_pc_src; // [1] Write JALR register to PC, [0] Otherwise
 logic [ 31 : 0 ]             memory_read; // Value read from memory
 logic [ DATA_WIDTH - 1 : 0 ] alu_out;     // output of ALU
+logic [ DATA_WIDTH - 1 : 0 ] mem_write_val;     // output of ALU
 
 assign rs1 = instr_o [ 19 : 15 ];
 assign rs2 = instr_o [ 24 : 20 ];
@@ -48,8 +49,10 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .alu_ctrl_i      ( alu_ctrl ),
 
     .eq_o            ( eq ),
-    .alu_out_o       ( alu_out )
-    //.a0_o(a0_o), UNCOMMENT ONLY IF NEEDED
+    .alu_out_o       ( alu_out ),
+    .rs2_val_o       ( mem_write_val ),
+    
+    .a0_o            (a0_o)
 
 );
 
@@ -97,7 +100,7 @@ main_memory main_mem (
     .clk_i          ( clk ),
     .address_i      ( alu_out ),
     .write_enable_i ( mem_write ),
-    .write_value_i  ( pc ),
+    .write_value_i  ( mem_write_val ),
 
     .read_value_o   ( memory_read )
 

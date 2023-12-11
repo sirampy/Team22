@@ -19,7 +19,7 @@ logic branch; // [1] - Branch, [0] Otherwise
 logic jal;    // [1] - JAL, [0] Otherwise
 
 always_comb
-    casez ( op_i )
+    case ( op_i )
         7'b0000011: // I-type load
             begin
                 reg_write_o = 1'b1;
@@ -35,7 +35,7 @@ always_comb
         7'b0110011: // R-type
             begin
                 reg_write_o = 1'b1;
-                imm_src_o = 3'b???; 
+                imm_src_o = 3'b000; 
                 alu_src_o = 1'b0;
                 mem_write_o = 1'b0;
                 result_src_o = 1'b0;
@@ -50,7 +50,7 @@ always_comb
                 imm_src_o = 3'b001;
                 alu_src_o = 1'b1;
                 mem_write_o = 1'b1;
-                result_src_o = 1'b?;
+                result_src_o = 1'b0;
                 branch = 1'b0;
                 alu_op_o = 2'b00;
                 jal = 1'b0;
@@ -74,7 +74,7 @@ always_comb
                 imm_src_o = 3'b010;
                 alu_src_o = 1'b0;
                 mem_write_o = 1'b0;
-                result_src_o = 1'b?; 
+                result_src_o = 1'b0; 
                 branch = 1'b1;
                 alu_op_o = 2'b01;
                 jal = 1'b0;
@@ -130,15 +130,15 @@ always_comb
             end
         default: // Should never occur
             begin
-                reg_write_o = 1'b?;
-                imm_src_o = 3'b???;
-                alu_src_o = 1'b?;
-                mem_write_o = 1'b?;
-                result_src_o = 1'b?;
-                branch = 1'b?;
-                alu_op_o = 2'b??;
-                jal = 1'b?;
-                jalr_pc_src_o = 1'b?;
+                reg_write_o = 1'b0;
+                imm_src_o = 3'b000;
+                alu_src_o = 1'b0;
+                mem_write_o = 1'b0;
+                result_src_o = 1'b0;
+                branch = 1'b0;
+                alu_op_o = 2'b00;
+                jal = 1'b0;
+                jalr_pc_src_o = 1'b0;
             end
     endcase
 
