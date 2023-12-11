@@ -1,7 +1,7 @@
 # F1 Program Implementation - Assembly Language
 init:
-    ADDI a1, zero, 0              #vbd flag value - trigger
-    ADDI a2, zero, 11111111       # all lights are on
+    ADDI a1, zero, 0              # vbd flag value - trigger
+    ADDI a2, zero, 255            # all lights are on - written in decimal
     ADDI a3, zero, 00001111       # THIS NEEDS DOING need to adjust to get 1s delay
     ADDI a4, zero, 0              # reset the count for light delay
     ADDI a5, zero, 0              # final output for turning on lights
