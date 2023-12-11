@@ -14,7 +14,7 @@ module reg_file #(
 
     output [ DATA_WIDTH - 1 : 0 ] rd1_o, // Value at ad1
     output [ DATA_WIDTH - 1 : 0 ] rd2_o,  // Value at ad2
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o // UNCOMMENT ONLY IF NEEDED - NEED IT FOR TESTING
+    output logic [ DATA_WIDTH - 1 : 0 ] a0_o
 
 );
 
@@ -27,6 +27,6 @@ always_ff @( posedge clk_i )
 
 assign rd1_o = reg_data [ ad1_i ];
 assign rd2_o = reg_data [ ad2_i ];
-assign a0_o = reg_data[10]; // UNCOMMENT ONLY IF NECESSARY - NEED IT FOR TESTING 
+assign a0_o = reg_data[10];
 
 endmodule

@@ -4,8 +4,8 @@ module control_top #(
 
 ) (
 
-    input  logic [ 31 : 0 ] pc_i,                          // Program counter
-    input  logic            eq_i,                          // Equal/zero flag
+    input  logic [ 31 : 0 ]                 pc_i,          // Program counter
+    input  logic                            eq_i,          // Equal/zero flag
 
     output logic                            pc_src_o,      // [0] - Increment PC by 4, [1] - Increment PC by immediate value
     output logic                            result_src_o,  // [0] - Write ALU output to register, [1] - Write memory value to register
