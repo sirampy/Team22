@@ -38,7 +38,7 @@ reg_file regfile (
     .wd3_i ( reg_write_src_i ? mem_read_val_i : alu_out_o ),
     
     .rd1_o ( rs1_val ),
-    .rd2_o ( rs2_val )
+    .rd2_o ( rs2_val ),
     .a0_o  ( a0_o ) // UNCOMMENT ONLY IF NECESSARY - NEED IT FOR TESTING
 );
 
