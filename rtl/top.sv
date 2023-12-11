@@ -8,9 +8,9 @@ module top #(
     output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
-    logic [PC_WIDTH-1:0] pc; // pcf
-    logic [PC_WIDTH-1:0] next_pc; // pcf'
-    logic pc_src;  // select +4 or pc_target (jumps)
+    logic [PC_WIDTH-1:0] pc;       // pcf
+    logic [PC_WIDTH-1:0] next_pc;  // pcf'
+    logic                pc_src;   // select +4 or pc_target (jumps)
     logic [PC_WIDTH-1:0] pc_plus4;
     logic [PC_WIDTH-1:0] pc_target;
 
@@ -19,23 +19,24 @@ module top #(
     logic [DATA_WIDTH-1:0] imm_ext;
 
     // reg file signals
-    logic reg_write; // write enable
-    logic [DATA_WIDTH-1:0] reg_op1; // contents of register 1
-    logic [DATA_WIDTH-1:0] reg_op2; // contents of register 2
+    logic                  reg_write; // write enable
+    logic [DATA_WIDTH-1:0] reg_op1;   // contents of register 1
+    logic [DATA_WIDTH-1:0] reg_op2;   // contents of register 2
 
     // control signals
     logic [1:0] result_src; // select what data to write
-    logic mem_write;
-    logic [1:0] jump;
-    logic branch;
-    logic [2:0] alu_ctrl;
-    logic alu_src;
-    logic [1:0] imm_src;
+    logic       mem_write;
+    logic       jump;
+    logic       branch;
+    logic [3:0] alu_ctrl;
+    logic       alu_src;
+    logic [2:0] imm_src;
+    logic [1:0] alu_op;    // [00] - LW/SW, [01] - B-type, [10] - (R-type or I-type)
 
     // alu signals
     logic [DATA_WIDTH-1:0] alu_op2;   // input 2
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
-    logic zero; // zero flag - NOTE: RENAME the eq stuff down below
+    logic                  zero;      // zero flag
 
     // data mem contents
     logic [DATA_WIDTH-1:0] read_data; 
@@ -46,18 +47,18 @@ module top #(
 
     logic [DATA_WIDTH-1:0] rd1E;
     logic [DATA_WIDTH-1:0] rd2E;
-    logic [PC_WIDTH-1:0] pcE;
+    logic [PC_WIDTH-1:0]   pcE;
     logic [ADDR_WIDTH-1:0] rdE;
     logic [DATA_WIDTH-1:0] imm_extE;
-    logic [PC_WIDTH-1:0] pc_plus4E;
+    logic [PC_WIDTH-1:0]   pc_plus4E;
 
-    logic reg_writeE;
+    logic       reg_writeE;
     logic [1:0] result_srcE;
-    logic mem_writeE;
-    logic [1:0] jumpE;
-    logic branchE;
-    logic [2:0] alu_ctrlE;
-    logic alu_srcE;
+    logic       mem_writeE;
+    logic       jumpE;
+    logic       branchE;
+    logic [3:0] alu_ctrlE;
+    logic       alu_srcE;
 
 
     // program counter
@@ -72,7 +73,7 @@ module top #(
     );
 
     instr_mem instr_mem ( 
-        .a_i (pc),
+        .addr_i (pc),
         .rd_o (instr)
     );
 
@@ -96,28 +97,36 @@ module top #(
         .we3_i (reg_writeW), //write enable
         .wd3_i (resultW), //write data
         .rd1_o (reg_op1),
-        .rd2_o (reg_op2)
+        .rd2_o (reg_op2),
+        .a0_o  (a0)
+    );
+
+    // control unit - split up for pipelining
+    main_decoder main_decoder (
+        .op_i          (instrD[6:0]),
+
+        .result_src_o  (result_src),
+        .mem_write_o   (mem_write),
+        .alu_src_o     (alu_src),
+        .imm_src_o     (imm_src),
+        .reg_write_o   (reg_write),
+        .jalr_pc_src_o (jump),
+        .branch_o      (branch),
+        .alu_op_o      (alu_op)
+    );
+
+    alu_decoder alu_decoder (
+        .funct3_i      (instrD[14:12]),
+        .funct7_i      (instrD[30]),
+        .op5_i         (instrD[5]),
+        .alu_op_i      (alu_op),
+        .alu_control_o (alu_ctrl)
     );
 
     sign_extend sign_ext (
-        .instr_i (instrD[31:7]),
+        .instr31_7_i (instrD[31:7]),
         .imm_src_i (imm_src),
         .imm_ext_o (imm_ext)
-    );
-
-    //control: 
-    control_top control_unit (
-        .op_i (instr[6:0]),
-        .funct3_i (instr[14:12]),
-        .funct7_i (instr[30]),
-        .result_src_o(result_src),
-        .mem_write_o(mem_write),
-        .alu_src_o(alu_src),
-        .reg_write_o(reg_write),
-        .alu_ctrl_o(alu_ctrl),
-        .imm_src_o (imm_src),
-        .jump_o (jump),
-        .branch_o (branch)
     );
 
     // decode stage pipelining
@@ -130,6 +139,7 @@ module top #(
         .rdD_i (instrD[11:7]),   // write reg
         .imm_extD_i (imm_ext),
         .pc_plus4D_i (pc_plus4D),
+
         // control unit inputs
         .reg_writeD_i (reg_write),
         .result_srcD_i (result_src),
@@ -138,6 +148,7 @@ module top #(
         .branchD_i (branch),
         .alu_ctrlD_i (alu_ctrl),
         .alu_srcD_i (alu_src),
+
         // main outputs
         .rd1E_o (rd1E),
         .rd2E_o (rd2E),
@@ -145,6 +156,7 @@ module top #(
         .rdE_o (rdE),
         .imm_extE_o (imm_extE),
         .pc_plus4E_o (pc_plus4E),
+
         // control unit outputs
         .reg_writeE_o (reg_writeE),
         .result_srcE_o (result_srcE),
@@ -157,16 +169,18 @@ module top #(
 
     // alu
     alu alu (
-        .aluOp1_i (rd1E),
-        .aluOp2_i (alu_op2),
-        .aluCtrl_i (alu_ctrlE),
-        .sum_o (alu_out),
-        .eq_o (zero)
-    ); 
+        .op1_i  (rd1E),
+        .op2_i  (alu_op2),
+        .ctrl_i (alu_ctrlE),
+        .out_o  (alu_out),
+        .eq_o   (zero)
+    );
 
     // mux for pc src
-    assign pc_src = (jumpE) | (zero & branchE);
-    assign pc_target = pcE + imm_extE;
+    logic bne;
+    assign bne = (instrD[14:12] == 3'b001) ? 1 : 0; // check for BNE
+    assign pc_src = (jumpE) | ((zero ^ bne) & branchE); // [0] - Increment PC by 4, [1] - Increment PC by immediate value
+    assign pc_target = pcE + imm_extE; 
 
     // mux for alu_op2
     assign alu_op2 = alu_srcE ? imm_extE : rd2E; // 1 for imm_extE and 0 for rd2E
@@ -203,11 +217,12 @@ module top #(
         .mem_writeM_o (mem_writeM)
     );
 
-    data_mem data_mem (
-        .a_i (alu_resultM),
-        .wd_i (write_dataM),
-        .wen_i (mem_writeM),
-        .rd_o (read_data)
+    main_memory main_mem (
+        .clk_i (clk_i),
+        .address_i (alu_resultM),
+        .write_value_i (write_dataM),
+        .write_enable_i (mem_writeM),
+        .read_value_o (read_data)
     );
 
     // memory stage:
@@ -242,6 +257,7 @@ module top #(
             2'b00: resultW = alu_resultW;
             2'b01: resultW = read_dataW;
             2'b10: resultW = pc_plus4W;
+            default: resultW = 32'b0;
         endcase
     end
 
