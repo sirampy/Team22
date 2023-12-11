@@ -16,7 +16,7 @@ function logic [ ACTUAL_ADDRESS_WIDTH - 1 : 0 ] convert_address ( input logic [ 
     convert_address = in [ 31 : 16 ] + in [ 15 : 0 ]; // Addition is performed to prevent errors involving unused bits
 endfunction
 
-logic [ 8 : 0 ] byte_array [ ( 2 ** ACTUAL_ADDRESS_WIDTH ) - 1 : 0 ];
+logic [ 7 : 0 ] byte_array [ ( 2 ** ACTUAL_ADDRESS_WIDTH ) - 1 : 0 ];
 
 
 initial begin
