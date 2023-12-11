@@ -15,8 +15,8 @@ module top #(
 
     output logic result_src,
     output logic mem_write,
-    output logic [DATA_WIDTH-1:0] instr_o
-    //output logic [DATA_WIDTH-1:0] a0_o, UNCOMMENT ONLY IF NEEDED
+    output logic [DATA_WIDTH-1:0] instr_o,
+    output logic [DATA_WIDTH-1:0] a0_o
 
 );
     
@@ -48,8 +48,8 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .alu_ctrl_i      ( alu_ctrl ),
 
     .eq_o            ( eq ),
-    .alu_out_o       ( alu_out )
-    //.a0_o(a0_o), UNCOMMENT ONLY IF NEEDED
+    .alu_out_o       ( alu_out ),
+    .a0_o(a0_o)
 
 );
 
