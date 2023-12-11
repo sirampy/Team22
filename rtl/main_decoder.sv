@@ -4,19 +4,19 @@ module main_decoder (
     input logic [ 6 : 0 ]  op_i,         // Instruction ppcode
     input logic [ 2 : 0 ]  funct3_i,     // ALU operation select (from instruction)
     
-    output logic           pc_src_o,     // [0] - Increment PC as usual, [1] - Write imm to PC 
+    output logic           pc_src_o,     // [0] - Increment PC by 4, [1] - Increment PC by immediate value
     output logic           result_src_o, // [0] - Write ALU output to register, [1] - Write memory value to register
     output logic           mem_write_o,  // Memory write enable
     output logic           alu_src_o,    // [0] - Use register as ALU input, [1] - Use immediate value as ALU input
     output logic [ 2 : 0 ] imm_src_o,    // Immediate value type
     output logic           reg_write_o,  // Register write enable
     output logic [ 1 : 0 ] alu_op_o,     // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
-    output logic           jalr_pc_src_o // [1] JALR, [0] otherwise
+    output logic           jalr_pc_src_o // [1] Write JALR register to PC, [0] Otherwise
 
 );
 
-logic branch; 
-logic jal;
+logic branch; // [1] - Branch, [0] Otherwise
+logic jal;    // [1] - JAL, [0] Otherwise
 
 always_comb
     casez ( op_i )
@@ -151,7 +151,7 @@ always_comb
                 pc_src_o = ( branch && eq_i ) ? 1'b1 : 1'b0;
             3'b001: // BNE
                 pc_src_o = ( branch && eq_i ) ? 1'b0 : 1'b1;
-            default: pc_src_o = 1'b?; // By default, do not jump
+            default: pc_src_o = 1'b0; // By default, do not jump
         endcase
 
 endmodule

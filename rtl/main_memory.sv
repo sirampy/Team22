@@ -8,7 +8,6 @@ module main_memory # (
 ) (
 
     input logic                           clk_i,          // Clock
-
     input logic [ ADDRESS_WIDTH - 1 : 0 ] address_i,      // Target address
     input logic                           write_enable_i, // Write enable
     input logic [ DATA_WIDTH - 1 : 0 ]    write_value_i,  // Value to write

@@ -7,7 +7,7 @@ module control_top #(
     input  logic [ 31 : 0 ] pc_i,                          // Program counter
     input  logic            eq_i,                          // Equal/zero flag
 
-    output logic                            pc_src_o,      // [0] - Let PC increment, [1] - Set PC to new value
+    output logic                            pc_src_o,      // [0] - Increment PC by 4, [1] - Increment PC by immediate value
     output logic                            result_src_o,  // [0] - Write ALU output to register, [1] - Write memory value to register
     output logic                            mem_write_o,   // Memory write enable
     output logic                            alu_src_o,     // [0] - Use rs2 as ALU input, [1] - Use imm_op as ALU input

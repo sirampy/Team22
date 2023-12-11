@@ -8,7 +8,7 @@ module instr_mem #(
 
     input logic [ ADDRESS_WIDTH - 1 : 0 ] addr_i, // Address to read from
 
-    output logic [ DATA_WIDTH - 1 : 0 ]   rd_o    // Value at addr
+    output logic [ DATA_WIDTH - 1 : 0 ]   rd_o    // Value at address
 
 );
 
@@ -25,7 +25,7 @@ initial begin
 end;
 
 
-assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Little endian. May want to change if loaded instructions are big endian?
+assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Little endian
                 byte_array[ convert_address( addr_i ) + 2 ],
                 byte_array[ convert_address( addr_i ) + 1 ],
                 byte_array[ convert_address( addr_i ) ] };

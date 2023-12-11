@@ -17,9 +17,9 @@ module alu_top #(
     input logic [ 3 : 0 ]               alu_ctrl_i,      // ALU operation select
 
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
-    
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o,            // Program output. Is this still needed in lab 5?
-    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o        // ALU output. Does this still need to be output?
+    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o        // ALU output
+
+    // output logic [ DATA_WIDTH - 1 : 0 ] a0_o, UNCOMMENT ONLY IF NEEDED
 
 );
 

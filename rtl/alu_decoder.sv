@@ -19,7 +19,7 @@ always_comb
             case ( funct3_i )
                 3'b000: alu_control_o = 4'b0001;  // BEQ - Want to SUB
                 3'b001: alu_control_o = 4'b0001;  // BNE - Want to SUB
-                default: alu_control_o = 4'b????; // Don't care condition/signal unknown
+                default: alu_control_o = 4'b????;
                 // 3'b100: // BLT
                 // 3'b101: // BGE
                 // 3'b110: // BLTU
@@ -27,7 +27,7 @@ always_comb
             endcase
         2'b10:
             case ( funct3_i )
-                3'b000: if  ( op5_funct7 != 2'b11 )
+                3'b000: if ( op5_funct7 != 2'b11 )
                         alu_control_o = 4'b0001;        // SUB
                     else alu_control_o = 4'b0000;       // ADD or I-type
                 3'b001: alu_control_o = 4'b0100;        // SLL
@@ -42,8 +42,8 @@ always_comb
         
                 default: alu_control_o = 4'b????;
             endcase
-        
-        default: alu_control_o = 4'b????; 
+        default: // Shouldn't occur
+            alu_control_o = 4'b????; 
     endcase
 
 endmodule

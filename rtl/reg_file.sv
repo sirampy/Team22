@@ -14,7 +14,7 @@ module reg_file #(
 
     output [ DATA_WIDTH - 1 : 0 ] rd1_o, // Value at ad1
     output [ DATA_WIDTH - 1 : 0 ] rd2_o, // Value at ad2
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o // Output for top sheet
+    // output logic [ DATA_WIDTH - 1 : 0 ] a0_o UNCOMMENT ONLY IF NEEDED
 
 );
 
