@@ -1,4 +1,4 @@
-module main_memory # (
+module data_memory # (
     
     parameter ACTUAL_ADDRESS_WIDTH = 16, // IF MODIFYING THIS, MODIFY convert_address BELOW (LINE 23)
     
