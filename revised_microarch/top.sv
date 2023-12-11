@@ -42,13 +42,11 @@ logic [31:0] reg_data_1;
 logic [31:0] reg_data_2;
 logic [31:0] alu_src_1;
 logic [31:0] alu_src_2;
-logic [31:0] data_mem_wd;
 
 // result signals
 logic [31:0] alu_out;
 logic [31:0] data_mem_rd;
-logic [31:0] data_mem_rd_selected;
-logic jump;
+logic jump; 
 logic [31:0] result;
 logic [31:0] wd3;
 
@@ -139,28 +137,16 @@ branch_tester branch_tester(
     .jump_o(jump)
 );
 
-bytes_selector write_selector(
-    .load3_i(alu3),
-    .data_i(alu_out),
-
-    .data_o(data_mem_wd)
-);
-
 data_mem data_mem(
    .a_i(alu_out[7:0]),
-   .wd_i(data_mem_wd),
+   .wd_i(reg_data_2),
+
    .wen_i(data_write),
+   .load3_i(alu3),
 
    .rd_o(data_mem_rd)
 );
 
-bytes_selector read_selector(
-    .load3_i(alu3),
-    .data_i(data_mem_rd),
-
-    .data_o(data_mem_rd_selected)
-);
-
-assign result = (data_read == 1) ? data_mem_rd_selected : alu_out;
+assign result = (data_read == 1) ? data_mem_rd : alu_out;
 
 endmodule

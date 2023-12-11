@@ -1,22 +1,23 @@
 module instr_mem #(
-    parameter   USED_ADDRESS_WIDTH = 8,
-                DATA_WIDTH = 32
+    parameter   ADDRESS_WIDTH = 8,
+                DATA_WIDTH = 8
 )(
-    input logic [USED_ADDRESS_WIDTH-1:0] a_i,
-    output logic [DATA_WIDTH-1:0]   rd_o
+    input logic [ADDRESS_WIDTH-1:0] a_i,
+    output logic [31:0]   rd_o
 
-);
+);;
 
-logic [USED_ADDRESS_WIDTH-1:0] a_resized;
-assign a_resized= a_i[USED_ADDRESS_WIDTH-1:0];
-
-logic [DATA_WIDTH-1:0] rom_array [2**USED_ADDRESS_WIDTH-1:0];
+logic [DATA_WIDTH-1:0] rom_array [2**ADDRESS_WIDTH-1:0];
 
 initial begin
-        $display("loading rom.");
+        $display("loading instruction rom");
         $readmemh("rom_bin/program.mem", rom_array);
+        $display("%h",rom_array[2]);
 end;
 
-assign rd_o = rom_array[a_resized];
+assign rd_o = {rom_array[a_i+3],
+        rom_array[a_i+2],
+        rom_array[a_i+1],
+        rom_array[a_i]};
 
 endmodule

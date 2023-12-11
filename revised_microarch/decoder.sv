@@ -208,7 +208,7 @@ always_latch begin
         end 
 
         default: begin
-            $display("unrecognised opcode");
+            //$display("unrecognised opcode");
             reg_write_o = 0;
             data_read_o = 0;
             data_write_o = 0;
