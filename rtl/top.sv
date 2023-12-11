@@ -4,8 +4,8 @@ module top #(
               PC_WIDTH = 32
 )(
     input logic clk_i,      
-    input logic rst
-  //  output logic [DATA_WIDTH-1:0] a0
+    input logic rst,
+    output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
     logic [PC_WIDTH-1:0] pc;       // pcf
