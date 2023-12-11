@@ -17,16 +17,16 @@ module alu_top #(
     input logic [ 3 : 0 ]               alu_ctrl_i,      // ALU operation select
 
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
-    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o        // ALU output
+    output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o,        // ALU output
 
-    // output logic [ DATA_WIDTH - 1 : 0 ] a0_o, UNCOMMENT ONLY IF NEEDED
+     output logic [ DATA_WIDTH - 1 : 0 ] a0_o // UNCOMMENT ONLY IF NEEDED - NEED IT FOR TESTING
 
 );
 
 logic [ DATA_WIDTH - 1 : 0 ] rs1_val; // Value at rs1
 logic [ DATA_WIDTH - 1 : 0 ] rs2_val; // Value at rs2
 
-// logic [ DATA_WIDTH - 1 : 0 ] alu_op2; // ALU input 2. Is this really needed?
+
 
 reg_file regfile (
 
@@ -39,7 +39,7 @@ reg_file regfile (
     
     .rd1_o ( rs1_val ),
     .rd2_o ( rs2_val )
-    // .a0_o  ( a0_o ) UNCOMMENT ONLY IF NECESSARY
+    .a0_o  ( a0_o ) // UNCOMMENT ONLY IF NECESSARY - NEED IT FOR TESTING
 );
 
 // assign alu_op2 = alu_src ? imm_op : reg_op2; 
