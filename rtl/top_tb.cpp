@@ -4,7 +4,7 @@
 
 void evalAndDump(VerilatedVcdC* tfp, Vtop* top, int& i) {
 
-    for ( top->clk = 1; top->clk < 2; --top->clk ) {
+    for ( top->clk = 1; top->clk < 5; --top->clk ) {
     
         top->eval();
         tfp->dump(++i);
@@ -84,9 +84,13 @@ int main(int argc, char **argv, char **env) {
     // Tested and working:  
     // Tested and broken:  
     
-    evalAndDump(tfp, top, i); // BEQ
-    evalAndDump(tfp, top, i); // ABNE
-
+    evalAndDump(tfp, top, i); //ADDI R1, R0, 0x05                                   -> 00 50 00 93
+    evalAndDump(tfp, top, i); //ADD R2, R0, R1                                      -> 00 50 01 13
+    evalAndDump(tfp, top, i); //BEQ R1, R2, L1 (if R1==R2, jump to L1)              -> 00 20 84 63
+    evalAndDump(tfp, top, i); //ADDI R4, R0, 0x01                                   -> 00 10 02 13
+    evalAndDump(tfp, top, i); //L1: ADDI R3, R0, 0X05                               -> 00 50 01 93
+    
+    
     // Testing U&I-type:
     // Implemented:         JALR, JAL
     // Not implemented:     AUIPC?, LUI?
@@ -103,3 +107,4 @@ int main(int argc, char **argv, char **env) {
     exit(0);
 
 }
+
