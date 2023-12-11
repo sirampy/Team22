@@ -142,7 +142,7 @@ data_mem data_mem(
    .wd_i(reg_data_2),
 
    .wen_i(data_write),
-   .load3_i(alu3),
+   .load3_i(funct3),
 
    .rd_o(data_mem_rd)
 );
