@@ -5,7 +5,7 @@ module sign_extend #(
 ) (
 
     input logic [ 31 : 7 ]             instr31_7_i, // Instruction [ 31 : 7 ], to use for immediate values
-    input logic [ 1 : 0 ]              imm_src_i,   // Immediate value type
+    input logic [ 2 : 0 ]              imm_src_i,   // Immediate value type
 
     output logic [ IMM_WIDTH - 1 : 0 ] imm_ext_o    // Immediate value
 
@@ -28,8 +28,8 @@ always_comb
                             instr31_7_i [ 20 ],
                             instr31_7_i [ 30 : 21 ],
                             1'b0 };
-        3'b100: imm_ext_o = { instr31_7_i [ 31 : 20 ],       // U-type
-                            instr31_7_i [ 19 ] };
+        3'b100: imm_ext_o = { instr31_7_i [ 31 : 12 ],       // U-type
+                            {12{1'b0}}}; // fixed - lui and auipc use upper 20 bit IMM
         default: imm_ext_o = { IMM_WIDTH{ 1'b? } };
     endcase
 
