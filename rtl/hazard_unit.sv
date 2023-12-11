@@ -1,9 +1,10 @@
 // hazard unit for data hazards
 module hazard_unit #(
-    parameter ADDR_WIDTH = 5;
+    parameter ADDR_WIDTH = 5
 )(
     input  logic [19:15]          rs1E_i,       // register 1 address (execute)
     input  logic [24:20]          rs2E_i,       // resister 2 address (execute)
+    input  logic [ADDR_WIDTH-1:0] rdE_i,        // write register address (execute)
     input  logic [ADDR_WIDTH-1:0] rdM_i,        // write register address (memory)
     input  logic [ADDR_WIDTH-1:0] rdW_i,        // write register address (writeback)
     input  logic                  reg_writeM_i, // write enable (m)
@@ -18,7 +19,7 @@ module hazard_unit #(
     output logic       stallF_o,     // stall fetch register (ff0)
     output logic       stallD_o,     // stall decode register (ff1)
     output logic       flushD_o,     // clear decode register (ff1) - for control hazards
-    output logic       flushE_o,     // clear execute register (ff2)
+    output logic       flushE_o     // clear execute register (ff2)
 );
 
     logic lw_stall;
@@ -26,9 +27,9 @@ module hazard_unit #(
     always_comb begin
         // for rs1:
         // if destination register (m) = register (e) --> forward from mem
-        if (((rs1E_i == rdM_i) & reg_writeM_i) & (rs1E_1 != 0)) forward_aE_o = 2'b10;
+        if (((rs1E_i == rdM_i) & reg_writeM_i) & (rs1E_i != 0)) forward_aE_o = 2'b10;
         // same for w
-        else if (((rs1E_i == rdW_i) & reg_writeW_i) & (rs1E_1 != 0)) forward_aE_o = 2'b01;
+        else if (((rs1E_i == rdW_i) & reg_writeW_i) & (rs1E_i != 0)) forward_aE_o = 2'b01;
         else forward_aE_o = 2'b00; // do not forward
 
         // same for rs2:
@@ -38,7 +39,8 @@ module hazard_unit #(
 
         // dealing with lw stalls
         lw_stall = result_srcE_i & ((rs1D_i == rdE_i) | (rs2D_i == rdE_i));
-        stallF_o = stallD_o = lw_stall;
+        stallF_o = lw_stall;
+        stallD_o = lw_stall;
         flushD_o = pc_srcE_i;
         flushE_o = lw_stall | pc_srcE_i;
     end

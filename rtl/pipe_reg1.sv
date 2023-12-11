@@ -1,11 +1,11 @@
-// pipelining flip flop 1 -> delays from fetch to decode
-module flip_flop1 #(
+// pipelining register 1 -> delays from fetch to decode
+module pipe_reg1 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(
     input  logic                     clk_i,       // clock
-    input  logic                     en,          //stall enable
-    input  logic                     clr,         // flush register
+    input  logic                     en_i,          //stall enable
+    input  logic                     clr_i,         // flush register
 
     input  logic [DATA_WIDTH-1:0]    rd_i,        // rd from instr mem
     input  logic [ADDRESS_WIDTH-1:0] pcF_i,       // pc (fetch)
@@ -16,14 +16,14 @@ module flip_flop1 #(
     output logic [ADDRESS_WIDTH-1:0] pc_plus4D_o  // pc+4 (decode)
 );
 
-always_ff @(posedge clk)
+always_ff @(posedge clk_i)
     begin
-        if (clr) begin
+        if (clr_i) begin
             instrD_o    <= {DATA_WIDTH{1'b0}};
             pcD_o       <= {ADDRESS_WIDTH{1'b0}};
             pc_plus4D_o <= {ADDRESS_WIDTH{1'b0}};;
         end
-        else if (!en) begin
+        else if (!en_i) begin
             instrD_o    <= rd_i;
             pcD_o       <= pcF_i;
             pc_plus4D_o <= pc_plus4F_i;

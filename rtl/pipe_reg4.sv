@@ -1,5 +1,5 @@
-// pipelining flip flop 4 -> delays from memory to writeback
-module flip_flop4 #(
+// pipelining register 4 -> delays from memory to writeback
+module pipe_reg4 #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(
@@ -21,18 +21,18 @@ module flip_flop4 #(
     output logic [ADDRESS_WIDTH-1:0] pc_plus4W_o,
 
     // control unit outputs
-    output logic reg_writeW_o,
-    output logic [1:0] result_srcW_o,
+    output logic       reg_writeW_o,
+    output logic [1:0] result_srcW_o
 );
 
-always_ff @(negedge clk)    // writeback happens on fall edge not rising
+always_ff @(posedge clk_i)    
     begin
-        alu_resultM_i <= alu_resultW_o;
-        read_dataM_i  <= pcW_o;
-        rdM_i         <= rdW_o;
-        pc_plus4M_i   <= pc_plus4W_o;
-        reg_writeM_i  <= reg_writeW_o;
-        result_srcM_i <= result_srcW_o;
+        alu_resultW_o <= alu_resultM_i;
+        read_dataW_o  <= read_dataM_i;
+        rdW_o         <= rdM_i;
+        pc_plus4W_o   <= pc_plus4M_i;
+        reg_writeW_o  <= reg_writeM_i;
+        result_srcW_o <= result_srcM_i;
     end
 
 endmodule

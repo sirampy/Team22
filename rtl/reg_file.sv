@@ -22,7 +22,7 @@ logic [ DATA_WIDTH - 1 : 0 ] reg_data [ 2 ** ADDR_WIDTH - 1 : 0 ];
 
 assign reg_data [ 0 ] = { DATA_WIDTH { 1'b0 } }; // Zero register
 
-always_ff @( posedge clk_i )
+always_ff @( negedge clk_i ) // writeback happens on fall edge not rising
     if ( we3_i ) reg_data [ ad3_i ] <= wd3_i;
 
 assign rd1_o = reg_data [ ad1_i ];
