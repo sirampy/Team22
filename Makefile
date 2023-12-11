@@ -3,12 +3,12 @@
 # make counter - build counter and prepare roms
 # make run - runs verilator without opening gtk
 
-.PHONY: all counter
+.PHONY: all counter clean clean_build clean_asssemble gtk
 
 all : run gtk
 
 
-run: clean
+run: clean_build
 	verilator -Wall --cc -Irevised_microarch --trace revised_microarch/top.sv --exe test/top_tb.cpp 
 
 	make -j -C obj_dir/ -f Vtop.mk Vtop
@@ -36,7 +36,11 @@ counter:
 	rm rom_bin/*.bin
 
 
-clean: 
+clean: clean_build clean_asssemble
+
+clean_build: 
 	rm -rf obj_dir
 	rm -f control_top.vcd
+
+clean_asssemble:
 	rm -f *.hex rom_bin/*.asm rom_bin/*.out rom_bin/*.bin

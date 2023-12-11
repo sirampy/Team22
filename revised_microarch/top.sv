@@ -114,7 +114,7 @@ reg_file reg_file(
 );
 
 
-assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? {16'b0, pc_inced} : -1; // last term should never occour
+assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? {16'b0, pc} : -1; // last term should never occour
 assign alu_src_2 = (src2 == RS2) ? reg_data_2 : imm;
 
 alu alu(
