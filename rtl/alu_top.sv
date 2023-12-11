@@ -38,8 +38,8 @@ reg_file regfile (
     .wd3_i ( reg_write_src_i ? mem_read_val_i : alu_out_o ),
     
     .rd1_o ( rs1_val ),
-    .rd2_o ( rs2_val ),
-    .a0_o  ( a0_o )
+    .rd2_o ( rs2_val )
+    // .a0_o  ( a0_o ) UNCOMMENT ONLY IF NECESSARY
 );
 
 // assign alu_op2 = alu_src ? imm_op : reg_op2; 
