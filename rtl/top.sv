@@ -4,8 +4,8 @@ module top #(
               PC_WIDTH = 32
 )(
     input logic clk_i,      
-    input logic rst,
-    output logic [DATA_WIDTH-1:0] a0
+    input logic rst
+  //  output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
     logic [PC_WIDTH-1:0] pc;       // pcf
@@ -257,7 +257,7 @@ module top #(
             2'b00: resultW = alu_resultW;
             2'b01: resultW = read_dataW;
             2'b10: resultW = pc_plus4W;
-            default: resultW = 32'b0;
+            default: $error ("unsupported");
         endcase
     end
 

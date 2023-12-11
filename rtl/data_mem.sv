@@ -19,7 +19,7 @@ initial begin
         $readmemh("../../rom_bin/data.mem", rom_array);
 end;
 
-always_comb begin
+always_latch begin
     rd_o = rom_array[a_resized];
 
     if (wen_i) begin
