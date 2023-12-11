@@ -16,7 +16,7 @@ module top #(
 
     output logic result_src,
     output logic mem_write,
-    output logic[1:0] imm_src,
+    output logic[2:0] imm_src,
     output logic [DATA_WIDTH-1:0] instr_o
 
 );
@@ -56,7 +56,7 @@ alu_top #(.ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH)) alu_regfile (
 );
 
 //control: 
-control_top #(.INSTR_WIDTH(DATA_WIDTH), .REG_ADDR_WIDTH(ADDR_WIDTH)) control_unit (
+control_top #(.INSTR_WIDTH(DATA_WIDTH)) control_unit (
 
     .pc_i(pc),
     .imm_src_o(imm_src),

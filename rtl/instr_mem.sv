@@ -21,7 +21,7 @@ logic [ 7 : 0 ] byte_array [ ( 2 ** ACTUAL_ADDRESS_WIDTH ) - 1 : 0 ];
 
 initial begin
         $display("Loading instructions into ROM.");
-        $readmemh("control/program.mem", byte_array); // Choose correct .mem location
+        $readmemh("f1_program.mem", byte_array); // Choose correct .mem location
 end;
 
 
