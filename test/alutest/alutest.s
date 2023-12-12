@@ -5,3 +5,4 @@
  LW   a0, 0x1(a1)
  LB   a2, 0x1(a1)
  LH   a3, 0x1(a1)
+ SW   a0, 0x1(a1)

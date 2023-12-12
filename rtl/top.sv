@@ -106,7 +106,7 @@ data_memory data_mem (
     .clk_i          ( clk ),
     .address_i      ( alu_out ),
     .write_enable_i ( mem_write ),
-    .write_value_i  ( mem_write_val ),
+    .write_data_i  ( mem_write_val ),
     .mem_type_i     ( mem_type ),
     .mem_sign_i     ( mem_sign ),
 
