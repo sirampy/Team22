@@ -41,4 +41,3 @@ _loop3:                         # repeat
     addi    a1, a1, 1           #   incr 
     BNE     a1, a2, _loop3      # until end of pdf array
     RET
-    
