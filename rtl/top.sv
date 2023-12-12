@@ -30,6 +30,8 @@ logic                        jalr_pc_src; // [1] Write JALR register to PC, [0] 
 logic [ 31 : 0 ]             memory_read; // Value read from memory
 logic [ DATA_WIDTH - 1 : 0 ] alu_out;     // output of ALU
 logic [ DATA_WIDTH - 1 : 0 ] mem_write_val;     // output of ALU
+logic                        Jstore;
+logic [ 31 : 0 ]             pc_plus4;
 
 assign rs1 = instr_o [ 19 : 15 ];
 assign rs2 = instr_o [ 24 : 20 ];
@@ -47,10 +49,12 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .alu_src_i       ( alu_src ),
     .mem_read_val_i  ( memory_read ),
     .alu_ctrl_i      ( alu_ctrl ),
+    .Jstore_i      ( Jstore ),
+    .pc_plus4_i    ( pc_plus4 ),
 
     .eq_o            ( eq ),
-    .alu_out_o       ( alu_out )
-    //.a0_o(a0_o), UNCOMMENT ONLY IF NEEDED
+    .alu_out_o       ( alu_out ),
+    .a0_o(a0_o)
 
 );
 
@@ -59,6 +63,7 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
     .pc_i          ( pc ),
     .eq_i          ( eq ),
 
+    .Jstore_o      ( Jstore ),
     .pc_src_o      ( pc_src ),
     .result_src_o  ( result_src ),
     .mem_write_o   ( mem_write ),
@@ -89,6 +94,7 @@ pc_mux pc_mux (
     .pc_jalr_i     ( alu_out ),
     .jalr_pc_src_i ( jalr_pc_src ),
 
+    .pc_plus4_o    ( pc_plus4 ),
     .next_pc_o     ( next_pc )
 
 );

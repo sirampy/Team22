@@ -149,6 +149,7 @@ always_comb
                 alu_op_o = 2'b00;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
     endcase
 
