@@ -1,18 +1,17 @@
-#include "Vtop.h"
+#include "Vtwo_way.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 
 int main(int argc, char **argv, char **env) {
 
     Verilated::commandArgs(argc, argv);
-    Vtop* top = new Vtop;
+    Vtwo_way* top = new Vtwo_way;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("top.vcd");
+    tfp->open("two_way.vcd");
 
-    top->rst = 0;
 
     for (int i = 0; i < 1000; ++i) {
 
