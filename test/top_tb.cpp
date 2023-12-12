@@ -5,7 +5,7 @@
 
 int main(int argc, char **argv, char **env) {
     int i;
-    int clk;
+    int clk_i;
 
     Verilated::commandArgs(argc, argv);
     Vtop* top = new Vtop;
@@ -15,13 +15,13 @@ int main(int argc, char **argv, char **env) {
     top->trace(tfp, 99);
     tfp->open("top.vcd");
 
-    top->clk = 1;
+    top->clk_i = 1;
 
     for (i=0; i<50000; i++){
 
-        for (clk=0; clk<2; clk++){
-            tfp->dump (2*i + clk);
-            top->clk = !top->clk;
+        for (clk_i=0; clk_i<2; clk_i++){
+            tfp->dump (2*i + clk_i);
+            top->clk_i = !top->clk_i;
             top->eval();
         }   
 

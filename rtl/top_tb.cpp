@@ -12,11 +12,10 @@ int main(int argc, char **argv, char **env) {
     top->trace(tfp, 99);
     tfp->open("top.vcd");
 
-    top->rst = 0;
 
     for (int i = 0; i < 1000; ++i) {
 
-        for (int clk = 0; clk < 2; ++clk){
+        for (int clk_i = 0; clk < 2; ++clk_i){
             tfp->dump (2 * i + clk);
             top->clk_i = !top->clk_i;
             top->eval();

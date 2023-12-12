@@ -33,6 +33,7 @@ module top #(
     logic [1:0] alu_op;    // [00] - LW/SW, [01] - B-type, [10] - (R-type or I-type)
 
     // alu signals
+    logic [DATA_WIDTH-1:0] alu_op1;
     logic [DATA_WIDTH-1:0] alu_op2;   // input 2
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
     logic                  zero;      // zero flag
@@ -72,7 +73,6 @@ module top #(
 
     pc_reg pc_module (
         .clk_i (clk_i),
-        .rst_i (rst_i),
         .en_i (stall_f),
         .next_pc_i (next_pc),
         .pc_o (pc)
@@ -315,8 +315,8 @@ module top #(
         .pc_srcE_i (pc_src),
         .forward_aE_o (forward_aE), // forward select for register 1 (e)
         .forward_bE_o (forward_bE), // forward select for register 2 (e)
-        .stall_f_o (stall_f),
-        .stall_d_o (stall_d),
+        .stallF_o (stall_f),
+        .stallD_o (stall_d),
         .flushD_o (flushD),
         .flushE_o (flushE)
     );
