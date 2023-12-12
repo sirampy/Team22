@@ -30,9 +30,9 @@ logic                        result_src;    // [0] - Write ALU output to registe
 logic                        mem_write;     // Memory write enable
 logic [ DATA_WIDTH - 1 : 7 ] instr31_7;         // Current instruction
 
-assign rs1 = instr [ 19 : 15 ];
-assign rs2 = instr [ 24 : 20 ];
-assign rd = instr [ 11 : 7 ];
+assign rs1 = instr31_7 [ 19 : 15 ];
+assign rs2 = instr31_7 [ 24 : 20 ];
+assign rd = instr31_7 [ 11 : 7 ];
 
 alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
@@ -76,7 +76,6 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
 pc_reg pc_reg (
 
     .clk_i     ( clk ),
-    .rst_i     ( rst ),
     .next_pc_i ( next_pc ),
 
     .pc_o      ( pc )

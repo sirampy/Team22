@@ -22,7 +22,6 @@ int main(int argc, char **argv, char **env) {
     top->trace(tfp, 99);
     tfp->open("top.vcd");
 
-    top->rst = 0;
     top->clk = 0;
 
     int i = 0;
