@@ -23,11 +23,11 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | | 
-| PC | pc_mux.sv, pc_reg.sv| | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | x | 
+| PC | pc_mux.sv, pc_reg.sv| | | x | 
 | Memory | instr_mem.sv, main_memory.sv | | | | 
 | Top | top.sv | | | |
-| Testbenches and debugging | top_tb.cpp | | | | 
+| Testbenches and debugging | top_tb.cpp | | | p | 
 | Formatting | - | | | | 
 | Setup | .gitignore, Makefile |  | | | 
 | F1 Testing | f1_tb.cpp, f1.s | | | | 
@@ -48,9 +48,9 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | | | | | | 
-| Two-way cache | | | | | 
-| Testbenches and debugging | | | | | 
+| Direct cache | |  | x | x | | 
+| Two-way cache | | | | x | 
+| Testbenches and debugging | |  | x | x | 
 | F1 Testing | | | | | |
 | Other testing | | | | |
 
