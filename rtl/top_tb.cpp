@@ -84,12 +84,12 @@ int main(int argc, char **argv, char **env) {
     // Tested and working:  
     // Tested and broken:  
     
-    evalAndDump(tfp, top, i); //ADDI R1, R0, 0x05                                   -> 00 50 00 93
-    evalAndDump(tfp, top, i); //ADD R2, R0, R1                                      -> 00 50 01 13
-    evalAndDump(tfp, top, i); //BEQ R1, R2, L1 (if R1==R2, jump to L1)              -> 00 20 84 63
-    evalAndDump(tfp, top, i); //ADDI R4, R0, 0x01                                   -> 00 10 02 13
-    evalAndDump(tfp, top, i); //L1: ADDI R3, R0, 0X05                               -> 00 50 01 93
-    
+    evalAndDump(tfp, top, i); //ADDI R1, R0, 0x3                                       -> 00 30 00 93
+    evalAndDump(tfp, top, i); //ADDI R2, R0, 0x5                                       -> 00 50 01 13
+    evalAndDump(tfp, top, i); //ADDI R1, R1, 0x2                                       -> 00 20 80 93
+    evalAndDump(tfp, top, i); //BEQ  R1, R2, -1 (if r1==r2, go back a line to addi)    -> FE 11 0F E3 
+    evalAndDump(tfp, top, i); //ADDI R1, R1, -1                                        -> FF F0 80 93
+    evalAndDump(tfp, top, i); //BNE  R1, R2, -1  (if r1!=r2, go back a line to addi)   -> FE 11 1F E3
     
     // Testing U&I-type:
     // Implemented:         JALR, JAL
