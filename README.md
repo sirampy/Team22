@@ -26,6 +26,8 @@ The above photo shows a rough diagram of the microarhitecture. The design re-use
 
 This approach also lends itself nicely for decoder to be fited with [microcode](https://en.wikipedia.org/wiki/Microcode) rom (not to be mistaken with firmware), allowing for bug fixes post production, and even user customisable opcodes and instructions.
 
+The pc is of width 16 in this branch as none of the test programs need the entire code space. It also reduces the ammount of memory we need to allocate.
+
 ## How to use
 All of the scripts need to test / build this branch are in the makefile.
 First initialise the program mems by building a test program:
