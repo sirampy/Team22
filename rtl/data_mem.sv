@@ -1,0 +1,31 @@
+module data_mem #(
+    parameter   ADDRESS_WIDTH = 32,
+                USED_ADDRESS_WIDTH = 8,
+                DATA_WIDTH = 32
+)(
+    input logic [ADDRESS_WIDTH-1:0] a_i,
+    input logic [DATA_WIDTH-1:0]     wd_i,
+    input logic                     wen_i,
+    output logic [DATA_WIDTH-1:0]   rd_o
+);
+
+logic [USED_ADDRESS_WIDTH-1:0] a_resized;
+assign a_resized= a_i[USED_ADDRESS_WIDTH-1:0];
+
+logic [DATA_WIDTH-1:0] rom_array [2**USED_ADDRESS_WIDTH-1:0];
+
+initial begin
+        $display("loading rom.");
+        $readmemh("../../rom_bin/data.mem", rom_array);
+end;
+
+always_latch begin
+    rd_o = rom_array[a_resized];
+
+    if (wen_i) begin
+        rom_array[a_resized] = wd_i;
+    end
+
+end
+
+endmodule

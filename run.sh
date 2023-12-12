@@ -40,20 +40,17 @@ fi
 # Get include dirs into one string
 
 INCLUDE_DIRS=""
-INCLUDE_DIRS_SEPERATOR=";"
 
-i=4
+i=3
 while [ $i -le $# ]
 do
     eval "cur=\$$i"
-    INCLUDE_DIRS+="$cur$INCLUDE_DIRS_SEPERATOR"
+    INCLUDE_DIRS+="-y \"$cur\" "
     ((i+=1))
 done
 
-# printf "$INCLUDE_DIRS\n"
-
 # -CFlags [str] <- use for vbuddy?
-verilator -Wall --cc --trace --exe -Mdir "out/" $VERILOG_TOP_FILE $TB_FILE
+eval "verilator -Wall --cc --trace --exe -Mdir \"out/\" $INCLUDE_DIRS$VERILOG_TOP_FILE $TB_FILE"
 
 make -j -C out/ -f "V$TOP_FILE_BASE.mk" "V$TOP_FILE_BASE"
 

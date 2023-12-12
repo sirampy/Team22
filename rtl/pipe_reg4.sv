@@ -8,7 +8,7 @@ module pipe_reg4 #(
     input  logic [DATA_WIDTH-1:0]    alu_resultM_i, // alu output (memory)
     input  logic [ADDRESS_WIDTH-1:0] read_dataM_i,  // read from data mem (m)
     input  logic [11:7]              rdM_i, 
-    input logic [ADDRESS_WIDTH-1:0]  pc_plus4M_i,
+    input  logic [ADDRESS_WIDTH-1:0] pc_plus4M_i,
 
     // control unit inputs
     input logic reg_writeM_i,

@@ -14,7 +14,7 @@ module main_decoder (
 );
 
 always_comb
-    casez ( op_i )
+    case ( op_i )
         7'b0000011: // I-type load
             begin
                 reg_write_o = 1'b1;

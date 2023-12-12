@@ -23,12 +23,12 @@ function logic[ ACTUAL_ADDRESS_WIDTH - 1 : 0 ] convert_address (input logic[ ADD
     convert_address = in [ 31 : 16 ] + in [ 15 : 0 ];
 endfunction
 
-/*
+
 initial begin
         $display("Loading main memory");
-        $readmemh("f1_program.mem", memory_bytes); // Update to new file, if needed
+        $readmemh("rom_bin/data.mem", memory_bytes); // Update to new file, if needed
 end
-*/
+
 
 always_ff @( posedge clk_i, posedge write_enable_i )
     if ( write_enable_i )

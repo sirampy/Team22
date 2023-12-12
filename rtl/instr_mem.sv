@@ -21,11 +21,11 @@ logic [ 7 : 0 ] byte_array [ ( 2 ** ACTUAL_ADDRESS_WIDTH ) - 1 : 0 ];
 
 initial begin
         $display("Loading instructions into ROM.");
-        $readmemh("f1_program.mem", byte_array); // Choose correct .mem location
+        $readmemh("rom_bin/program.mem", byte_array); // Choose correct .mem location
 end;
 
 
-assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Little endian
+assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Big endian, works better with file
                 byte_array[ convert_address( addr_i ) + 2 ],
                 byte_array[ convert_address( addr_i ) + 1 ],
                 byte_array[ convert_address( addr_i ) ] };

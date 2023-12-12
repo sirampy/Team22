@@ -4,7 +4,6 @@ module top #(
               PC_WIDTH = 32
 )(
     input logic clk_i,      
-    input logic rst_i,
     output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
@@ -34,7 +33,6 @@ module top #(
     logic [1:0] alu_op;    // [00] - LW/SW, [01] - B-type, [10] - (R-type or I-type)
 
     // alu signals
-    logic [DATA_WIDTH-1:0] alu_op1;   // input 1
     logic [DATA_WIDTH-1:0] alu_op2;   // input 2
     logic [DATA_WIDTH-1:0] alu_out;   // output of ALU
     logic                  zero;      // zero flag
@@ -74,7 +72,6 @@ module top #(
 
     pc_reg pc_module (
         .clk_i (clk_i),
-        .rst_i (rst_i),
         .en_i (stallF),
         .next_pc_i (next_pc),
         .pc_o (pc)
@@ -231,7 +228,7 @@ module top #(
         // main input
         .clk_i(clk_i),
         .alu_resultE_i (alu_out),
-        .write_dataE_i (alu_op2_a),
+        .write_dataE_i (reg_op2),
         .rdE_i (rdE),
         .pc_plus4E_i (pc_plus4E),
 
