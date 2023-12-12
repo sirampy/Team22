@@ -33,3 +33,6 @@ this test is more advanced than the previous 2, as it makes use of a large porti
 ![triangle pdf](images/triangle_pdf.png)
 ![gauss pdf](images/gauss_pdf.png)
 ![noise pdf](images/noise_pdf.png)
+### 4. F1 Light sequence
+In the implemantion of the f1 sequence, we are able to test many different kinds of instructions work, thus helping to show that the CPU can support the entire RV32I instruction set correctly. below are some waveforms to show this taking place:
+![f1 light wave](images/f1lightwave.png)
