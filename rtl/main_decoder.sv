@@ -13,8 +13,8 @@ module main_decoder (
     output logic [ 1 : 0 ] alu_op_o,     // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
     output logic           jalr_pc_src_o, // [1] Write JALR register to PC, [0] Otherwise
     output logic           Jstore_o,      // When high (only for jump), pc+4 written to regfile
-    output logic [ 1 : 0 ] mem_type,      // [0] - word, [1] - byte, [2] - half
-    output logic           mem_sign       // [0] - unsigned, [1] - signed
+    output logic [ 1 : 0 ] mem_type_o,    // [0] - word, [1] - byte, [2] - half
+    output logic           mem_sign_o     // [0] - unsigned, [1] - signed
 );
 
 logic branch; // [1] - Branch, [0] Otherwise
@@ -34,30 +34,30 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
-                casez(funct3_i) // byte, half or word load
+                case(funct3_i) // byte, half or word load
                     3'b010: begin // LW
-                        mem_type = 2'b00; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b00; 
+                        mem_sign_o = 1'b1;
                     end
                     3'b000: begin // LB
-                        mem_type = 2'b01; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b01; 
+                        mem_sign_o = 1'b1;
                     end
                     3'b001: begin // LH
-                        mem_type = 2'b10; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b10; 
+                        mem_sign_o = 1'b1;
                     end
                     3'b100: begin // LBU
-                        mem_type = 2'b01; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b01; 
+                        mem_sign_o = 1'b1;
                     end
                     3'b101: begin // LHU
-                        mem_type = 2'b10; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b10; 
+                        mem_sign_o = 1'b1;
                     end
                     default: begin
-                        mem_type = 2'b00; 
-                        mem_sign = 1'b1;
+                        mem_type_o = 2'b00; 
+                        mem_sign_o = 1'b1;
                     end
                 endcase
             end
@@ -87,10 +87,10 @@ always_comb
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
                 casez(funct3_i) // byte, half or word store
-                    3'b010: assign mem_type = 2'b00; // SW
-                    3'b000: assign mem_type = 2'b01; // SB
-                    3'b001: assign mem_type = 2'b01; // SH
-                    default: assign mem_type = 2'b00;
+                    3'b010: assign mem_type_o = 2'b00; // SW
+                    3'b000: assign mem_type_o = 2'b01; // SB
+                    3'b001: assign mem_type_o = 2'b01; // SH
+                    default: assign mem_type_o = 2'b00;
                 endcase
             end
         7'b0010011: // I-type arithmetic
@@ -183,8 +183,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
-                mem_type = 2'b00; 
-                mem_sign = 1'b1;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
     endcase
 

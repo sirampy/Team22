@@ -59,9 +59,9 @@ main_decoder main_decoder (
     .reg_write_o   ( reg_write_o ),
     .jalr_pc_src_o ( jalr_pc_src_o ),
     .alu_op_o      ( alu_op ),
-    .Jstore_o      ( Jstore_o )
-    .mem_type      ( mem_type_o ),
-    .mem_sign      ( mem_sign_o )
+    .Jstore_o      ( Jstore_o ),
+    .mem_type_o    ( mem_type_o ),
+    .mem_sign_o    ( mem_sign_o )
 
 );
 

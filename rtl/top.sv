@@ -72,9 +72,9 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
     .alu_ctrl_o    ( alu_ctrl ),
     .imm_op_o      ( imm_op ),
     .instr24_15_o  ( instr24_15 ),
-    .instr11_7_o   ( instr11_7 )
+    .instr11_7_o   ( instr11_7 ),
     .mem_type_o    ( mem_type ),
-    .mem_type_o    ( mem_sign )
+    .mem_sign_o    ( mem_sign )
 
 );
 
@@ -107,8 +107,8 @@ data_memory data_mem (
     .address_i      ( alu_out ),
     .write_enable_i ( mem_write ),
     .write_value_i  ( mem_write_val ),
-    .mem_type_i(mem_type),
-    .mem_sign_i(mem_sign)
+    .mem_type_i     ( mem_type ),
+    .mem_sign_i     ( mem_sign ),
 
     .read_value_o   ( memory_read )
 

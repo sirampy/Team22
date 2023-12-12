@@ -12,7 +12,11 @@ module data_memory # (
     input logic                           write_enable_i, // Write enable
     input logic [ DATA_WIDTH - 1 : 0 ]    write_value_i,  // Value to write
 
+    input logic [ 1 : 0 ]                 mem_type_i,       // [0] - word, [1] - byte, [2] - half
+    input logic                           mem_sign_i,       // [0] - unsigned, [1] - signed
+
     output logic [ DATA_WIDTH - 1 : 0]    read_value_o    // Value read at address
+    
 
 );
 
@@ -23,25 +27,31 @@ function logic[ ACTUAL_ADDRESS_WIDTH - 1 : 0 ] convert_address (input logic[ ADD
     convert_address = in [ 31 : 16 ] + in [ 15 : 0 ];
 endfunction
 
-/*
+
 initial begin
         $display("Loading main memory");
-        $readmemh("f1_program.mem", memory_bytes); // Update to new file, if needed
+        $readmemh("./rom_bin/data.mem", memory_bytes); // Update to new file, if needed
 end
-*/
 
-always_ff @( posedge clk_i, posedge write_enable_i )
-    if ( write_enable_i )
-    begin
-        memory_bytes [ convert_address( address_i ) + 3 ] <= write_value_i [ 31 : 24 ]; // Little endian
-        memory_bytes [ convert_address( address_i ) + 2 ] <= write_value_i [ 23 : 16 ];
-        memory_bytes [ convert_address( address_i ) + 1 ] <= write_value_i [ 15 : 8 ];
-        memory_bytes [ convert_address( address_i ) ] <= write_value_i [ 7 : 0 ];
-    end
+logic [ ADDRESS_WIDTH - 1 : 0 ] address;
 
-assign read_value_o = { memory_bytes [ convert_address( address_i ) + 3 ], // Little endian
-                        memory_bytes [ convert_address( address_i ) + 2 ],
-                        memory_bytes [ convert_address( address_i ) + 1 ],
-                        memory_bytes [ convert_address( address_i ) ] };
+always_comb begin
+    case (mem_type_i)
+        2'b01: // byte
+            case (mem_sign_i)
+                1'b0: address = {{24{1'b0}},  {address_i[7:0]}};
+                1'b1: address = {{24{address_i[7]}},  {address_i[7:0]}};
+            endcase   
+        2'b10: // half
+            case (mem_sign_i)
+                1'b0: address = {{16{1'b0}},  {address_i[15:0]}};
+                1'b1: address = {{16{address_i[15]}},  {address_i[15:0]}};
+            endcase
+        default: address = address_i; // word
+        endcase 
+end
+
+
+
 
 endmodule

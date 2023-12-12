@@ -43,12 +43,17 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ANDI R1, R1, 0x08      - Expect R1 = 0x8           -> ...01000 00001 111 00001 0010011       -> 00 80 f0 93
 
     // Testing I-type loads:
-    // Implemented:         LW
-    // Not implemented:     LB, LH, LBU, LHU
+    // Implemented:         LW, LB, LH, LBU, LHU
+    // Not implemented:     
     // Tested and working:  LW
     // Tested and broken:  
 
     evalAndDump(tfp, top, i); // LW R2, 0x5(R3)         - Expect R2 = 0x09080706    -> ...00101 00011 010 00010 0000011       -> 00 51 a1 03
+    evalAndDump(tfp, top, i); // LB   R2, 0x5(R3)       - Expect R2 = 0xffffff86    -> ...00101 00011 000 00010 0000011       -> [12] 00 51 81 03
+    evalAndDump(tfp, top, i); // LH   R2, 0x5(R3)       - Expect R2 = 0xffff8786    -> ...00101 00011 001 00010 0000011       -> [13] 00 51 91 03
+    evalAndDump(tfp, top, i); // LBU  R2, 0x5(R3)       - Expect R2 = 0x00000086    -> ...00101 00011 100 00010 0000011       -> [14] 00 51 c1 03
+    evalAndDump(tfp, top, i); // LHU  R2, 0x5(R3)       - Expect R2 = 0x00008786    -> ...00101 00011 101 00010 0000011       -> [15] 00 51 d1 03
+
 
     // Testing S-type:
     // Implemented:         SW
