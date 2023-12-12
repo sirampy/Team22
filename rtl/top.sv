@@ -41,8 +41,8 @@ module top #(
     logic [DATA_WIDTH-1:0] read_data; 
 
     // pipelining signals
-    logic stallF;
-    logic stallD;
+    logic stall_f; // fetch
+    logic stall_d; // decode
 
     logic [PC_WIDTH-1:0] pcD; 
     logic [PC_WIDTH-1:0] instrD;
@@ -72,7 +72,8 @@ module top #(
 
     pc_reg pc_module (
         .clk_i (clk_i),
-        .en_i (stallF),
+        .rst_i (rst_i),
+        .en_i (stall_f),
         .next_pc_i (next_pc),
         .pc_o (pc)
     );
@@ -85,7 +86,7 @@ module top #(
     // fetch stage pipeling:
     pipe_reg1 pipe_reg1 (
         .clk_i (clk_i),
-        .en_i (stallD),
+        .en_i (stall_d),
         .clr_i (flushD),
         .rd_i (instr),              // read data from instr mem
         .pcF_i (pc),
@@ -314,8 +315,8 @@ module top #(
         .pc_srcE_i (pc_src),
         .forward_aE_o (forward_aE), // forward select for register 1 (e)
         .forward_bE_o (forward_bE), // forward select for register 2 (e)
-        .stallF_o (stallF),
-        .stallD_o (stallD),
+        .stall_f_o (stall_f),
+        .stall_d_o (stall_d),
         .flushD_o (flushD),
         .flushE_o (flushE)
     );
