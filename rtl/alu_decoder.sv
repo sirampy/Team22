@@ -15,6 +15,7 @@ assign op5_funct7 = { op5_i, funct7_i };
 always_comb
     case ( alu_op_i )
         2'b00: alu_control_o = 4'b0000; // LW/SW - Want to ADD
+
         2'b01:
             case ( funct3_i )
                 3'b000: alu_control_o = 4'b0001;  // BEQ - Want to SUB
@@ -30,9 +31,8 @@ always_comb
                 3'b000: if ( op5_funct7 == 2'b11 )
                         alu_control_o = 4'b0001;        // SUB
                     else alu_control_o = 4'b0000;       // ADD or I-type
-                3'b001: alu_control_o = 4'b0100;        // SLL
+                3'b001: alu_control_o = 4'b0100;        // SLL 
                 3'b010: alu_control_o = 4'b0101;        // SLT
-                // 3'b011: // SLTU
                 3'b100: alu_control_o = 4'b1001;        // XOR
                 3'b101: if ( funct7_i == 0 ) 
                         alu_control_o = 4'b0110;        // SRL - Don't care about I-type as it's the same
@@ -40,6 +40,7 @@ always_comb
                 3'b110: alu_control_o = 4'b0011;        // OR
                 3'b111: alu_control_o = 4'b0010;        // AND
                 3'b011: alu_control_o= 4'b1000;         // SLTU
+                
         
                 default: alu_control_o = 4'b0000;
             endcase

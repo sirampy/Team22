@@ -161,7 +161,7 @@ always_comb
             3'b000: // BEQ
                 pc_src_o = ( branch && eq_i ) ? 1'b1 : 1'b0;
             3'b001: // BNE
-                pc_src_o = ( branch && eq_i ) ? 1'b0 : 1'b1;
+                pc_src_o = ( branch && !(eq_i )) ? 1'b1 : 1'b0;
             default: pc_src_o = 1'b0; // By default, do not jump
         endcase
 
