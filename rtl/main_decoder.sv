@@ -25,7 +25,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b0110011: // R-type
             begin
@@ -37,7 +36,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b10;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b0100011: // S-type
             begin
@@ -49,7 +47,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b0010011: // I-type arithmetic
             begin
@@ -61,7 +58,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b10;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b1100011: // B-type
             begin
@@ -73,7 +69,6 @@ always_comb
                 branch_o = 1'b1;
                 alu_op_o = 2'b01;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b1101111: // JAL
             begin
@@ -85,7 +80,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b1;
-                Jstore_o = 1'b1;
             end
         7'b1100111: // JALR
             begin
@@ -97,7 +91,6 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b1;
-                Jstore_o = 1'b1;
             end
         7'b0010111: // AUIPC
             begin
@@ -109,7 +102,6 @@ always_comb
                 branch_o = 1'b1;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b0;
-                Jstore_o = 1'b0;
             end
         7'b0110111: // LUI
             begin
@@ -132,7 +124,6 @@ always_comb
                 branch_o = 1'b?;
                 alu_op_o = 2'b??;
                 jalr_pc_src_o = 1'b?;
-                Jstore_o = 1'b0;
             end
     endcase
 
