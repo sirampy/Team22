@@ -186,8 +186,9 @@ always_latch begin
             alu3_o = ADD;
             alu7_o = I_STD;
 
-            src1_o = RS1;
+            src1_o = PC;
             src2_o = IS_IMM12;
+            imm12_o = i_imm;
 
             srcr_o = NEXT_PC;
             reg_write_o = 1;

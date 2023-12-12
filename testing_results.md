@@ -23,4 +23,4 @@ we can see that the program is running and branching as intended. this test impl
 ![sine wave waveform](images/sine_test.png)
 this test demonstrates that memory read instructions work
 ### 3. PDF
-getting this to work nicely was a bit more envolved, as I had to throw together a quick python script to allow the user to select which array_data to use. The data is so large that I also need to increase the size of the data_mem to accomodate
+getting this to work nicely was a bit more envolved, as I had to throw together a quick python script to allow the user to select which array_data to use. The data is so large that I also need to increase the size of the data_mem to accomodate. 
