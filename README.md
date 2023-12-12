@@ -1,7 +1,13 @@
 # Team 22 - RISC-V RV32I Processor
+---
+## Table of Contents
+1. [Group Details](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#group-details)
+2. [Division of Tasks]((https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#division-of-tasks))
+3. [Repository Structure](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#respository-structure)
+4. [Testing instructions](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#testing-instructions)
+5. [Evidence](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#evidence)
 
 ## Group Details
----
 | Name           | CID      | GitHub   | Email                     | Personal Statement|
 |----------------|----------|----------|---------------------------|--------------|
 | Alex Charlton |  | **sirampy**  |       | [Alex's Statement](https://github.com/sirampy/Team22/blob/main/statements/Alex%20Charlton.md) |
@@ -11,81 +17,89 @@
 | Sophie Jayson |  | **Slayque3n**  |  | [Sophie's Statement](https://github.com/sirampy/Team22/blob/main/statements/Sophie%20Jayson.md) |
 
 ## Division of Tasks
----
-Main Sections
-1. Testing (Testbenches for all individual components, only the main top-level module, coming up with machine code, testing for all instructions)
-2. ALU (mostly done) + Data mem (actually still needs to be done my bad - create data mem module, add read_data mux, link it to alu+register file) + Implementing and testing F1 Vbuddy lights, test Lab4 code given by peter
-3. Control unit (Implement all types of instructions - Load, Store, Jump, Branch etc) + PC
-4. Pipelining
-5. Cache
-
-Note: Testbenches written by Person 1, but all other members utilize and change testbenches as needed when testing their own portion
-
-### CPU tasks allocations (main responsibilities):
-**Alex:** Cache 
-
-**Beth:** Pipelining
-
-**Dell:** Testbench and verification of design
-
-**Mateusv:** ALU, Data Mem, Implement F1 Lights algorithm
-
-**Sophie:** Control Unit, PC
-
-### Component split (currently incomplete list of modules):
----
-| File Name     | Alex  | Beth | Dell | Mateusv |  Sophie  |
-|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|
-| alu_top.sv | | | | | 
-| alu.sv | | | | | 
-| reg_file.sv | | | | | 
-| control_top.sv | | | | | 
-| main_decoder.sv | | | | |
-| alu_decoder.sv | | | | | 
-| instr_mem.sv | | | | | 
-| program_mem.sv | | | | | 
-| sign_extend.sv | | | | | 
-| pc_top.sv | | | | |
-| pc_reg.sv | | | | |
-| top.sv (singlecycle) | | | | | 
-| top.sv (pipeline) | | | | | 
-| cpu_tb.cpp | | | | | 
-| F1Assembly.s | | | | | 
-
+### Work split by component
 LEGEND :       `x` = full/main responsibility;  `p` = partial contribution; 
+#### Single Cycle:
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | | 
+| PC | pc_mux.sv, pc_reg.sv| | | | 
+| Memory | instr_mem.sv, main_memory.sv | | | | 
+| Top | top.sv | | | |
+| Testbenches and debugging | top_tb.cpp | | | | 
+| Formatting | - | | | | 
+| Setup | .gitignore, Makefile |  | | | 
+| F1 Testing | f1_tb.cpp, f1.s | | | | 
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | | | |
 
-&nbsp;   
-# Joint Statement 
+#### Pipelining:
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | 
+| Hazard unit | hazard_unit.sv | | x | | 
+| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | 
+| Testbenches | cpu_tb.cpp | | | x | 
+| Debugging | - | | p | p | 
+| F1 Testing | f1.s, f1_tb.cpp | | | | | x|
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | | | |
+| V2 Pipeline | all | x | | |
 
+#### Cache:
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| Direct cache | | | | | | 
+| Two-way cache | | | | | 
+| Testbenches and debugging | | | | | 
+| F1 Testing | | | | | |
+| Other testing | | | | |
 
+#### Version-2 (Revised Microarchitecture):
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | | 
+| PC | pc_mux.sv, pc_reg.sv| | | | 
+| Memory | instr_mem.sv, program_mem.sv | | | | 
+| Top | top.sv | | | |
+| Testbenches and debugging | | | | | 
+| F1 Testing | | | | | 
+| Other testing | | | | |
+
+#### Lab 4:
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| ALU | alu.sv, alu_top.sv, reg_file.sv | p | p | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | | 
+| PC | pc_mux.sv, pc_reg.sv| | | | | x |
+| Memory | instr_mem.sv, program.mem| p | | | p 
+| Top | top.sv | | | x |
+| Testbenches and debugging | alu_top_tb.cpp,  | | | x | 
+| Run files | |  | | p | p 
+| Formatting | | | | |  x
+
+&nbsp; 
 ## Repository Structure
+For each new feature we added, a new branch was created. The final repo includes the following branches:
 
-## Summary of Approach
+| Branch name and link | Summary | 
+| -----------------|-------------|
+|1. **[`lab4_done`](https://github.com/sirampy/Team22/tree/lab4_done#)**|The original structure of Lab 4 was moved to a separate branch to preserve it, as we realised that many changes would have to be made for the full RISC-V CPU.|
+|2. **[`SINGLE-CYCLE`](https://github.com/sirampy/Team22/tree/SINGLE-CYCLE#)**|Fully implemented RISC-V RV32I Processor. |
+|3. **[`pipelining`](https://github.com/sirampy/Team22/tree/pipelining#)**|Pipelined CPU <u>without</u> hazard handling. |
+|4. **[`pipelining-hazards`](https://github.com/sirampy/Team22/tree/pipelining-hazards#)**|Pipelined CPU <u>with</u> hazard handling, including forwarding and stalls.|
+|5. **[`cache`](https://github.com/sirampy/Team22/tree/cache#)**|This branch contains both direct mapped cache and 2-way associative cache, with implementation of **[WRITE WHICH]** in the fully pipelined CPU.  |
+|6. **[`version-2`](https://github.com/sirampy/Team22/tree/version-2#)**|While creating the single cycle CPU, we realised the microarchitecture could be further improved on with a few changes. Thus, version-2 was created as a way to explore what in the CPU could be upgraded to become more efficient beyond what we were taught.|
+|7. **[`v2-full`](https://github.com/sirampy/Team22/tree/v2-full#)**|Version-2 with pipelining and cache incorporated.|
+&nbsp; 
+> A more in-depth explanation of each of the branches can be found in their individual READMEs linked above. 
 
-### Pipelining
-#### Single-Cycle
-In order to add pipelining to the single-cycle CPU, 4 pipeline registers were added in between the 5 different stages of the CPU. 
-
-This required us to create new signals that had the same purpose but for different stages. In order to differentiate between them, those that had to be in mulitple stages were appended with the letter of the stage (ie F, D, E, M and W for fetch, decode, execute, memory, and writeback respectively). 
-
-One change that had to be made was the writeback to register file had to be triggered on the negative edge rather than the postive edge. This allows the data to be written back in the first half of the cycle and be read back in the second half so that it can be used in the next instruction immediately.
-
-#### Data Hazards
-In order to deal with data hazards, the simplest way would be to add NOP instructions, which was done in the branch 'pipelining'. 
-
-However, this not only wastes cycles but has to be written into the program directly. Thus, a better way to deal with it would be through forwarding data from earlier stages.
-
-This required us to create a new branch 'pipelining-hazard' where we added a hazard unit that looks for data hazards. The hazard unit detects these data dependencies when the source register of the execute stage matches the destination register of the memory or writeback stage, sending signals to forwarding multiplexers to select the data from the respective stage.
-
-However, an error occurs for the lw intruction as the correct value will not be produced until cycle 5. Thus, the execution of instructions using that value need to be stalled. To do this, stall signals were added to indicate when the existing values of the pipeline registers should be kept for that cycle. Flush signals were also introduced to create a bubble and clear the execute registers,
-
-#### Control Hazards
-After that, we had to resolve control hazards, which occur when the next instruction may be fetched wrongly as the branch decision have not yet been made. This is dealt with by predicting that branches are not taken until pc_src in the execute stage determines which branch is taken. If the prediction is wrong, the predictions will be flushed.
-
+&nbsp; 
 ## Testing Instructions
 
-as a team, we encounted some troubles when it came to creating the top file and putting the whole CPU together; as we had not previously discussed naming conventions. However, with a short discussion and a few simple changes these problems were easily overcome.
 
+## Evidence
 
+## References
 > instruction set reference: https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf <br>
 > system verilog style guide: https://www.systemverilog.io/verification/styleguide/#variables
