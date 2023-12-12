@@ -5,15 +5,14 @@ The cache is write back - not write through
 */
 
 module direct_cache #(
-    parameter   ADDRESS_WIDTH = 16,
-                TAG_WIDTH = 27,
-                USED_ADDRESS_WIDTH = 8,
-                DATA_WIDTH = 32,
-                SET_WIDTH = 3,
-
+    parameter ADDRESS_WIDTH = 16,
+    parameter TAG_WIDTH = 27,
+    parameter USED_ADDRESS_WIDTH = 8,
+    parameter DATA_WIDTH = 32,
+    parameter SET_WIDTH = 3
 )(
     input  logic [ADDRESS_WIDTH-1:0] addr_i,
-    input  logic [DATA_WIDTH-1:0]     data_in_i,
+    input  logic [DATA_WIDTH-1:0]    data_in_i,
     input  logic                     wen_i,
     output logic [DATA_WIDTH-1:0]    data_out_o
 );
@@ -42,14 +41,12 @@ data_memory data_mem(
 );
 
 initial begin
-    foreach (data[i]) begin
-        assign data[i].flags = [0,0]; // set invalid
-    end
+    foreach (data[i]) assign data[i].flags = [0,0]; // set invalid
 end
 
 always_comb begin
     
-    case (wen):
+    case (wen_i):
     1'b0: begin // read operation
 
         if (tag == data[set].tag && data[set].flags.valid == 1) rd_o = data[set]; // cache hit
@@ -61,7 +58,7 @@ always_comb begin
         end
         //read to cache
         data_mem.a_i = a_i;
-        data_mem.wen_i = 1'b0; // write enable set to 0 
+        data_mem.wen_i = 1'b0; // set datamem write enable to 0 
         data[set].data = data_mem.rd_o; // update cache
         data[set].tag = tag;
         data[set].flags = {1'b1, 1'b0}; // set flags as valid and not dirty
@@ -71,21 +68,22 @@ always_comb begin
         if (tag == data[set].tag || data[set].flags.valid == 0) begin // cache hit
             data[set].data = wd_i;
             data[set].tag = tag;
-            data[set].flags = 'b11;
+            data[set].flags = 2'b11;
+        end
         else if (data[set].flags == 2'b11) begin // cache miss
-                // write to memory
-                data_mem.a_i = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
-                data_mem.wd_i = data[set].data;
-                data_mem.wen_i = 1'b1; // write enable
+            // write to memory
+            data_mem.a_i = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
+            data_mem.wd_i = data[set].data;
+            data_mem.wen_i = 1'b1; // write enable
         end
         data[set].data = data_in_i;
         data[set].tag = tag;
         data[set].flags = 'b11;
-        end
     end
 
-endcase
-    
+    default: $display("Error: Unexpected value of wen_i");
+    endcase
+
 end
 
 endmodule
