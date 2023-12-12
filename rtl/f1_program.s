@@ -29,4 +29,3 @@ turn_off:                        # wait some delay and turn off all lights
     JAL ra, lightdelay
     ADDI a5, zero, 0             # switch lights off
     RET
-    
