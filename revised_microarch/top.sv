@@ -138,7 +138,7 @@ branch_tester branch_tester(
 );
 
 data_mem data_mem(
-   .a_i(alu_out[7:0]),
+   .a_i(alu_out[19:0]),
    .wd_i(reg_data_2),
 
    .wen_i(data_write),
