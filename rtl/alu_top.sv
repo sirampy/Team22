@@ -17,7 +17,7 @@ module alu_top #(
     input logic [ 3 : 0 ]               alu_ctrl_i,      // ALU operation select
     
     input logic                        Jstore_i,      
-    input logic [ 31 : 0 ]             pc_plus4_i,       //pc+4 output to write into reg_file.sv
+    input logic [ 31 : 0 ]             pc_plus4_i,       //pc+4 to write into reg_file.sv
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
     output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o,       // ALU output
     output logic [ DATA_WIDTH - 1 : 0 ] rs2_val_o,       // Value at rs2, output for memory write
