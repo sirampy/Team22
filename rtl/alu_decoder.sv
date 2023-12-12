@@ -34,11 +34,12 @@ always_comb
                 3'b010: alu_control_o = 4'b0101;        // SLT
                 // 3'b011: // SLTU
                 3'b100: alu_control_o = 4'b1001;        // XOR
-                3'b101: if ( funct7_i == 0 )
-                        alu_control_o = 4'b0110;            // SRL - Don't care about I-type as it's the same
-                    else alu_control_o = 4'b0110;           // SRA - Don't care about I-type as it's the same
+                3'b101: if ( funct7_i == 0 ) 
+                        alu_control_o = 4'b0110;        // SRL - Don't care about I-type as it's the same
+                    else alu_control_o = 4'b0111;       // SRA - Don't care about I-type as it's the same
                 3'b110: alu_control_o = 4'b0011;        // OR
                 3'b111: alu_control_o = 4'b0010;        // AND
+                3'b011: alu_control_o= 4'b1000;         // SLTU
         
                 default: alu_control_o = 4'b0000;
             endcase
