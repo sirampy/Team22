@@ -26,7 +26,7 @@ endfunction
 
 initial begin
         $display("Loading main memory");
-        $readmemh("test2.mem", memory_bytes); // Update to new file, if needed
+        $readmemh("rom_bin/data.mem", memory_bytes); // Update to new file, if needed
 end
 
 
