@@ -6,7 +6,7 @@ module two_way #(
                 SET_WIDTH = 2 // now reduced to 2 for 4 sets
 )(
     input  logic                     clk_i,
-    input  logic [DATA_WIDTH-1:0] addr_i,
+    input  logic [DATA_WIDTH-1:0]    addr_i,
     input  logic [DATA_WIDTH-1:0]    data_in_i,
     input  logic                     wen_i,
     output logic [DATA_WIDTH-1:0]    data_out_o
@@ -21,7 +21,7 @@ typedef struct packed {
     logic [DATA_WIDTH-1:0] data;
     logic [TAG_WIDTH-1:0]  tag;
     cache_flags_t         flags;
-} cache_entry_t; 
+} cache_entry_t;
 
 cache_entry_t data[2][(2**SET_WIDTH)-1:0]; // 2-d array for 'two ways' per set
 
