@@ -15,8 +15,8 @@ module two_way #(
 );
 
 typedef struct { 
-    bit [0] valid;
-    bit [0] dirty;
+    bit valid;
+    bit dirty;
  } cache_flags_t;
 
  typedef struct packed {
@@ -31,7 +31,7 @@ logic set[SET_WIDTH-1:0]  = addr_i[SET_WIDTH+1:0];
 logic tag[TAG_WIDTH-1:0]  = addr_i[ADDRESS_WIDTH-1:ADDRESS_WIDTH-TAG_WIDTH];
 
 data_memory data_mem(
-    .a_i(addr_i),
+    .address_i(addr_i),
     .wd_i(data_in_i),
     .wen_i(wen_i),
     .rd_o(data_out_o)
@@ -40,6 +40,7 @@ data_memory data_mem(
 logic lru[(2**SET_WIDTH)-1:0]; //LRU bits - one for each set
 
 initial begin
+    int i, j;
     foreach (data[i][j]) begin
         data[i][j].flags = {1'b0, 1'b0}; // set invalid
     end
@@ -64,28 +65,30 @@ always_comb begin
         end
     end
     case(wen_i)
-            1'b0: begin // read operation
-                if (hit) {
+            1'b0: begin //read operation
+                if (hit) begin
                     // read hit
                     data_out_o = data[way][set].data;
                     lru[set] = ~way; 
-                } else {
+                end 
+                else begin
                     // read miss
                     way = lru[set]; 
                     lru[set] = ~way; 
-                }
+                end 
             end 
             1'b1: begin // write operation
-                if (hit) {
+                if (hit) begin 
                     // write hit
                     data[way][set].data = data_in_i;
                     data[way][set].flags.dirty = 1'b1;
                     lru[set] = ~way; 
-                } else {
+                end 
+                 else begin 
                     // write miss
-                    way = lru_bits[set]; // using LRU to choose which way
+                    way = lru[set]; // using LRU to choose which way
                     lru[set] = ~way; 
-                }
+                 end 
             end
     endcase 
 end
