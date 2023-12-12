@@ -25,7 +25,7 @@ module direct_cache #(
     // } cache_flags_t;
 
     logic v [CACHE_LENGTH-1:0];
-    logic d [CACHE_LENGTH-1:0];
+   // logic d [CACHE_LENGTH-1:0];
     logic [TAG_WIDTH-1:0] tag [CACHE_LENGTH-1:0];
     logic [DATA_WIDTH-1:0] data [CACHE_LENGTH-1:0];
 
@@ -39,11 +39,18 @@ module direct_cache #(
     logic [SET_WIDTH-1:0] current_set;
     logic [TAG_WIDTH-1:0] current_tag;
 
+   /* data_memory data_mem(
+        .clk_i (clk_i),
+        .address_i(addr_i),
+        .write_value_i(data_in_i),
+        .wen_i(wen_i),
+        .read_value_o(data_out_o)
+    );*/
     assign current_set = addr_i[SET_WIDTH+1:2];
     assign current_tag = addr_i[DATA_WIDTH-1:DATA_WIDTH-TAG_WIDTH]; 
     assign hit_o = (tag[current_set] == current_tag) && v[current_set];
 
-    always_comb begin
+    always_latch begin
         if(hit_o) data_out_o = data[current_set];
     end
 

@@ -1,102 +1,72 @@
-//two way associative cache
-
 module two_way #(
-    parameter   TAG_WIDTH = 28, // increased from 27 (direct cache)
-                DATA_WIDTH = 32,
-                SET_WIDTH = 2 // now reduced to 2 for 4 sets
+    parameter ADDRESS_WIDTH = 32,
+    parameter TAG_WIDTH = 28, 
+    parameter DATA_WIDTH = 32,
+    parameter CACHE_LENGTH = 8,
+    parameter SET_WIDTH = 2
 )(
     input  logic                     clk_i,
-    input  logic [DATA_WIDTH-1:0]    addr_i,
+    input  logic [ADDRESS_WIDTH-1:0] addr_i,
     input  logic [DATA_WIDTH-1:0]    data_in_i,
     input  logic                     wen_i,
-    output logic [DATA_WIDTH-1:0]    data_out_o
+    output logic [DATA_WIDTH-1:0]    data_out_o,
+    output logic                     hit_o
 );
 
-typedef struct packed { 
-    bit valid;
-    bit dirty;
-} cache_flags_t;
+    logic v[CACHE_LENGTH-1:0][1:0];
+    logic [TAG_WIDTH-1:0] tag [CACHE_LENGTH-1:0];
+    logic [DATA_WIDTH-1:0] data [CACHE_LENGTH-1:0];
+    logic round_robin [CACHE_LENGTH-1:0]; // round_robin policy bit for each set
 
-typedef struct packed {
-    logic [DATA_WIDTH-1:0] data;
-    logic [TAG_WIDTH-1:0]  tag;
-    cache_flags_t         flags;
-} cache_entry_t;
+    logic [SET_WIDTH-1:0] current_set;
+    logic [TAG_WIDTH-1:0] current_tag;
 
-cache_entry_t data[2][(2**SET_WIDTH)-1:0]; // 2-d array for 'two ways' per set
+    assign current_set = addr_i[SET_WIDTH+1:2];
+    assign current_tag = addr_i[DATA_WIDTH-1:DATA_WIDTH-TAG_WIDTH]; 
 
-logic [SET_WIDTH-1:0] set;
-logic [TAG_WIDTH-1:0] tag;
+    logic hit0, hit1;
+    assign hit0 = (tag[current_set][0] == current_tag) && v[current_set][0];
+    assign hit1 = (tag[current_set][1] == current_tag) && v[current_set][1];
+    assign hit_o = hit0 || hit1;
 
-always_comb begin
-    set = addr_i[SET_WIDTH+1:2];
-    tag = addr_i[DATA_WIDTH-1:DATA_WIDTH-TAG_WIDTH];
-end
-
-// Assuming data_memory is defined elsewhere
-data_memory data_mem(
-    .clk_i(clk_i),
-    .address_i(addr_i),
-    .write_value_i(data_in_i),
-    .write_enable_i(wen_i),
-    .read_value_o(data_out_o)
-);
-
-logic [(2**SET_WIDTH)-1:0] lru; // LRU bits - one for each set
-
-initial begin
-    int i, j;
-    for (i = 0; i < 2; i++) begin
-        for (j = 0; j < (2**SET_WIDTH); j++) begin
-            data[i][j].flags = {1'b0, 1'b0}; // set invalid
-        end
-    end
-    for (i = 0; i < (2**SET_WIDTH); i++) begin
-        lru[i] = 0; // initialise LRU bits
-    end
-end
-
-logic hit;
-logic way; // tracking which way is hit
-always_comb begin
-    // checking both ways for a hit
-    hit = 1'b0;
-    way = 1'b0;
-    for (int i = 0; i < 2; i++) begin
-        if (data[i][set].tag == tag && data[i][set].flags.valid) begin
-            hit = 1'b1;
-            way = i[0];
-            lru[set] = ~i[0]; // toggling between 1 and 0 for which way
-            break;
+    always_latch begin
+        if(hit_o) begin
+            if(hit0) begin
+                data_out_o = data[current_set][0];
+                round_robin[current_set] = 1'b1; 
+            end else if(hit1) begin
+                data_out_o = data[current_set][1];
+                round_robin[current_set] = 1'b0; 
+            end
+        end else begin
+            data_out_o = data_in_i;
         end
     end
 
-    case(wen_i)
-        1'b0: begin // read operation
-            if (hit) begin
-                // read hit
-                data_out_o = data[way][set].data;
-                lru[set] = ~way; 
+    always_ff @(negedge clk_i) begin
+        if(!hit_o) begin
+            if(round_robin[current_set]) begin
+                tag[current_set][1] <= current_tag;
+                data[current_set][1] <= data_in_i;
+                v[current_set][1] <= 1'b1;
+                round_robin[current_set] <= 1'b0;
             end else begin
-                // read miss
-                way = lru[set]; 
-                lru[set] = ~way; 
+                tag[current_set][0] <= current_tag;
+                data[current_set][0] <= data_in_i;
+                v[current_set][0] <= 1'b1;
+                round_robin[current_set] <= 1'b1;
             end
         end
-        1'b1: begin // write operation
-            if (hit) begin
-                // write hit
-                data[way][set].data = data_in_i;
-                data[way][set].flags.dirty = 1'b1;
-                lru[set] = ~way; 
-            end else begin
-                // write miss
-                way = lru[set]; // using LRU to choose which way
-                lru[set] = ~way; 
+        if(wen_i) begin
+            if(hit0) begin
+                tag[current_set][0] <= current_tag;
+                data[current_set][0] <= data_in_i;
+                round_robin[current_set] <= 1'b1;
+            end else if(hit1) begin
+                tag[current_set][1] <= current_tag;
+                data[current_set][1] <= data_in_i;
+                round_robin[current_set] <= 1'b0;
             end
         end
-    default: $display("Error: Unexpected value of wen_i");
-    endcase
-end
-
+    end
 endmodule
