@@ -83,7 +83,6 @@ int main(int argc, char **argv, char **env) {
     // Tested and working:  BEQ, BNE
     // Tested and broken:  
     
-<<<<<<< HEAD
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x3       - Expect R1 = 0x3           -> ...00011 00000 000 00001 0010011       -> 00 30 00 93
     evalAndDump(tfp, top, i); // ADDI R2, R0, 0x5       - Expect R2 = 0x5           -> ...00101 00000 000 00001 0010011       -> 00 50 01 13
     evalAndDump(tfp, top, i); // ADDI R1, R1, 0x2       - Expect R1 = 0x5           -> ...00010 00001 000 00001 0010011       -> 00 20 80 93
@@ -94,18 +93,6 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // BNE  R1, R2, -4        - Expect branch back 1 line -> 1111110 00001 00010 001 11101 1100011  -> fe 11 1e e3
     evalAndDump(tfp, top, i); //                        - Expect R1 = 5
     evalAndDump(tfp, top, i); //                        - Expect no jump
-=======
-    evalAndDump(tfp, top, i); //ADDI R1, R0, 0x3                                       -> 00 30 00 93
-    evalAndDump(tfp, top, i); //ADDI R2, R0, 0x5                                       -> 00 50 01 13
-    evalAndDump(tfp, top, i); //ADDI R1, R1, 0x2                                       -> 00 20 80 93
-    evalAndDump(tfp, top, i); //BEQ  R1, R2, -2 (if r1==r2, go back a line to addi)    -> fe 11 0e e3
-    evalAndDump(tfp, top, i); //extra evals to allow for branch loops
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i); //ADDI R1, R1, -1                                        -> ff f0 80 93
-    evalAndDump(tfp, top, i); //BNE  R1, R2, -2  (if r1!=r2, go back a line to addi)   -> fe 11 1e e3
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
->>>>>>> e2e66d8 (light error)
     
     // Testing U&I-type:
     // Implemented:         JALR, JAL
