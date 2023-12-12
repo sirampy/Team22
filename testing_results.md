@@ -16,11 +16,11 @@ make run
 the diference between the above 2 make targets is that all will run gtkwave (this is likely the most commonly used test methood) to allow you to verify the results, whereas run will simply build the cpu (useful for getting the cpu to compile correctly). 
 ## test programs
 ### 1. Counter
-![Counter program running](images/counter_working.png)
-![Counter program running](images/counter_code.png)
+![Counter program waveform](images/counter_working.png)
+![Counter program source code](images/counter_code.png)
 we can see that the program is running and branching as intended. this test implies the successful implementation of some basic instructions, and demostrates that the architecture as a whole works
-### 2. alu+regfile
-![ALU testing](image.png)
-![GTKWave](<WhatsApp Image 2023-11-30 at 20.41.51_ee4dc1b7.jpg>)
-![GTKWave2](image-1.png)
-Tested alu_top.sv with alu_top_tb.cpp by directly putting input signals and checking if the output signals were as expected - verified this on GTKWave.
+### 2. Sine
+![sine wave waveform](images/sine_test.png)
+this test demonstrates that memory read instructions work
+## 3. PDF
+getting this to work nicely was a bit more envolved, as I had to throw together a quick python script to allow the user to select which array_data to use
