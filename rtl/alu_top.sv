@@ -20,9 +20,7 @@ module alu_top #(
     input logic [ 31 : 0 ]             pc_plus4_i,       //pc+4 to write into reg_file.sv
     output logic                        eq_o,            // Equal flag: [1] - (ALU output == 0), [0] - otherwise
     output logic [ DATA_WIDTH - 1 : 0 ] alu_out_o,       // ALU output
-    output logic [ DATA_WIDTH - 1 : 0 ] rs2_val_o,       // Value at rs2, output for memory write
-
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o
+    output logic [ DATA_WIDTH - 1 : 0 ] rs2_val_o        // Value at rs2, output for memory write
 
 );
 
@@ -38,8 +36,8 @@ reg_file regfile (
     .wd3_i ( Jstore_i ? pc_plus4_i : (reg_write_src_i ? mem_read_val_i : alu_out_o )), // When Jstore is high, pc + 4 is written to reg_file
     
     .rd1_o ( rs1_val ),
-    .rd2_o ( rs2_val_o ),
-    .a0_o  ( a0_o )
+    .rd2_o ( rs2_val_o )
+    
 );
 
 // assign alu_op2 = alu_src ? imm_op : reg_op2; 

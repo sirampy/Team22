@@ -16,25 +16,27 @@ module control_top #(
     output logic                            Jstore_o,      
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
-    output logic [ INSTR_WIDTH - 1 : 0 ]    instr_o        // Current instruction to execute
+    output logic [ INSTR_WIDTH - 1 : 7 ]    instr31_7_o    // Current instruction [ 31 : 7 ]
 
 );
 
-logic [ 1 : 0 ] alu_op;  // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
-logic [ 6 : 0 ] op;      // Instruction operand
-logic [ 2 : 0 ] funct3;  // Operator select
-logic           funct7;  // Operator select
-logic [ 2 : 0 ] imm_src; // Immediate value type 
+logic [ 1 : 0 ] alu_op;              // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
+logic [ 6 : 0 ] op;                  // Instruction operand
+logic [ 2 : 0 ] funct3;              // Operator select
+logic           funct7;              // Operator select
+logic [ 2 : 0 ] imm_src;             // Immediate value type
+logic [ INSTR_WIDTH - 1 : 0 ] instr; // Current instruction to execute
 
-assign op = instr_o [ 6 : 0 ];
-assign funct3 = instr_o [ 14 : 12 ];
-assign funct7 = instr_o [ 30 ];
+assign op = instr [ 6 : 0 ];
+assign funct3 = instr [ 14 : 12 ];
+assign funct7 = instr [ 30 ];
+assign instr31_7_o = instr [ 31 : 7 ];
 
 instr_mem instr_mem (
 
     .addr_i ( pc_i ),
 
-    .rd_o   ( instr_o )
+    .rd_o   ( instr )
 
 );
 
@@ -52,7 +54,7 @@ main_decoder main_decoder (
     .reg_write_o   ( reg_write_o ),
     .jalr_pc_src_o ( jalr_pc_src_o ),
     .alu_op_o      ( alu_op ),
-    .Jstore_o      ( Jstore_o)
+    .Jstore_o      ( Jstore_o )
 
 );
 
@@ -69,7 +71,7 @@ alu_decoder alu_decoder (
 
 sign_extend sign_extend (
 
-    .instr31_7_i ( instr_o [ 31 : 7 ] ),
+    .instr31_7_i ( instr31_7_o ),
     .imm_src_i   ( imm_src ),
     
     .imm_ext_o   ( imm_op_o )

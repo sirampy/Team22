@@ -13,8 +13,7 @@ module reg_file #(
     input [ DATA_WIDTH - 1 : 0 ]  wd3_i, // Write data
 
     output [ DATA_WIDTH - 1 : 0 ] rd1_o, // Value at ad1
-    output [ DATA_WIDTH - 1 : 0 ] rd2_o,  // Value at ad2
-    output logic [ DATA_WIDTH - 1 : 0 ] a0_o
+    output [ DATA_WIDTH - 1 : 0 ] rd2_o  // Value at ad2
 
 );
 
@@ -27,6 +26,5 @@ always_ff @( posedge clk_i )
 
 assign rd1_o = reg_data [ ad1_i ];
 assign rd2_o = reg_data [ ad2_i ];
-assign a0_o = reg_data[10];
 
 endmodule

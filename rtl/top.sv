@@ -5,37 +5,34 @@ module top #(
 
 ) (
 
-    input logic clk,
-    input logic rst,
-
-    output logic reg_write,
-    output logic eq,
-    output logic alu_src,
-    output logic [3:0] alu_ctrl,
-    output logic[DATA_WIDTH-1:0]  imm_op,
-    output logic result_src,
-    output logic mem_write,
-    output logic [DATA_WIDTH-1:0] instr_o,
-    output logic [DATA_WIDTH-1:0] a0_o
+    input logic clk
 
 );
     
-logic [ ADDR_WIDTH - 1 : 0 ] rs1;         // ALU registers read address 1
-logic [ ADDR_WIDTH - 1 : 0 ] rs2;         // ALU registers read address 2
-logic [ ADDR_WIDTH - 1 : 0 ] rd;          // ALU registers write address
-logic                        pc_src;      // [0] - Increment PC by 4, [1] - Increment PC by immediate value
-logic [ 31 : 0 ]             pc;          // Current PC value           
-logic [ 31 : 0 ]             next_pc;     // Write value for PC
-logic                        jalr_pc_src; // [1] Write JALR register to PC, [0] Otherwise
-logic [ 31 : 0 ]             memory_read; // Value read from memory
-logic [ DATA_WIDTH - 1 : 0 ] alu_out;     // output of ALU
-logic [ DATA_WIDTH - 1 : 0 ] mem_write_val;     // output of ALU
+logic [ ADDR_WIDTH - 1 : 0 ] rs1;           // ALU registers read address 1
+logic [ ADDR_WIDTH - 1 : 0 ] rs2;           // ALU registers read address 2
+logic [ ADDR_WIDTH - 1 : 0 ] rd;            // ALU registers write address
+logic                        pc_src;        // [0] - Increment PC by 4, [1] - Increment PC by immediate value
+logic [ 31 : 0 ]             pc;            // Current PC value           
+logic [ 31 : 0 ]             next_pc;       // Write value for PC
+logic                        jalr_pc_src;   // [1] Write JALR register to PC, [0] Otherwise
+logic [ 31 : 0 ]             memory_read;   // Value read from memory
+logic [ DATA_WIDTH - 1 : 0 ] alu_out;       // output of ALU
+logic [ DATA_WIDTH - 1 : 0 ] mem_write_val; // output of ALU
 logic                        Jstore;
 logic [ 31 : 0 ]             pc_plus4;
+logic                        reg_write;     // Register write enable
+logic                        eq;            // Equal/zero flag
+logic                        alu_src;       // [0] - Use rs2 as ALU input, [1] - Use imm_op as ALU input
+logic [ 3 : 0 ]              alu_ctrl;      // ALU operation select
+logic [ DATA_WIDTH - 1 : 0 ] imm_op;        // Immediate value
+logic                        result_src;    // [0] - Write ALU output to register, [1] - Write memory value to register
+logic                        mem_write;     // Memory write enable
+logic [ DATA_WIDTH - 1 : 7 ] instr31_7;         // Current instruction
 
-assign rs1 = instr_o [ 19 : 15 ];
-assign rs2 = instr_o [ 24 : 20 ];
-assign rd = instr_o [ 11 : 7 ];
+assign rs1 = instr [ 19 : 15 ];
+assign rs2 = instr [ 24 : 20 ];
+assign rd = instr [ 11 : 7 ];
 
 alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
@@ -49,12 +46,12 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .alu_src_i       ( alu_src ),
     .mem_read_val_i  ( memory_read ),
     .alu_ctrl_i      ( alu_ctrl ),
-    .Jstore_i      ( Jstore ),
-    .pc_plus4_i    ( pc_plus4 ),
+    .Jstore_i        ( Jstore ),
+    .pc_plus4_i      ( pc_plus4 ),
 
     .eq_o            ( eq ),
     .alu_out_o       ( alu_out ),
-    .a0_o(a0_o)
+    .rs2_val_o       ( mem_write_val )
 
 );
 
@@ -72,7 +69,7 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
     .jalr_pc_src_o ( jalr_pc_src ),
     .alu_ctrl_o    ( alu_ctrl ),
     .imm_op_o      ( imm_op ),
-    .instr_o       ( instr_o )
+    .instr31_7_o   ( instr31_7 )
 
 );
 
