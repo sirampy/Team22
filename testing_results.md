@@ -21,6 +21,15 @@ the diference between the above 2 make targets is that all will run gtkwave (thi
 we can see that the program is running and branching as intended. this test implies the successful implementation of some basic instructions, and demostrates that the architecture as a whole works
 ### 2. Sine
 ![sine wave waveform](images/sine_test.png)
-this test demonstrates that memory read instructions work
+this test is an iteration of the counter demonstrates that memory read instructions work
 ### 3. PDF
 getting this to work nicely was a bit more envolved, as I had to throw together a quick python script to allow the user to select which array_data to use. The data is so large that I also need to increase the size of the data_mem to accomodate. 
+
+![python script in action](images/pdf_make_usage.png)
+
+this test is more advanced than the previous 2, as it makes use of a large portion of the instruciton set, including LUI and JAL / JALR. It shows that the underlying microarchitecture supports the entire RV32I instruction set, and shows that manny instructions are correctly implemented. below are some of the created waveforms of a0 during display:
+
+![sine pdf](images/sine_pdf.png)
+![triangle pdf](images/triangle_pdf.png)
+![gauss pdf](images/gauss_pdf.png)
+![noise pdf](images/noise_pdf.png)

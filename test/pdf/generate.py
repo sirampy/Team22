@@ -2,10 +2,10 @@ import math
 import string
 
 signal = input('''please chose 1 of:
-               (1) sine
-               (2) triangle
-               (3) gaussian
-               (4) noise\n''')
+(1) sine
+(2) triangle
+(3) gaussian
+(4) noise\n''')
 
 signal_filename = ""
 
