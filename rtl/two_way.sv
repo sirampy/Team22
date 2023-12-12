@@ -2,7 +2,7 @@ module two_way #(
     parameter ADDRESS_WIDTH = 32,
     parameter TAG_WIDTH = 28, 
     parameter DATA_WIDTH = 32,
-    parameter CACHE_LENGTH = 8,
+    parameter CACHE_LENGTH = 4,
     parameter SET_WIDTH = 2
 )(
     input  logic                     clk_i,
@@ -13,9 +13,9 @@ module two_way #(
     output logic                     hit_o
 );
 
-    logic v[CACHE_LENGTH-1:0][1:0];
-    logic [TAG_WIDTH-1:0] tag [CACHE_LENGTH-1:0];
-    logic [DATA_WIDTH-1:0] data [CACHE_LENGTH-1:0];
+    logic v [CACHE_LENGTH-1:0][1:0];
+    logic [TAG_WIDTH-1:0] tag [CACHE_LENGTH-1:0][1:0];
+    logic [DATA_WIDTH-1:0] data [CACHE_LENGTH-1:0][1:0];
     logic round_robin [CACHE_LENGTH-1:0]; // round_robin policy bit for each set
 
     logic [SET_WIDTH-1:0] current_set;
