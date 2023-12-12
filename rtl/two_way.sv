@@ -32,9 +32,9 @@ logic tag[TAG_WIDTH-1:0]  = addr_i[ADDRESS_WIDTH-1:ADDRESS_WIDTH-TAG_WIDTH];
 
 data_memory data_mem(
     .address_i(addr_i),
-    .wd_i(data_in_i),
-    .wen_i(wen_i),
-    .rd_o(data_out_o)
+    .write_value_i(data_in_i),
+    .write_enable_i(wen_i),
+    .read_value_o(data_out_o)
 );
 
 logic lru[(2**SET_WIDTH)-1:0]; //LRU bits - one for each set
