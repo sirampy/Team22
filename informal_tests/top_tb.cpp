@@ -27,28 +27,10 @@ int main(int argc, char **argv, char **env) {
     int i = 0;
     tfp->dump(i);
 
-    
-
-
-
-
-    //initalise and loop once
+    for(int j=0; j<1000; j++){
     evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-
-
+    }
     tfp->close();
     exit(0);
 
 }
-
