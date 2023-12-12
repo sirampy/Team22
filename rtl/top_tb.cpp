@@ -87,11 +87,11 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x3       - Expect R1 = 0x3           -> ...00011 00000 000 00001 0010011       -> 00 30 00 93
     evalAndDump(tfp, top, i); // ADDI R2, R0, 0x5       - Expect R2 = 0x5           -> ...00101 00000 000 00001 0010011       -> 00 50 01 13
     evalAndDump(tfp, top, i); // ADDI R1, R1, 0x2       - Expect R1 = 0x5           -> ...00010 00001 000 00001 0010011       -> 00 20 80 93
-    evalAndDump(tfp, top, i); // BEQ  R1, R2, -2        - Expect branch back 1 line -> 1111111 00001 00010 000 11101 1100011  -> fe 11 0e e3
+    evalAndDump(tfp, top, i); // BEQ  R1, R2, -4        - Expect branch back 1 line -> 1111110 00001 00010 000 11101 1100011  -> fe 11 0e e3
     evalAndDump(tfp, top, i); //                        - Expect R1 = 0x7
     evalAndDump(tfp, top, i); //                        - Expect no jump
     evalAndDump(tfp, top, i); // ADDI R1, R1, -1        - Expect R1 = 6             -> 111111111111 00001 000 00001 0010011   -> ff f0 80 93
-    evalAndDump(tfp, top, i); // BNE  R1, R2, -2        - Expect branch back 1 line -> 1111111 00001 00010 001 11101 1100011  -> fe 11 1e e3
+    evalAndDump(tfp, top, i); // BNE  R1, R2, -4        - Expect branch back 1 line -> 1111110 00001 00010 001 11101 1100011  -> fe 11 1e e3
     evalAndDump(tfp, top, i); //                        - Expect R1 = 5
     evalAndDump(tfp, top, i); //                        - Expect no jump
 =======
@@ -113,9 +113,12 @@ int main(int argc, char **argv, char **env) {
     // Tested and working:  
     // Tested and broken:  
 
-    
-    evalAndDump(tfp, top, i); // JALR
-    evalAndDump(tfp, top, i); // JAL
+    evalAndDump(tfp, top, i); // JAL R2, 0x8            - Expect jump forw. 2 lines -> ...00110000000000 00010 1101111        -> 00 c0 01 6f
+    evalAndDump(tfp, top, i); // ADDI R1, R0, 0x0       - Not expected to run       -> ...00000 000 00001 0010011             -> 00 00 00 93
+    evalAndDump(tfp, top, i); // JALR R3, R2, 0xC       - Expect jump forw. 2 lines -> ...001100 00010 000 00011 1100111      -> 00 c1 01 e7
+    evalAndDump(tfp, top, i); // ADDI R1, R0, 0x0       - Not expected to run       -> ...00000 000 00001 0010011             -> 00 00 00 93
+    evalAndDump(tfp, top, i); // ADDI R1, R0, 0x10      - Expect R1 = 0x10          -> ...0010000 000 00001 0010011           -> 01 00 00 93
+                              //                        - Note: Verify R2 after JAL and R3 after JALR equals PC + 4 both times
 
     evalAndDump(tfp, top, i);
 
