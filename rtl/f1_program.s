@@ -14,13 +14,13 @@ lights_loop:
     JAL ra, lightdelay            # 1s delay
     SLLI a5, a5, 1                # shifts t0 left
     ADDI a5, a5, 1                # adds 1 to t0
-    BNE  a0, s2, lights_loop      # loops until all lights are on
+    BNE  a5, a2, lights_loop      # loops until all lights are on
     JAL ra, turn_off
     RET
 
 lightdelay:
     ADDI  a4, a4, 1               # a4 acts as counter
-    BNE   a1, a3, lightdelay
+    BNE   a4, a3, lightdelay
     ADDI  a1, zero, 0
     RET
 
