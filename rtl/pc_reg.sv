@@ -11,8 +11,7 @@ module pc_reg #(
 
 );
 
-always_ff @( posedge clk_i, posedge rst_i )
-    if ( rst_i ) pc_o <= { PC_WIDTH { 1'b0 } };
-    else pc_o <= next_pc_i;
+always_ff @( posedge clk_i)
+    pc_o <= next_pc_i;
 
 endmodule

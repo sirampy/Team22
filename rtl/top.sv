@@ -50,6 +50,8 @@ module top #(
     logic [ADDR_WIDTH-1:0] rdE;
     logic [DATA_WIDTH-1:0] imm_extE;
     logic [PC_WIDTH-1:0]   pc_plus4E;
+    logic [2:0]            branch_opcode_e;
+    logic bne;
 
     logic       reg_writeE;
     logic [1:0] result_srcE;
@@ -146,6 +148,7 @@ module top #(
         .branchD_i (branch),
         .alu_ctrlD_i (alu_ctrl),
         .alu_srcD_i (alu_src),
+        .branch_opc_i(instrD[14:12]),
 
         // main outputs
         .rd1E_o (rd1E),
@@ -162,7 +165,8 @@ module top #(
         .jumpE_o (jumpE),
         .branchE_o (branchE),
         .alu_ctrlE_o (alu_ctrlE),
-        .alu_srcE_o (alu_srcE)
+        .alu_srcE_o (alu_srcE),
+        .branch_opc_e_o(branch_opcode_e)
     );
 
     // alu
@@ -175,8 +179,7 @@ module top #(
     );
 
     // mux for pc src
-    logic bne;
-    assign bne = (instrD[14:12] == 3'b001) ? 1 : 0; // check for BNE
+    assign bne = (branch_opcode_e == 3'b001) ? 1 : 0; // check for BNE 
     assign pc_src = (jumpE) | ((zero ^ bne) & branchE); // [0] - Increment PC by 4, [1] - Increment PC by immediate value
     assign pc_target = pcE + imm_extE; 
 

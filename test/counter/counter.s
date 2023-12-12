@@ -4,6 +4,10 @@ main:
 
 mloop:
     addi    a1, zero, 0x0
+    nop
+    nop
+    nop
+    nop
 
 iloop:
     addi    a0, a1, 0

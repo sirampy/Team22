@@ -11,6 +11,7 @@ module pipe_reg2 #(
     input  logic [11:7]              rdD_i,       // write register address (d)
     input  logic [DATA_WIDTH-1:0]    imm_extD_i,  // imm extend (d)
     input  logic [ADDRESS_WIDTH-1:0] pc_plus4D_i, // pc+4 (d)
+    input  logic [2:0]    branch_opc_i,    // instructions (decode)
 
     // control unit inputs
     input logic       reg_writeD_i,  // write enable (d) 
@@ -36,7 +37,8 @@ module pipe_reg2 #(
     output logic       jumpE_o,
     output logic       branchE_o,
     output logic [3:0] alu_ctrlE_o,
-    output logic       alu_srcE_o
+    output logic       alu_srcE_o,
+    output logic [2:0] branch_opc_e_o
 );
 
 always_ff @(posedge clk_i)
@@ -55,6 +57,7 @@ always_ff @(posedge clk_i)
         branchE_o <= branchD_i;
         alu_ctrlE_o <= alu_ctrlD_i;
         alu_srcE_o <= alu_srcD_i;
+        branch_opc_e_o <= branch_opc_i;
     end
 
 endmodule
