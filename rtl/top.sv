@@ -4,7 +4,6 @@ module top #(
               PC_WIDTH = 32
 )(
     input logic clk_i,      
-    input logic rst,
     output logic [DATA_WIDTH-1:0] a0
 );
     // pc signals
@@ -67,7 +66,6 @@ module top #(
 
     pc_reg pc_module (
         .clk_i (clk_i),
-        .rst_i (rst),
         .next_pc_i (next_pc),
         .pc_o (pc)
     );

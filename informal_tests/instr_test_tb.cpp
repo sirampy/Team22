@@ -97,10 +97,10 @@ int main(int argc, char **argv, char **env) {
     // Testing U&I-type:
     // Implemented:         JALR, JAL
     // Not implemented:     AUIPC?, LUI?
-    // Tested and working:  
+    // Tested and working:  JALR, JAL
     // Tested and broken:  
 
-    evalAndDump(tfp, top, i); // JAL R2, 0x8            - Expect jump forw. 2 lines -> ...00110000000000 00010 1101111        -> 00 c0 01 6f
+    evalAndDump(tfp, top, i); // JAL R2, 0x8            - Expect jump forw. 2 lines -> ...00100000000000 00010 1101111        -> 00 80 01 6f
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x0       - Not expected to run       -> ...00000 000 00001 0010011             -> 00 00 00 93
     evalAndDump(tfp, top, i); // JALR R3, R2, 0xC       - Expect jump forw. 2 lines -> ...001100 00010 000 00011 1100111      -> 00 c1 01 e7
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x0       - Not expected to run       -> ...00000 000 00001 0010011             -> 00 00 00 93
