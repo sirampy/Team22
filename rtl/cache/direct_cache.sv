@@ -5,9 +5,8 @@ The cache is write back - not write through
 */
 
 module direct_cache #(
-    parameter ADDRESS_WIDTH = 16,
+    parameter ADDRESS_WIDTH = 32,
     parameter TAG_WIDTH = 27,
-    parameter USED_ADDRESS_WIDTH = 8,
     parameter DATA_WIDTH = 32,
     parameter SET_WIDTH = 3
 )(
@@ -29,13 +28,13 @@ module direct_cache #(
         cache_flags_t         flags;
     } cache_entry_t;
 
-    logic [SET_WIDTH:0] set;
-    logic [TAG_WIDTH:0] tag;
+    logic [SET_WIDTH-1:0] set;
+    logic [TAG_WIDTH-1:0] tag;
 
-    assign set = addr_i[SET_WIDTH+2:2];
-    assign tag = addr_i[ADDRESS_WIDTH-1:ADDRESS_WIDTH-TAG_WIDTH]; 
+    assign set = addr_i[SET_WIDTH+1:2];
+    assign tag = addr_i[DATA_WIDTH-1:DATA_WIDTH-TAG_WIDTH]; 
 
-    cache_entry_t data [(2**SET_WIDTH)-1:0];
+    cache_entry_t cache [(2**SET_WIDTH)-1:0];
 
     logic [ADDRESS_WIDTH-1:0] address;
     logic wen;
@@ -51,50 +50,56 @@ module direct_cache #(
     );
 
     initial begin
-        foreach (data[i]) assign data[i].flags = {0, 0}; // set invalid
+        foreach (cache[i]) assign cache[i].flags = {1'b0, 1'b0}; // set invalid
     end
 
-    always_comb begin
-        
+    always_ff @(posedge clk_i) begin
+        // Move cache assignments to always_ff
         case (wen_i)
-        1'b0: begin // read operation
-
-            if (tag == data[set].tag && data[set].flags.valid == 1) data_out_o = data[set]; // cache hit
-            else if (data[set].flags == 2'b11) begin // cache miss
-                // write to memory
-                address = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
-                write_data = data[set].data;
-                wen = 1'b1; // write enable
+            1'b0: begin // read operation
+                if (tag == cache[set].tag && cache[set].flags.valid == 1) begin
+                    // cache hit
+                    data_out_o <= cache[set].data;
+                end else begin
+                    // cache miss
+                    if (cache[set].flags.dirty == 1) begin
+                        // write back to memory
+                        address <= {cache[set].tag, set, 2'b00}; // tag, set, byte offset
+                        write_data <= cache[set].data;
+                        wen <= 1'b1; // write enable
+                    end
+                    // read from memory
+                    address <= addr_i;
+                    wen <= 1'b0; // set datamem write enable to 0 
+                    // update cache with read data
+                    cache[set].data <= read_data;
+                    cache[set].tag <= tag;
+                    cache[set].flags <= {1'b1, 1'b0}; // set flags as valid and not dirty
+                end
             end
-            //read to cache
-            address = addr_i;
-            wen = 1'b0; // set datamem write enable to 0 
-            data[set].data = read_data; // update cache
-            data[set].tag = tag;
-            data[set].flags = {1, 0}; // set flags as valid and not dirty
-        end
 
-        1'b1: begin // write operation
-            if (tag == data[set].tag || data[set].flags.valid == 0) begin // cache hit
-                data[set].data = wen_i;
-                data[set].tag = tag;
-                data[set].flags = 2'b11;
+            1'b1: begin // write operation
+                if (tag == cache[set].tag || cache[set].flags.valid == 0) begin // cache hit
+                    cache[set].data <= data_in_i;
+                    cache[set].tag <= tag;
+                    cache[set].flags <= 2'b11;
+                end
+                else if (cache[set].flags.dirty == 1) begin // cache miss
+                    // write back to memory
+                    address <= {cache[set].tag, set, 2'b00}; // tag, set, byte offset
+                    write_data <= cache[set].data;
+                    wen <= 1'b1; // write enable
+                end
+                cache[set].data <= write_data;
+                cache[set].tag <= tag;
+                cache[set].flags <= 2'b11;
             end
-            else if (data[set].flags == 2'b11) begin // cache miss
-                // write to memory
-                address = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
-                write_data = data[set].data;
-                wen = 1'b1; // write enable
-            end
-            data[set].data = write_data;
-            data[set].tag = tag;
-            data[set].flags = 'b11;
-        end
 
-        default: $display("Error: Unexpected value of wen_i");
+            default: $display("Error: Unexpected value of wen_i");
         endcase
-
     end
+
+
 
 endmodule
 
