@@ -8,7 +8,8 @@ init:
 main:
     BEQ a1, a0, main            # loop until s1 not equal 0 - ie vbdflag pressed
     JAL ra, lights_loop
-    JAL ra, main
+    BEQ a0,a0, init
+    
     
 lights_loop:
     JAL ra, lightdelay            # 1s delay
