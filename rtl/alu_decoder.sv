@@ -19,7 +19,7 @@ always_comb
             case ( funct3_i )
                 3'b000: alu_control_o = 4'b0001;  // BEQ - Want to SUB
                 3'b001: alu_control_o = 4'b0001;  // BNE - Want to SUB
-                default: alu_control_o = 4'b????;
+                default: alu_control_o = 4'b0000;
                 // 3'b100: // BLT
                 // 3'b101: // BGE
                 // 3'b110: // BLTU
@@ -27,7 +27,7 @@ always_comb
             endcase
         2'b10:
             case ( funct3_i )
-                3'b000: if ( op5_funct7 != 2'b11 )
+                3'b000: if ( op5_funct7 == 2'b11 )
                         alu_control_o = 4'b0001;        // SUB
                     else alu_control_o = 4'b0000;       // ADD or I-type
                 3'b001: alu_control_o = 4'b0100;        // SLL
@@ -35,15 +35,14 @@ always_comb
                 // 3'b011: // SLTU
                 3'b100: alu_control_o = 4'b1001;        // XOR
                 3'b101: if ( funct7_i == 0 )
-                    alu_control_o = 4'b0110;            // SRL - Don't care about I-type as it's the same
-                else alu_control_o = 4'b0110;           // SRA - Don't care about I-type as it's the same
+                        alu_control_o = 4'b0110;            // SRL - Don't care about I-type as it's the same
+                    else alu_control_o = 4'b0110;           // SRA - Don't care about I-type as it's the same
                 3'b110: alu_control_o = 4'b0011;        // OR
                 3'b111: alu_control_o = 4'b0010;        // AND
         
-                default: alu_control_o = 4'b????;
+                default: alu_control_o = 4'b0000;
             endcase
-        default: // Shouldn't occur
-            alu_control_o = 4'b????; 
+        default: alu_control_o = 4'b0000;
     endcase
 
 endmodule

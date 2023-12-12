@@ -19,7 +19,7 @@ Main Sections
 4. Pipelining
 5. Cache
 
-Note: Testbenches written by Person 1, but all other members utilize and change testbenches as needed when testing their own portion
+## What is observed
 
 ### CPU tasks allocations (main responsibilities):
 **Alex:** Cache 
@@ -92,3 +92,4 @@ as a team, we encounted some troubles when it came to creating the top file and 
 
 > instruction set reference: https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf <br>
 > system verilog style guide: https://www.systemverilog.io/verification/styleguide/#variables
+As expected, we have the sine wave read from memory. Since the sinerom is stored as bytes but we are reading words, and since we are using little endian, after every read we have the a0[7:0] be the current sine value, and the 24 remaining bits have extra readings (a potential optimisation to remove memory reads would be to read word, then logical shift right 3 times, meaning we only do 0.25x the reads). The code also never reads memory location 255, jumping back to main loop after reading 254 (which is a logical error in the provided code, not a hardware fault). When we are at the final memory locations we can see the undefined memory (in our case just 0's) fill the most significant bits of a0 (8 bits for 253, 16 bits for 254).
