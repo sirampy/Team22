@@ -14,6 +14,12 @@ add a2, a1, a0
 addi a3,a0,  3
 add a0,a0,a0
 add a3, a1, a0
+#test no noops 
+addi a1, a0, 1
+addi a2, a0, 2
+add a2, a1, a0
+addi a3,a0,  3
+add a3, a1, a0
 #branch testing
 addi a1, a0, 0
 addi a2, a0, 3
