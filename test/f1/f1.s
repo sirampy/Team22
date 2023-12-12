@@ -6,7 +6,9 @@ init:
     ADDI a4, a0, 0              # reset the count for light delay
     ADDI a5, a0, 0              # final output for turning on lights
 main:
-    BEQ a1, a0, main            # loop until s1 not equal 0 - ie vbdflag pressed
+    #BEQ a1, a0, main            
+    # loop until s1 not equal 0 - ie vbdflag pressed
+    #TRIGGER REMOVED FOR TESTING
     JAL ra, lights_loop
     BEQ a0,a0,init
     

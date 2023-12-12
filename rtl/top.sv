@@ -6,7 +6,6 @@ module top #(
 ) (
 
     input logic clk
-
 );
     
 logic [ ADDR_WIDTH - 1 : 0 ] rs1;           // ALU registers read address 1

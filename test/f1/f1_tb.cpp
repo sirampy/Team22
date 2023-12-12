@@ -33,9 +33,9 @@ int main(int argc, char **argv, char **env) {
 
         }
         top->rst = 0;
-        vbdHex(4, (int(top->a0_o) >> 16) & 0xF);
-        vbdHex(3, (int(top->a0_o) >> 8) & 0xF);
-        vbdHex(2, (int(top->a0_o) >> 4) & 0xF);
+        //vbdHex(4, (int(top->a0_o) >> 16) & 0xF);
+        //vbdHex(3, (int(top->a0_o) >> 8) & 0xF);
+        //vbdHex(2, (int(top->a0_o) >> 4) & 0xF);
         vbdHex(1, int(top->a0_o) & 0xF);
         vbdCycle(i+1);
         vbdBar(top-> a0_o );

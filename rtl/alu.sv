@@ -20,13 +20,13 @@ always_comb
         4'b0010: out_o = op1_i & op2_i; // AND
         4'b0011: out_o = op1_i | op2_i; // OR
         4'b0101: out_o = ( ( op1_i - op2_i ) >= 2 ** ( DATA_WIDTH - 1 ) ) // SLT
-                         //? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
-                         //: { DATA_WIDTH { 1'b0 } };
+                         ? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
+                         : { DATA_WIDTH { 1'b0 } };
         
-        4'b0100: out_o= op1_i<< op2_i //SLL
-        4'b0110:out_o= op1_i >> op2_i  // SRL
-        4'b0111: out_o = op_1 >>> op2_i // SRA
-        4'b1000: out_o= (op1_i<op2_i) // SLTU
+        4'b0100: out_o= op1_i<< op2_i; //SLL
+        4'b0110:out_o= op1_i >> op2_i;  // SRL
+        4'b0111: out_o = op1_i >>> op2_i; // SRA
+        4'b1000: out_o={ { DATA_WIDTH - 1 { 1'b0 } },(op1_i < op2_i)}; // SLTU
         4'b1001: out_o = op1_i ^ op2_i; // XOR
         default: out_o = { DATA_WIDTH { 1'b0 } };
     endcase
