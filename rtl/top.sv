@@ -19,6 +19,8 @@ logic [ 31 : 0 ]             memory_read;   // Value read from memory
 logic [ DATA_WIDTH - 1 : 0 ] alu_out;       // output of ALU
 logic [ DATA_WIDTH - 1 : 0 ] mem_write_val; // output of ALU
 logic                        Jstore;
+logic [ 1 : 0 ]              mem_type;
+logic                        mem_sign;
 logic [ 31 : 0 ]             pc_plus4;
 logic                        reg_write;     // Register write enable
 logic                        eq;            // Equal/zero flag
@@ -71,6 +73,8 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
     .imm_op_o      ( imm_op ),
     .instr24_15_o  ( instr24_15 ),
     .instr11_7_o   ( instr11_7 )
+    .mem_type_o    ( mem_type ),
+    .mem_type_o    ( mem_sign )
 
 );
 
@@ -96,12 +100,15 @@ pc_mux pc_mux (
 
 );
 
-main_memory main_mem (
+
+data_memory data_mem (
 
     .clk_i          ( clk ),
     .address_i      ( alu_out ),
     .write_enable_i ( mem_write ),
     .write_value_i  ( mem_write_val ),
+    .mem_type_i(mem_type),
+    .mem_sign_i(mem_sign)
 
     .read_value_o   ( memory_read )
 

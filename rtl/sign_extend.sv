@@ -12,7 +12,7 @@ module sign_extend #(
 );
 
 always_comb
-    case ( imm_src_i )
+    casez ( imm_src_i )
         3'b000: imm_ext_o = { { 20 { instr31_7_i [ 31 ] } }, // I-type, JAL and JALR
                               instr31_7_i [ 31 : 20 ] };
         3'b001: imm_ext_o = { { 20 { instr31_7_i [ 31 ] } }, // S-type
@@ -30,7 +30,7 @@ always_comb
                               1'b0 };
         3'b100: imm_ext_o = { instr31_7_i [ 31 : 12 ],       // AUIPC and LUI
                               { 12 { 1'b0 } } };
-        default: imm_ext_o = { IMM_WIDTH{ 1'b0 } }; // Should never occur
+        default: imm_ext_o = { IMM_WIDTH{ 1'b? } }; // Should never occur
     endcase
 
 endmodule 
