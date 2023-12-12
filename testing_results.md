@@ -1,3 +1,4 @@
+# this is a copty from V2 branch - please re-write for SINGLE-CYCLE
 ## methods
 ### scope
 testing the entire instruction set that I have implemented exhaustively is a large and tedious task. Without using a pre-existing verification library (eg: https://github.com/SymbioticEDA/riscv-formal) the easiest way to easiest way to test that all parts of the processor work as intended is to test them together as one with some test programs. this may miss some edge cases, and not cover all instructions, it allows us to simply look at the output of the program to verify that it has run correctly without necesarily having to look at the program excecution on a single cycle basis
