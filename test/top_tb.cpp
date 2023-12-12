@@ -15,13 +15,13 @@ int main(int argc, char **argv, char **env) {
     top->trace(tfp, 99);
     tfp->open("top.vcd");
 
-    top->clk_i = 1;
+    top->clk = 1;
 
     for (i=0; i<50000; i++){
 
         for (clk=0; clk<2; clk++){
             tfp->dump (2*i + clk);
-            top->clk_i = !top->clk_i;
+            top->clk = !top->clk;
             top->eval();
         }   
 

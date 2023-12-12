@@ -25,9 +25,9 @@ initial begin
 end;
 
 
-assign rd_o = { byte_array[ convert_address( addr_i ) ], // Big endian, works better with file
-                byte_array[ convert_address( addr_i ) + 1 ],
+assign rd_o = { byte_array[ convert_address( addr_i ) + 3 ], // Big endian, works better with file
                 byte_array[ convert_address( addr_i ) + 2 ],
-                byte_array[ convert_address( addr_i ) + 3 ] };
+                byte_array[ convert_address( addr_i ) + 1 ],
+                byte_array[ convert_address( addr_i ) ] };
 
 endmodule
