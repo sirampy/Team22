@@ -24,6 +24,7 @@ always_comb
                          ? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
                          : { DATA_WIDTH { 1'b0 } };
         // 4'b0110: // SRL/SRA
+        
         // 4'b0111: // Undefined?
         // 4'b1000: // Undefined?
         4'b1001: out_o = op1_i ^ op2_i; // XOR
