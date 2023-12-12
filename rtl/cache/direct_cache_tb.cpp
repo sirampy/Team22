@@ -1,6 +1,6 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "Vcache_top.h"
+#include "Vdirect_cache.h"
 
 #define MAX_SIM_CYC 100000
 
@@ -11,12 +11,12 @@ int main(int argc, char **argv, char **env) {
 
   Verilated::commandArgs(argc, argv);
   // init top verilog instance
-  Vcache_top * cache_top = new Vcache_top;
+  Vdirect_cache * direct_cache = new Vdirect_cache;
   // init trace dump
   Verilated::traceEverOn(true);
   VerilatedVcdC* tfp = new VerilatedVcdC;
   top->trace (tfp, 99);
-  tfp->open ("cache_top.vcd");
+  tfp->open ("direct_cache.vcd");
  
 
   // initialize simulation inputs

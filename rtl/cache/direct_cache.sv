@@ -18,7 +18,7 @@ module direct_cache #(
     output logic [DATA_WIDTH-1:0]    data_out_o
 );
 
-    typedef struct { 
+    typedef struct packed { 
         bit valid;
         bit dirty;
     } cache_flags_t;
@@ -32,17 +32,22 @@ module direct_cache #(
     logic [SET_WIDTH:0] set;
     logic [TAG_WIDTH:0] tag;
 
-    assign set = addr_i[SET_WIDTH+1:2];
-    assign tag = addr_i[DATA_WIDTH-1:DATA_WIDTH-1-TAG_WIDTH]; 
+    assign set = addr_i[SET_WIDTH+2:2];
+    assign tag = addr_i[ADDRESS_WIDTH-1:ADDRESS_WIDTH-TAG_WIDTH]; 
 
     cache_entry_t data [(2**SET_WIDTH)-1:0];
 
+    logic [ADDRESS_WIDTH-1:0] address;
+    logic wen;
+    logic [DATA_WIDTH-1:0] write_data;
+    logic [DATA_WIDTH-1:0] read_data;
+
     data_memory data_mem(
         .clk_i (clk_i),
-        .address_i(addr_i),
-        .write_value_i(data_in_i),
-        .wen_i(wen_i),
-        .read_value_o(data_out_o)
+        .address_i(address),
+        .write_value_i(write_data),
+        .wen_i(wen),
+        .read_value_o(read_data)
     );
 
     initial begin
@@ -57,14 +62,14 @@ module direct_cache #(
             if (tag == data[set].tag && data[set].flags.valid == 1) data_out_o = data[set]; // cache hit
             else if (data[set].flags == 2'b11) begin // cache miss
                 // write to memory
-                data_mem.address_i = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
-                data_mem.write_value_i = data[set].data;
-                data_mem.wen_i = 1'b1; // write enable
+                address = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
+                write_data = data[set].data;
+                wen = 1'b1; // write enable
             end
             //read to cache
-            data_mem.address_i = addr_i;
-            data_mem.wen_i = 1'b0; // set datamem write enable to 0 
-            data[set].data = data_mem.read_value_o; // update cache
+            address = addr_i;
+            wen = 1'b0; // set datamem write enable to 0 
+            data[set].data = read_data; // update cache
             data[set].tag = tag;
             data[set].flags = {1, 0}; // set flags as valid and not dirty
         end
@@ -77,11 +82,11 @@ module direct_cache #(
             end
             else if (data[set].flags == 2'b11) begin // cache miss
                 // write to memory
-                data_mem.address_i = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
-                data_mem.write_value_i = data[set].data;
-                data_mem.wen_i = 1'b1; // write enable
+                address = {data[set].tag, set, 2'b00}; // full address - tag, set, byte offset
+                write_data = data[set].data;
+                wen = 1'b1; // write enable
             end
-            data[set].data = data_in_i;
+            data[set].data = write_data;
             data[set].tag = tag;
             data[set].flags = 'b11;
         end
