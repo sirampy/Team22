@@ -4,7 +4,7 @@
 
 void evalAndDump(VerilatedVcdC* tfp, Vtop* top, int& i) {
 
-    for ( top->clk = 1; top->clk < 5; --top->clk ) {
+    for ( top->i_clk = 1; top->i_clk < 5; --top->i_clk ) {
     
         top->eval();
         tfp->dump(++i);
@@ -22,7 +22,7 @@ int main(int argc, char **argv, char **env) {
     top->trace(tfp, 99);
     tfp->open("top.vcd");
 
-    top->clk = 0;
+    top->i_clk = 0;
 
     int i = 0;
     tfp->dump(i);

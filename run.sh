@@ -50,7 +50,7 @@ do
 done
 
 # -CFlags [str] <- use for vbuddy?
-eval "verilator -Wall --cc --trace --exe -Mdir \"out/\" $INCLUDE_DIRS$VERILOG_TOP_FILE $TB_FILE"
+eval "verilator -Wall --cc --trace --top-module $TOP_FILE_BASE --exe -Mdir \"out/\" $INCLUDE_DIRS$VERILOG_TOP_FILE $TB_FILE"
 
 make -j -C out/ -f "V$TOP_FILE_BASE.mk" "V$TOP_FILE_BASE"
 

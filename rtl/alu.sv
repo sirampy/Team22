@@ -1,35 +1,45 @@
-module alu #(
+module alu (   
+    
+    input  data_val i_opnd1, // Operand 1 ( reg1 )
+    input  data_val i_opnd2, // Operand 2 ( reg2 or imm )
+    input  alu_optr i_optr,  // Operator ( funct7 [ 5 ], funct3 ) / Operation select
 
-    parameter DATA_WIDTH = 32
-
-) (
-
-    input  logic [ DATA_WIDTH - 1 : 0 ]  op1_i,  // ALU input 1: Always rs1
-    input  logic [ DATA_WIDTH - 1 : 0 ]  op2_i,  // ALU input 2: Either rs2 or imm
-    input  logic [ 3 : 0 ]               ctrl_i, // ALU operation
-
-    output logic [ DATA_WIDTH - 1 : 0 ]  out_o,  // ALU output
-    output logic                         eq_o    // Equal/zero flag: (ALU output == 0)
+    output data_val o_out    // Output
 
 );
 
 always_comb 
-    case ( ctrl_i )
-        4'b0000: out_o = op1_i + op2_i; // ADD
-        4'b0001: out_o = op1_i - op2_i; // SUB
-        4'b0010: out_o = op1_i & op2_i; // AND
-        4'b0011: out_o = op1_i | op2_i; // OR
-        // 4'b0100: // SLL
-        4'b0101: out_o = ( ( op1_i - op2_i ) >= 2 ** ( DATA_WIDTH - 1 ) ) // SLT
-                         ? { { DATA_WIDTH - 1 { 1'b0 } }, 1'b1 }
-                         : { DATA_WIDTH { 1'b0 } };
-        // 4'b0110: // SRL/SRA
-        // 4'b0111: // Undefined?
-        // 4'b1000: // Undefined?
-        4'b1001: out_o = op1_i ^ op2_i; // XOR
-        default: out_o = { DATA_WIDTH { 1'b0 } };
+    case ( i_optr.funct3 )
+        ALU_ADD:
+            if ( i_optr.funct7_5 == 0 )
+                o_out = i_opnd1 + i_opnd2; // ADD, ADDI
+            else
+                o_out = i_opnd1 - i_opnd2; // SUB
+        ALU_SLL:
+            o_out = i_opnd1 << i_opnd2;
+        ALU_SLT:
+            /*if ( i_opnd1 [ DATA_WIDTH - 1 ] == i_opnd2 [ DATA_WIDTH - 1 ] )
+                o_out = ( i_opnd1 - i_opnd2 ) >> ( 2 ** ( DATA_WIDTH - 1 ) ) == 1 ? 1 : 0; // ( Checking ( i_opnd1 - i_opnd2 ) < 0 )
+            else
+                o_out = i_opnd1 [ DATA_WIDTH - 1 ] ? 1 : 0;*/
+            o_out = $signed(i_opnd1) < $signed(i_opnd2) ? 1 : 0;
+        ALU_SLTU:
+            /*if ( i_opnd1 [ DATA_WIDTH - 1 ] == i_opnd2 [ DATA_WIDTH - 1 ] )
+                o_out = ( i_opnd1 - i_opnd2 ) >> ( 2 ** ( DATA_WIDTH - 1 ) ) == 1 ? 1 : 0; // ( Checking ( i_opnd1 - i_opnd2 ) < 0 )
+            else
+                o_out = i_opnd2 [ DATA_WIDTH - 1 ] ? 1 : 0;*/
+            o_out = i_opnd1 < i_opnd2 ? 1 : 0;
+        ALU_XOR:
+            o_out = i_opnd1 ^ i_opnd2;
+        ALU_SRL:
+            if ( i_optr.funct7_5 == 0 )
+                o_out = i_opnd1 >> i_opnd2; // SRL
+            else
+                o_out = $signed(i_opnd1) >>> i_opnd2; // SRA
+        ALU_OR:
+            o_out = i_opnd1 | i_opnd2;
+        ALU_AND:
+            o_out = i_opnd1 & i_opnd2;
     endcase
-
-assign eq_o = ( out_o == 0 ) ? 1'b1 : 1'b0; // Computes equal flag
 
 endmodule
