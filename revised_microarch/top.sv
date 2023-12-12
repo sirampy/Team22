@@ -11,38 +11,55 @@ module top #(
 );
 
 // PC signals
-logic [PC_WIDTH-1:0] pc;
-logic [PC_WIDTH-1:0] pc_inced = pc + 4; // NOTE: this name has been changed from pc_4
-logic [PC_WIDTH-1:0] next_pc;
-logic [PC_WIDTH-1:0] pc_target;
+logic [PC_WIDTH-1:0] pc_f;
+logic [PC_WIDTH-1:0] pc_inced = pc + 4; // this logic must be replaced my a more extensive module if when the extensions that require it are implemented.
+logic [PC_WIDTH-1:0] next_pc_f; 
 
 // control signals
-logic [31:0] instr;
+pipeline_contron_t piepline_control;
 
-funct3_t funct3;
-alu3_t alu3;
-alu7_t alu7;
+logic [31:0] instr_f;
+logic [31:0] instr_d;
 
-src1_t src1;
-src2_t src2;
-wire [4:0]   rs1;
-wire [4:0]   rs2;
+
+funct3_t funct3_d;
+alu3_t alu3_d;
+alu7_t alu7_d;
+
+funct3_t funct3_e;
+alu3_t alu3_e;
+alu7_t alu7_e;
+
+
+src1_t src1_d;
+src2_t src2_d;
+wire [4:0]   rs1_d;
+wire [4:0]   rs2_d;
 wire [11:0]  imm12;
 wire [19:0]  imm20;
 
-srcr_t srcr; // return source
-logic [4:0] rd;
-logic reg_write;
-logic data_read;
-logic data_write;
-next_pc_t pc_control;
+// return control signals
+srcr_t srcr_d; 
+logic [4:0] rd_d;
+logic reg_write_d;
+logic data_read_d;
+logic data_write_d;
+next_pc_t pc_control_d;
+
+next_pc_t pc_control_e;
+
 
 // input signals
 logic [31:0] imm;
 logic [31:0] reg_data_1;
 logic [31:0] reg_data_2;
-logic [31:0] alu_src_1;
-logic [31:0] alu_src_2;
+logic [31:0] alu_src_1_d;
+logic [31:0] alu_src_2_d;
+
+logic [31:0] alu_src_1_e;
+logic [31:0] alu_src_2_e;
+
+
 
 // result signals
 logic [31:0] alu_out;
@@ -51,153 +68,63 @@ logic jump;
 logic [31:0] result;
 logic [31:0] wd3;
 
-// pipelining signals
-logic stall_f; // fetch
-logic stall_d; // decode
 
-logic [PC_WIDTH-1:0] pcD; 
-logic [PC_WIDTH-1:0] instrD;
-logic [PC_WIDTH-1:0] pc_incedD;
-
-logic [DATA_WIDTH-1:0] rd1E;
-logic [DATA_WIDTH-1:0] rd2E;
-logic [ADDR_WIDTH-1:0] rs1E;
-logic [ADDR_WIDTH-1:0] rs2E;
-logic [PC_WIDTH-1:0]   pcE;
-logic [ADDR_WIDTH-1:0] rdE;
-logic [DATA_WIDTH-1:0] imm_extE;
-logic [PC_WIDTH-1:0]   pc_plus4E;
-
-logic       reg_writeE;
-logic [1:0] result_srcE;
-logic       mem_writeE;
-logic       jumpE;
-logic       branchE;
-logic [3:0] alu_ctrlE;
-logic       alu_srcE;
-
-
-assign next_pc [PC_WIDTH-1:0] = jump ? result[PC_WIDTH-1:0] : pc_inced;
+assign next_pc_f [PC_WIDTH-1:0] = jump ? result[PC_WIDTH-1:0] : pc_inced;
 
 pc_reg pc_reg(
     .clk_i(clk_i),
     .rst_i(rst_i),
-    .next_pc_i(next_pc),
+    .next_pc_i(next_pc_f),
 
-    .pc_o(pc)
+    .pc_o(pc_f)
 );
 
 instr_mem instr_mem(
-    .a_i(pc[7:0]), // TODO: parameterise correctly
-    .rd_o(instr)
+    .a_i(pc_f[7:0]), // TODO: parameterise correctly
+    .rd_o(instr_f)
 );
 
-// fetch stage pipeling:
-pipe_reg1 pipe_reg1 (
-    .clk_i (clk_i),
-    .en_i (stall_d),
-    .clr_i (flushD),
-    .rd_i (instr),              // read data from instr mem
-    .pcF_i (pc),
-    .pc_plus4F_i (pc_inced), 
-    .instrD_o (instrD),
-    .pcD_o (pcD),
-    .pc_plus4D_o (pc_incedD)
+pipe_fetch fetch_reg(
+    .clk_i(clk_i),
+    .pipeline_control_i(piepline_control),
+
+    .instr_i(instr_f),
+    .instr__o(instr_d)
 );
+
 
 decoder decoder(
-    .instr_i(instrD),
-    .alu3_o(alu3),
-    .alu7_o(alu7),
-    .funct3_o(funct3),
+    .instr_i(instr_d),
 
-    .src1_o(src1),
-    .src2_o(src2),
-    .rs1_o(rs1),
-    .rs2_o(rs2),
+    .alu3_o(alu3_d),
+    .alu7_o(alu7_d),
+    .funct3_o(funct3_d),
+
+    .src1_o(src1_d),
+    .src2_o(src2_d),
+    .rs1_o(rs1_d),
+    .rs2_o(rs2_d),
     .imm12_o(imm12),
     .imm20_o(imm20),
 
-    .srcr_o(srcr),
-    .rd_o(rd),
-    .reg_write_o(reg_write),
-    .data_read_o(data_read),
-    .data_write_o(data_write),
-    .pc_control_o(pc_control)
+    .srcr_o(srcr_d),
+    .rd_o(rd_d),
+    .reg_write_o(reg_write_d),
+    .data_read_o(data_read_d),
+    .data_write_o(data_write_d),
+    .pc_control_o(pc_control_d)
 );
 
 sign_extend sign_extend(
     .imm12_i(imm12),
     .imm20_i(imm20),
-    .src2_i(src2),
+    .src2_i(src2_d),
 
-    .imm_o(imm)
+    .imm_o(imm_d)
 );
 
-// decode stage pipelining
-pipe_reg2 pipe_reg2 (
-    // main inputs
-    .clk_i(clk_i),
-    .clr_i (flushE),
-    .rd1D_i (reg_data_1), // read reg 1 val
-    .rd2D_i (reg_data_2), // read reg 2 val
-    .rs1D_i (instrD[19:15]), // read reg 1 addr
-    .rs2D_i (instrD[24:20]), // read reg 2 addr
-    .pcD_i (pcD), 
-    // .rdD_i (instrD[11:7]),   // write reg
-    .imm_extD_i (imm),
-    .pc_plus4D_i (pc_incedD),
-
-    // control unit inputs
-    .alu3_i(alu3),
-    .alu7_i(alu7),
-    .funct3_i(funct3),
-
-    .src1_i(src1),
-    .src2_i(src2),
-    .rs1_i(rs1),
-    .rs2_i(rs2),
-    .imm12_i(imm12),
-    .imm20_i(imm20),
-
-    .srcr_i(srcr),
-    .rd_i(rd),
-    .reg_write_i(reg_write),
-    .data_read_i(data_read),
-    .data_write_i(data_write),
-    .pc_control_i(pc_control)
-
-    // main outputs
-    .rd1E_o (rd1E),
-    .rd2E_o (rd2E),
-    .rs1E_o (rs1E), // read reg 1 addr
-    .rs2E_o (rs2E), // read reg 2 addr
-    .pcE_o (pcE),
-    .imm_extE_o (immE),
-    .pc_plus4E_o (pc_incedE),
-
-    // control unit outputs
-    .alu3_o(alu3E),
-    .alu7_o(alu7E),
-    .funct3_o(funct3E),
-
-    .src1_o(src1E),
-    .src2_o(src2E),
-    .rs1_o(rs1E),
-    .rs2_o(rs2E),
-    .imm12_o(imm12E),
-    .imm20_o(imm20E),
-
-    .srcr_o(srcrE),
-    .rd_o(rdE),
-    .reg_write_o(reg_write),
-    .data_read_o(data_read),
-    .data_write_o(data_write),
-    .pc_control_o(pc_control)
-);
-
-// assign wd3 = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result; // not properly parameterised
-// this is all replaced by resultW
+// TODO: writeback
+assign wd3 = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result; // not properly parameterised
 
 reg_file reg_file(
     .clk_i(clk_i),
@@ -213,54 +140,55 @@ reg_file reg_file(
     .rd2_o(reg_data_2)
 );
 
+assign alu_src_1_d = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? {16'b0, pc} : -1; // last term should never occour
+assign alu_src_2_d = (src2 == RS2) ? reg_data_2 : imm;
 
-assign alu_src_1 = (src1 == RS1) ? reg_data_1 : (src1 == ZERO) ? 'b0 : (src1 == PC) ? {16'b0, pc} : -1; // last term should never occour
-assign alu_src_2 = (src2 == RS2) ? reg_data_2 : imm;
+pipe_decode decode_reg(
+    .clk_i(clk_i),
+    .pipeline_control_i(piepline_control),
+
+    .alu_src_1_i(alu_src_1_d),
+    .alu_src_2_i(alu_src_2_d),
+    .alu3_i(alu3_d),
+    .alu7_i(alu7_d),
+
+    .funct3_i(funct3_d),
+    .pc_control_i(pc_control_d)
+
+    .alu_src_1_o(alu_src_1_e),
+    .alu_src_2_o(alu_src_2_e),
+    .alu3_o(alu3_e),
+    .alu7_o(alu7_e),
+
+    .funct3_o(funct3_e),
+    .pc_control_o(pc_control_e)
+);
+
 
 alu alu(
-    .src1_i(alu_src_1),
-    .src2_i(alu_src_2),
+    .src1_i(alu_src_1_e),
+    .src2_i(alu_src_2_e),
 
-    .alu3_i(alu3),
-    .alu7_i(alu7),
+    .alu3_i(alu3_e),
+    .alu7_i(alu7_e),
 
     .result_o(alu_out)
 );
 
-pipe_reg3 pipe_reg3 (
-    // main input
-    .clk_i(clk_i),
-    .alu_resultE_i (alu_out),
-    .write_dataE_i (reg_op2),
-    .rdE_i (rdE),
-    .pc_plus4E_i (pc_plus4E),
-
-    // control input
-    .reg_writeE_i (reg_writeE),
-    .result_srcE_i (result_srcE),
-    .mem_writeE_i (mem_writeE),
-
-    // main output
-    .alu_resultM_o (alu_resultM),
-    .write_dataM_o (write_dataM),
-    .rdM_o (rdM),
-    .pc_plus4M_o (pc_plus4M),
-
-    // control output
-    .reg_writeM_o (reg_writeM),
-    .result_srcM_o (result_srcM),
-    .mem_writeM_o (mem_writeM)
-);
-
 branch_tester branch_tester(
-    .src1_i(reg_data_1),
-    .src2_i(reg_data_2),
+    .src1_i(reg_data_1_e),
+    .src2_i(reg_data_2_e),
 
-    .branch3_i(funct3),
-    .pc_control_i(pc_control),
+    .branch3_i(funct3_e),
+    .pc_control_i(pc_control_e),
 
     .jump_o(jump)
 );
+
+pipe_excecute excecute_reg(
+    
+);
+
 
 data_mem data_mem(
    .a_i(alu_out[19:0]),

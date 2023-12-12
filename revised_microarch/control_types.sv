@@ -84,4 +84,10 @@ typedef enum logic [1:0] {
     JUMP = 2 // unconditional branch
  } next_pc_t;
 
+typedef enum logic {
+    CONTINUE = 0,
+    STALL = 1,
+    FLUSH = 2
+} pipeline_control_t;
+
 // endpackage
