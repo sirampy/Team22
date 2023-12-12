@@ -97,7 +97,7 @@ int main(int argc, char **argv, char **env) {
     // Testing U&I-type:
     // Implemented:         JALR, JAL
     // Not implemented:     AUIPC?, LUI?
-    // Tested and working:  
+    // Tested and working:  JALR, JAL
     // Tested and broken:  
 
     evalAndDump(tfp, top, i); // JAL R2, 0x8            - Expect jump forw. 2 lines -> ...00100000000000 00010 1101111        -> 00 80 01 6f
