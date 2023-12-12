@@ -11,7 +11,8 @@ module main_decoder (
     output logic [ 2 : 0 ] imm_src_o,    // Immediate value type
     output logic           reg_write_o,  // Register write enable
     output logic [ 1 : 0 ] alu_op_o,     // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
-    output logic           jalr_pc_src_o // [1] Write JALR register to PC, [0] Otherwise
+    output logic           jalr_pc_src_o, // [1] Write JALR register to PC, [0] Otherwise
+    output logic           Jstore_o       // When high (only for jump), pc+4 written to regfile
 
 );
 
@@ -31,6 +32,7 @@ always_comb
                 alu_op_o = 2'b00;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b0110011: // R-type
             begin
@@ -43,6 +45,7 @@ always_comb
                 alu_op_o = 2'b10;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b0100011: // S-type
             begin
@@ -55,6 +58,7 @@ always_comb
                 alu_op_o = 2'b00;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b0010011: // I-type arithmetic
             begin
@@ -67,6 +71,7 @@ always_comb
                 alu_op_o = 2'b10;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b1100011: // B-type
             begin
@@ -79,6 +84,7 @@ always_comb
                 alu_op_o = 2'b01;
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b1101111: // JAL
             begin
@@ -91,6 +97,7 @@ always_comb
                 alu_op_o = 2'b00;
                 jal = 1'b1;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b1;
             end
         7'b1100111: // JALR
             begin
@@ -103,6 +110,7 @@ always_comb
                 alu_op_o = 2'b00; 
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b1;
+                Jstore_o = 1'b1;
             end
         7'b0010111: // AUIPC
             begin
@@ -115,6 +123,7 @@ always_comb
                 alu_op_o = 2'b00; 
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         7'b0110111: // LUI
             begin
@@ -127,6 +136,7 @@ always_comb
                 alu_op_o = 2'b10; 
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
+                Jstore_o = 1'b0;
             end
         default: // Should never occur
             begin

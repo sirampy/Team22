@@ -13,6 +13,7 @@ module control_top #(
     output logic                            alu_src_o,     // [0] - Use rs2 as ALU input, [1] - Use imm_op as ALU input
     output logic                            reg_write_o,   // Register write enable
     output logic                            jalr_pc_src_o, // [0] - ?, [1] - ?
+    output logic                            Jstore_o,      
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
     output logic [ INSTR_WIDTH - 1 : 0 ]    instr_o        // Current instruction to execute
@@ -50,7 +51,8 @@ main_decoder main_decoder (
     .imm_src_o     ( imm_src ),
     .reg_write_o   ( reg_write_o ),
     .jalr_pc_src_o ( jalr_pc_src_o ),
-    .alu_op_o      ( alu_op )
+    .alu_op_o      ( alu_op ),
+    .Jstore_o      ( Jstore_o)
 
 );
 
