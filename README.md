@@ -18,7 +18,7 @@
 
 ## Division of Tasks
 ### Work split by component
-LEGEND :       `x` = full/main responsibility;  `p` = partial contribution; 
+LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution; 
 #### Single Cycle:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
@@ -69,10 +69,10 @@ LEGEND :       `x` = full/main responsibility;  `p` = partial contribution;
 #### Lab 4:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | p | p | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | | 
+| ALU | alu.sv, alu_top.sv, reg_file.sv | x | x | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | 
 | PC | pc_mux.sv, pc_reg.sv| | | | | x |
-| Memory | instr_mem.sv, program.mem| p | | | p 
+| Memory | instr_mem.sv, program.mem| x | | | x
 | Top | top.sv | | | x |
 | Testbenches and debugging | alu_top_tb.cpp,  | | | x | 
 | Run files | |  | | p | p 
