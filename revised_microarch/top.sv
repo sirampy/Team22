@@ -12,8 +12,9 @@ module top #(
 
 // PC signals
 logic [PC_WIDTH-1:0] pc;
-logic [PC_WIDTH-1:0] pc_inced = pc + 4; // this logic must be replaced my a more extensive module if when the extensions that require it are implemented.
-logic [PC_WIDTH-1:0] next_pc; 
+logic [PC_WIDTH-1:0] pc_inced = pc + 4; // NOTE: this name has been changed from pc_4
+logic [PC_WIDTH-1:0] next_pc;
+logic [PC_WIDTH-1:0] pc_target;
 
 // control signals
 logic [31:0] instr;
@@ -50,6 +51,31 @@ logic jump;
 logic [31:0] result;
 logic [31:0] wd3;
 
+// pipelining signals
+logic stall_f; // fetch
+logic stall_d; // decode
+
+logic [PC_WIDTH-1:0] pcD; 
+logic [PC_WIDTH-1:0] instrD;
+logic [PC_WIDTH-1:0] pc_incedD;
+
+logic [DATA_WIDTH-1:0] rd1E;
+logic [DATA_WIDTH-1:0] rd2E;
+logic [ADDR_WIDTH-1:0] rs1E;
+logic [ADDR_WIDTH-1:0] rs2E;
+logic [PC_WIDTH-1:0]   pcE;
+logic [ADDR_WIDTH-1:0] rdE;
+logic [DATA_WIDTH-1:0] imm_extE;
+logic [PC_WIDTH-1:0]   pc_plus4E;
+
+logic       reg_writeE;
+logic [1:0] result_srcE;
+logic       mem_writeE;
+logic       jumpE;
+logic       branchE;
+logic [3:0] alu_ctrlE;
+logic       alu_srcE;
+
 
 assign next_pc [PC_WIDTH-1:0] = jump ? result[PC_WIDTH-1:0] : pc_inced;
 
@@ -66,9 +92,21 @@ instr_mem instr_mem(
     .rd_o(instr)
 );
 
-decoder decoder(
-    .instr_i(instr),
+// fetch stage pipeling:
+pipe_reg1 pipe_reg1 (
+    .clk_i (clk_i),
+    .en_i (stall_d),
+    .clr_i (flushD),
+    .rd_i (instr),              // read data from instr mem
+    .pcF_i (pc),
+    .pc_plus4F_i (pc_inced), 
+    .instrD_o (instrD),
+    .pcD_o (pcD),
+    .pc_plus4D_o (pc_incedD)
+);
 
+decoder decoder(
+    .instr_i(instrD),
     .alu3_o(alu3),
     .alu7_o(alu7),
     .funct3_o(funct3),
@@ -96,8 +134,70 @@ sign_extend sign_extend(
     .imm_o(imm)
 );
 
+// decode stage pipelining
+pipe_reg2 pipe_reg2 (
+    // main inputs
+    .clk_i(clk_i),
+    .clr_i (flushE),
+    .rd1D_i (reg_data_1), // read reg 1 val
+    .rd2D_i (reg_data_2), // read reg 2 val
+    .rs1D_i (instrD[19:15]), // read reg 1 addr
+    .rs2D_i (instrD[24:20]), // read reg 2 addr
+    .pcD_i (pcD), 
+    // .rdD_i (instrD[11:7]),   // write reg
+    .imm_extD_i (imm),
+    .pc_plus4D_i (pc_incedD),
 
-assign wd3 = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result; // not properly parameterised
+    // control unit inputs
+    .alu3_i(alu3),
+    .alu7_i(alu7),
+    .funct3_i(funct3),
+
+    .src1_i(src1),
+    .src2_i(src2),
+    .rs1_i(rs1),
+    .rs2_i(rs2),
+    .imm12_i(imm12),
+    .imm20_i(imm20),
+
+    .srcr_i(srcr),
+    .rd_i(rd),
+    .reg_write_i(reg_write),
+    .data_read_i(data_read),
+    .data_write_i(data_write),
+    .pc_control_i(pc_control)
+
+    // main outputs
+    .rd1E_o (rd1E),
+    .rd2E_o (rd2E),
+    .rs1E_o (rs1E), // read reg 1 addr
+    .rs2E_o (rs2E), // read reg 2 addr
+    .pcE_o (pcE),
+    .imm_extE_o (immE),
+    .pc_plus4E_o (pc_incedE),
+
+    // control unit outputs
+    .alu3_o(alu3E),
+    .alu7_o(alu7E),
+    .funct3_o(funct3E),
+
+    .src1_o(src1E),
+    .src2_o(src2E),
+    .rs1_o(rs1E),
+    .rs2_o(rs2E),
+    .imm12_o(imm12E),
+    .imm20_o(imm20E),
+
+    .srcr_o(srcrE),
+    .rd_o(rdE),
+    .reg_write_o(reg_write),
+    .data_read_o(data_read),
+    .data_write_o(data_write),
+    .pc_control_o(pc_control)
+);
+
+// assign wd3 = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result; // not properly parameterised
+// this is all replaced by resultW
 
 reg_file reg_file(
     .clk_i(clk_i),
@@ -125,6 +225,31 @@ alu alu(
     .alu7_i(alu7),
 
     .result_o(alu_out)
+);
+
+pipe_reg3 pipe_reg3 (
+    // main input
+    .clk_i(clk_i),
+    .alu_resultE_i (alu_out),
+    .write_dataE_i (reg_op2),
+    .rdE_i (rdE),
+    .pc_plus4E_i (pc_plus4E),
+
+    // control input
+    .reg_writeE_i (reg_writeE),
+    .result_srcE_i (result_srcE),
+    .mem_writeE_i (mem_writeE),
+
+    // main output
+    .alu_resultM_o (alu_resultM),
+    .write_dataM_o (write_dataM),
+    .rdM_o (rdM),
+    .pc_plus4M_o (pc_plus4M),
+
+    // control output
+    .reg_writeM_o (reg_writeM),
+    .result_srcM_o (result_srcM),
+    .mem_writeM_o (mem_writeM)
 );
 
 branch_tester branch_tester(
