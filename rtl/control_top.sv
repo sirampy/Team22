@@ -16,7 +16,8 @@ module control_top #(
     output logic                            Jstore_o,      
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
-    output logic [ INSTR_WIDTH - 1 : 7 ]    instr31_7_o    // Current instruction [ 31 : 7 ]
+    output logic [ 24 : 15 ]                instr24_15_o,  // Current instruction [ 24 : 15 ]
+    output logic [ 11 : 7 ]                 instr11_7_o    // Current instruction [ 31 : 7 ]
 
 );
 
@@ -30,7 +31,8 @@ logic [ INSTR_WIDTH - 1 : 0 ] instr; // Current instruction to execute
 assign op = instr [ 6 : 0 ];
 assign funct3 = instr [ 14 : 12 ];
 assign funct7 = instr [ 30 ];
-assign instr31_7_o = instr [ 31 : 7 ];
+assign instr24_15_o = instr [ 24 : 15 ];
+assign instr11_7_o = instr [ 11 : 7 ];
 
 instr_mem instr_mem (
 
@@ -71,7 +73,7 @@ alu_decoder alu_decoder (
 
 sign_extend sign_extend (
 
-    .instr31_7_i ( instr31_7_o ),
+    .instr31_7_i ( instr [ 31 : 7 ] ),
     .imm_src_i   ( imm_src ),
     
     .imm_ext_o   ( imm_op_o )

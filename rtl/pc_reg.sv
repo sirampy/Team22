@@ -5,7 +5,6 @@ module pc_reg #(
 ) (
 
     input  logic                       clk_i,     // Clock
-    input  logic                       rst_i,     // Rese
     input  logic [ PC_WIDTH - 1 : 0 ]  next_pc_i, // Write value for PC
 
     output logic [ PC_WIDTH - 1 : 0 ]  pc_o       // Current value of PC

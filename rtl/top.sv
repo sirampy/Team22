@@ -28,11 +28,12 @@ logic [ 3 : 0 ]              alu_ctrl;      // ALU operation select
 logic [ DATA_WIDTH - 1 : 0 ] imm_op;        // Immediate value
 logic                        result_src;    // [0] - Write ALU output to register, [1] - Write memory value to register
 logic                        mem_write;     // Memory write enable
-logic [ DATA_WIDTH - 1 : 7 ] instr31_7;         // Current instruction
+logic [ 24 : 15 ]            instr24_15;    // Current instruction [ 24 : 15 ]
+logic [ 11 : 7 ]             instr11_7;     // Current instruction [ 11 : 7 ]
 
-assign rs1 = instr31_7 [ 19 : 15 ];
-assign rs2 = instr31_7 [ 24 : 20 ];
-assign rd = instr31_7 [ 11 : 7 ];
+assign rs1 = instr24_15 [ 19 : 15 ];
+assign rs2 = instr24_15 [ 24 : 20 ];
+assign rd = instr11_7 [ 11 : 7 ];
 
 alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
@@ -69,7 +70,8 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
     .jalr_pc_src_o ( jalr_pc_src ),
     .alu_ctrl_o    ( alu_ctrl ),
     .imm_op_o      ( imm_op ),
-    .instr31_7_o   ( instr31_7 )
+    .instr24_15_o  ( instr24_15 ),
+    .instr11_7_o   ( instr11_7 )
 
 );
 
