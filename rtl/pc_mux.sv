@@ -15,7 +15,7 @@ module pc_mux #(
 
 );
 
-logic [ PC_WIDTH - 1:  0 ] jal_branch_pc; // Program counter incremented by immediate value
+logic [ PC_WIDTH - 1 : 0 ] jal_branch_pc; // Program counter incremented by immediate value
 
 assign jal_branch_pc = pc_i + imm_op_i;
 assign pc_plus4_o = pc_i + 4;
