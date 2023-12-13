@@ -1,9 +1,9 @@
 // pipelining register 1 -> delays from fetch to decode
-module decode_fetch #(
+module pipe_decode #(
     parameter ADDRESS_WIDTH = 32,
               DATA_WIDTH = 32
 )(
-    input  logic                clk_i,       
+    input  logiccode                clk_i,       
     input  pipeline_control_t   pipeline_control_i,
 
     // data
