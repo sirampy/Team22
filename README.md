@@ -50,7 +50,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = partial contribution;
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | Direct cache | |  | x | x | | 
 | Two-way cache | | | | x | 
-| Testbenches and debugging | | x | x | x | 
+| Testbenches and debugging | |  | x | x | 
 | F1 Testing | | | | | |
 | Other testing | | | | |
 
