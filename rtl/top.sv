@@ -61,20 +61,26 @@ typedef struct packed {
 typedef enum logic [ 1 : 0 ] {
     PC_RST,
     PC_INCR,
-    PC_IMM_OFFSET,
+    PC_IMM_OFF,
     PC_ALU_OUT
 } pc_sel;
 
 typedef enum logic [ 1 : 0 ] {
     REG_WR_ALU_OUT,
+    REG_WR_IMM,
     REG_WR_MEM,
-    REG_WR_PC
+    REG_WR_PC_INCR
 } reg_wr_sel;
 
 typedef enum logic {
-    ALU_OPND_SEL_REG = 0,
-    ALU_OPND_SEL_IMM = 1
-} alu_opnd_sel;
+    ALU_OPND_1_REG,
+    ALU_OPND_1_PC
+} alu_opnd_1_sel;
+
+typedef enum logic {
+    ALU_OPND_2_REG,
+    ALU_OPND_2_IMM
+} alu_opnd_2_sel;
 
 typedef enum logic [ 2 : 0 ] {
     ALU_ADD  = 3'b000,
@@ -120,31 +126,54 @@ module top (
 
 );
 
-instr_val       pc_val, pc_val_incr;
+instr_val       pc_val, pc_val_incr, pc_val_imm_off, pc_wr_val;
 instr           cur_instr_val;
-data_val        reg_val_1, reg_val_2, imm_val, reg_wr_val, alu_out_val, mem_addr_val, mem_rd_val, mem_wr_val, alu_opnd2;
+data_val        reg_val_1, reg_val_2, imm_val, reg_wr_val, alu_out_val,
+                mem_addr_val, mem_rd_val, mem_wr_val, alu_opnd_1, alu_opnd_2;
 reg_addr        reg_rd_addr_1, reg_rd_addr_2, reg_wr_addr;
 logic           reg_wr_en, mem_wr_en, flg_z;
 pc_sel          pc_sel_val;
 reg_wr_sel      reg_wr_sel_val;
-alu_opnd_sel    alu_opnd_sel_val;
+alu_opnd_1_sel  alu_opnd_1_sel_val;
+alu_opnd_2_sel  alu_opnd_2_sel_val;
 alu_optr        alu_optr_val;
 l_s_sel         l_s_sel_val;
 
-assign pc_val_incr   = pc_val + 4;
-assign mem_addr_val  = alu_out_val;
-assign flg_z         = alu_out_val == 0 ? 1 : 0;
-assign reg_rd_addr_1 = cur_instr_val.body.R.rs1;
-assign reg_rd_addr_2 = cur_instr_val.body.R.rs2;
-assign reg_wr_addr   = cur_instr_val.body.R.rd;
-assign l_s_sel_val   = cur_instr_val.body.R.funct3;
+assign pc_val_incr            = pc_val + 4;
+assign pc_val_imm_off         = pc_val + data_val_to_instr_val( imm_val );
+assign mem_addr_val           = alu_out_val;
+assign flg_z                  = alu_out_val == 0 ? 1 : 0;
+assign reg_rd_addr_1          = cur_instr_val.body.R.rs1;
+assign reg_rd_addr_2          = cur_instr_val.body.R.rs2;
+assign reg_wr_addr            = cur_instr_val.body.R.rd;
+assign l_s_sel_val            = cur_instr_val.body.R.funct3;
 
 always_comb
-    case ( alu_opnd_sel_val )
-        ALU_OPND_SEL_REG:
-            alu_opnd2 = reg_val_2;
-        ALU_OPND_SEL_IMM:
-            alu_opnd2 = imm_val;
+    case ( pc_sel_val )
+    PC_RST:
+        pc_wr_val = 0;
+    PC_INCR:
+        pc_wr_val = pc_val_incr;
+    PC_IMM_OFF:
+        pc_wr_val = pc_val_imm_off;
+    PC_ALU_OUT:
+        pc_wr_val = data_val_to_instr_val( alu_out_val );
+    endcase
+
+always_comb
+    case ( alu_opnd_1_sel_val )
+        ALU_OPND_1_REG:
+            alu_opnd_1 = reg_val_1;
+        ALU_OPND_1_PC:
+            alu_opnd_1 = pc_val;
+    endcase
+
+always_comb
+    case ( alu_opnd_2_sel_val )
+        ALU_OPND_2_REG:
+            alu_opnd_2 = reg_val_2;
+        ALU_OPND_2_IMM:
+            alu_opnd_2 = imm_val;
     endcase
 
 always_comb
@@ -165,9 +194,10 @@ always_comb
             reg_wr_val = { 16'h0000, mem_rd_val [ 15 : 0 ] };
         default: reg_wr_val = 0;
         endcase
-    REG_WR_PC:
+    REG_WR_PC_INCR:
         reg_wr_val = pc_val_incr;
-    default: reg_wr_val = 0;
+    REG_WR_IMM:
+        reg_wr_val = imm_val;
     endcase
 
 always_comb
@@ -175,7 +205,7 @@ always_comb
     L_S_BYTE:
         mem_wr_val = { 24'h000000, reg_val_2 [ 7 : 0 ] };
     L_S_HALF:
-        mem_wr_val = { 16'h0000, reg_val_2 [ 15 : 0] };
+        mem_wr_val = { 16'h0000, reg_val_2 [ 15 : 0 ] };
     L_S_WORD:
         mem_wr_val = reg_val_2;
     default: mem_wr_val = 0;
@@ -183,13 +213,10 @@ always_comb
 
 pc pc_ (
 
-    .i_clk        ( i_clk ),
-    .i_pc_val_inc ( pc_val_incr ),
-    .i_imm_val    ( imm_val ),
-    .i_reg_val    ( reg_val_1 ),
-    .i_sel        ( pc_sel_val ),
+    .i_clk    ( i_clk ),
+    .i_wr_val ( pc_wr_val ), 
 
-    .o_pc_val     ( pc_val )
+    .o_val    ( pc_val )
 
 );
 
@@ -217,8 +244,8 @@ regs regs_ (
 
 alu alu_ (
 
-    .i_opnd1 ( reg_val_1 ),
-    .i_opnd2 ( alu_opnd2 ),
+    .i_opnd1 ( alu_opnd_1 ),
+    .i_opnd2 ( alu_opnd_2 ),
     .i_optr  ( alu_optr_val ),
     
     .o_out   ( alu_out_val )
@@ -238,16 +265,17 @@ main_mem main_mem_ (
 
 decoder decoder_ (
 
-    .i_cur_instr_val    ( cur_instr_val ),
-    .i_flg_z            ( flg_z ),
-    
-    .o_pc_sel_val       ( pc_sel_val ),
-    .o_reg_wr_sel_val   ( reg_wr_sel_val ),
-    .o_alu_opnd_sel_val ( alu_opnd_sel_val ),
-    .o_alu_optr_val     ( alu_optr_val ),
-    .o_reg_wr_en        ( reg_wr_en ),
-    .o_mem_wr_en        ( mem_wr_en ),
-    .o_imm_val          ( imm_val )
+    .i_cur_instr_val      ( cur_instr_val ),
+    .i_flg_z              ( flg_z ),
+
+    .o_pc_sel_val         ( pc_sel_val ),
+    .o_reg_wr_sel_val     ( reg_wr_sel_val ),
+    .o_alu_opnd_1_sel_val ( alu_opnd_1_sel_val ),
+    .o_alu_opnd_2_sel_val ( alu_opnd_2_sel_val ),
+    .o_alu_optr_val       ( alu_optr_val ),
+    .o_reg_wr_en          ( reg_wr_en ),
+    .o_mem_wr_en          ( mem_wr_en ),
+    .o_imm_val            ( imm_val )
 
 );
 
