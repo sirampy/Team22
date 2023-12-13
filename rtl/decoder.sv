@@ -15,13 +15,14 @@ module decoder (
 
 typedef enum logic [ 2 : 0 ] {
     IMM_DECODER_I,
+    IMM_DECODER_I_SHIFT,
     IMM_DECODER_S,
     IMM_DECODER_B,
     IMM_DECODER_U,
     IMM_DECODER_JAL
 } imm_decoder_sel;
 
-logic funct7_5;
+logic           funct7_5;
 imm_decoder_sel imm_decoder_sel_val;
 
 assign funct7_5 = i_cur_instr_val.body.R.funct7 [ 5 ];
@@ -40,11 +41,15 @@ always_comb
             end
         OPC_I:
             begin
-                imm_decoder_sel_val = IMM_DECODER_I;
+                imm_decoder_sel_val = i_cur_instr_val.body.R.funct3 == ALU_SLL
+                                      || i_cur_instr_val.body.R.funct3 == ALU_SRL
+                                      ? IMM_DECODER_I_SHIFT
+                                      : IMM_DECODER_I;
                 o_pc_sel_val        = PC_INCR;
                 o_reg_wr_sel_val    = REG_WR_ALU_OUT;
                 o_alu_opnd_sel_val  = ALU_OPND_SEL_IMM;
-                o_alu_optr_val      = { 1'b0, i_cur_instr_val.body.R.funct3 };
+                o_alu_optr_val      = { i_cur_instr_val.body.R.funct3 == ALU_SRL ? funct7_5 : 1'b0,
+                                        i_cur_instr_val.body.R.funct3 };
                 o_reg_wr_en         = 1;
                 o_mem_wr_en         = 0;
             end
@@ -136,6 +141,9 @@ always_comb
         IMM_DECODER_I:
             o_imm_val = { { 20 { i_cur_instr_val.body [ 24 ] } },
                           i_cur_instr_val.body.I.imm_11_0 };
+        IMM_DECODER_I_SHIFT:
+            o_imm_val = { { 27'h0000000 },
+                          i_cur_instr_val.body.I.imm_11_0 [ 4 : 0 ] };
         IMM_DECODER_S:
             o_imm_val = { { 20 { i_cur_instr_val.body [ 24 ] } },
                           i_cur_instr_val.body.S.imm_11_5,

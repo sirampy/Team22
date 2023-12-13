@@ -92,6 +92,14 @@ typedef struct packed {
     alu_funct3_optr funct3;
 } alu_optr;
 
+typedef enum logic [ 2 : 0 ] {
+    L_S_BYTE   = 3'b000,
+    L_S_HALF   = 3'b001,
+    L_S_WORD   = 3'b010,
+    L_S_BYTE_U = 3'b100,
+    L_S_HALF_U = 3'b101
+} l_s_sel;
+
 typedef enum opcode {
     OPC_L     = 7'b0000011,
     OPC_I     = 7'b0010011,
@@ -121,14 +129,15 @@ pc_sel          pc_sel_val;
 reg_wr_sel      reg_wr_sel_val;
 alu_opnd_sel    alu_opnd_sel_val;
 alu_optr        alu_optr_val;
+l_s_sel         l_s_sel_val;
 
 assign pc_val_incr   = pc_val + 4;
 assign mem_addr_val  = alu_out_val;
 assign flg_z         = alu_out_val == 0 ? 0 : 1;
-assign mem_wr_val    = reg_val_2;
 assign reg_rd_addr_1 = cur_instr_val.body.R.rs1;
 assign reg_rd_addr_2 = cur_instr_val.body.R.rs2;
 assign reg_wr_addr   = cur_instr_val.body.R.rd;
+assign l_s_sel_val   = cur_instr_val.body.R.funct3;
 
 always_comb
     case ( alu_opnd_sel_val )
@@ -143,10 +152,33 @@ always_comb
     REG_WR_ALU_OUT:
         reg_wr_val = alu_out_val;
     REG_WR_MEM:
-        reg_wr_val = mem_rd_val;
+        case ( l_s_sel_val )
+        L_S_BYTE:
+            reg_wr_val = { { 24 { mem_rd_val [ 7 ] } }, mem_rd_val [ 7 : 0 ] };
+        L_S_HALF:
+            reg_wr_val = { { 16 { mem_rd_val [ 15 ] } }, mem_rd_val [ 15 : 0 ] };
+        L_S_WORD:
+            reg_wr_val = mem_rd_val;
+        L_S_BYTE_U:
+            reg_wr_val = { 24'h000000, mem_rd_val [ 7 : 0 ] };
+        L_S_HALF_U:
+            reg_wr_val = { 16'h0000, mem_rd_val [ 15 : 0 ] };
+        default: reg_wr_val = 0;
+        endcase
     REG_WR_PC:
         reg_wr_val = pc_val_incr;
     default: reg_wr_val = 0;
+    endcase
+
+always_comb
+    case ( l_s_sel_val )
+    L_S_BYTE:
+        mem_wr_val = { 24'h000000, reg_val_2 [ 7 : 0 ] };
+    L_S_HALF:
+        mem_wr_val = { 16'h0000, reg_val_2 [ 15 : 0] };
+    L_S_WORD:
+        mem_wr_val = reg_val_2;
+    default: mem_wr_val = 0;
     endcase
 
 pc pc_ (
