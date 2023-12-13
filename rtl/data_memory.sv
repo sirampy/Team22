@@ -19,17 +19,17 @@ initial begin
         $readmemh("", ram_array);
         $display ("ram loaded fully");
     end;
-assign read_value_o = { ram_array[address_i[16:0] + 3],
-                        ram_array[address_i[16:0] + 2],
-                        ram_array[address_i[16:0] + 1],
-                        ram_array[address_i[16:0]]};
+assign read_value_o = {ram_array[{address_i[31:2], 2'b0}], 
+                        ram_array[{address_i[31:2], 2'b0}+1], 
+                        ram_array[{address_i[31:2], 2'b0}+2], 
+                        ram_array[{address_i[31:2], 2'b0}+3]};
 
  always_ff @(posedge clk_i) begin
         if (write_en_i) begin
-            ram_array[address_i[16:0]] <= write_dataddress_i[7:0];
-            ram_array[address_i[16:0] + 1] <= write_dataddress_i[15:8];
-            ram_array[address_i[16:0] + 2] <= write_dataddress_i[23:16];
-            ram_array[address_i[16:0] + 3] <= write_dataddress_i[31:24];
+            ram_array[{address_i[31:2], 2'b0}]   <= write_data_i[31:24];      
+            ram_array[{address_i[31:2], 2'b0}+1] <= write_data_i[23:16];
+            ram_array[{address_i[31:2], 2'b0}+2] <= write_data_i[15:8];
+            ram_array[{address_i[31:2], 2'b0}+3] <= write_data_i[7:0];
 
         end
     end 
