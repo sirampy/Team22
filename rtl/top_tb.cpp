@@ -79,8 +79,8 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // LW R4, 6(R0)           - Expect R4 = 0x09088aa7    -> ...00101 00011 010 00100 0000011       -> 00 51 a2 03
 
     // Testing R-Type:
-    // Implemented:         ADD, SUB, SLT, XOR, OR, AND
-    // Not implemented:     SLL, SLTU, SRL, SRA
+    // Implemented:         ADD, SUB, SLL, SLT, SLTU, XOR, SRL, SRA, OR, AND
+    // Not implemented:     
     // Tested and working:  ADD, SUB, SLT, XOR, OR, AND
     // Tested and broken:  
 
@@ -88,12 +88,15 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ADD R2, R0, R1         - Expect R2 = 0x5           -> ...001 00000 000 00010 0110011         -> 00 10 01 33
     evalAndDump(tfp, top, i); // ADDI R2, R2, 0x8       - Expect R2 = 0xd           -> ...001000 00010 000 00010 0010011      -> 00 81 01 13
     evalAndDump(tfp, top, i); // SUB R3, R2, R1         - Expect R3 = 0x3           -> 0100000 00001 00010 000 00011 0110011  -> 40 11 01 b3
-    
+    evalAndDump(tfp, top, i); // ADDI R3, R0, 0x1c      - Expect R3 = 0x1c          -> ...0011100 00000 000 00011 0010011     -> 01 c0 01 93
+    evalAndDump(tfp, top, i); // SLL R4, R2, R3         - Expect R4 = 0xd00..       -> ...00011 00010 001 00100 0110011       -> 00 31 12 33
     evalAndDump(tfp, top, i); // SLT R3, R2, R1         - Expect R3 = 0x0           -> ...001 00010 010 00011 0110011         -> 00 11 21 b3
     evalAndDump(tfp, top, i); // SLT R3, R1, R2         - Expect R3 = 0x1           -> ...0010 00001 010 00011 0110011        -> 00 20 a1 b3
-    
+    evalAndDump(tfp, top, i); // SLTU R3, R2, R1        - Expect R3 = 0x0           -> ...001 00010 011 00011 0110011         -> 00 11 31 b3
+    evalAndDump(tfp, top, i); // SLTU R3, R1, R2        - Expect R3 = 0x1           -> ...0010 00001 011 00011 0110011        -> 00 20 b1 b3
     evalAndDump(tfp, top, i); // XOR R3, R1, R2         - Expect R3 = 0x8           -> ...0010 00001 100 00011 0110011        -> 00 20 c1 b3
-    
+    evalAndDump(tfp, top, i); // SRL R5, R4, R3         - Expect R5 = 0x00d00..     -> ...00011 00100 101 00101 0110011       -> 00 32 52 b3
+    evalAndDump(tfp, top, i); // SRA R5, R4, R3         - Expect R5 = 0xffd00..     -> 0100000 00011 00100 101 00101 0110011  -> 40 32 52 b3
     evalAndDump(tfp, top, i); // OR R3, R1, R2          - Expect R3 = 0xd           -> ...0010 00001 110 00011 0110011        -> 00 20 e1 b3
     evalAndDump(tfp, top, i); // AND R3, R1, R2         - Expect R3 = 0x5           -> ...0010 00001 111 00011 0110011        -> 00 20 f1 b3
 
