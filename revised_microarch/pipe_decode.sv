@@ -15,6 +15,10 @@ module decode_fetch #(
     input funct3_t funct3_i,
     input next_pc_t pc_control_i,
 
+    input logic [31:0] reg_data_2_i
+
+    output logic [31:0] reg_data_2_o
+
     output logic [4:0] alu_src_1_o,
     output logic [4:0] alu_src_2_o,
     output alu3_t alu3_o,
@@ -36,6 +40,8 @@ always_ff @(posedge clk_i)
                 fucnt3_o <= funct3_i;  
                 pc_control_o <= pc_control_i;
 
+                reg_data_2_o <= reg_data_2_i;
+
             end
 
             STALL: begin 
@@ -50,6 +56,7 @@ always_ff @(posedge clk_i)
 
                 fucnt3_o <= alu.I_STD;  
                 pc_control_o <= NEXT_PC;
+                reg_data_2_o <= 'b0;
             end
 
             default: display("fetch: unknown pipeline control signal");
