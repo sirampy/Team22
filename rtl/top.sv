@@ -133,7 +133,7 @@ l_s_sel         l_s_sel_val;
 
 assign pc_val_incr   = pc_val + 4;
 assign mem_addr_val  = alu_out_val;
-assign flg_z         = alu_out_val == 0 ? 0 : 1;
+assign flg_z         = alu_out_val == 0 ? 1 : 0;
 assign reg_rd_addr_1 = cur_instr_val.body.R.rs1;
 assign reg_rd_addr_2 = cur_instr_val.body.R.rs2;
 assign reg_wr_addr   = cur_instr_val.body.R.rd;

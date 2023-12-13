@@ -76,7 +76,7 @@ always_comb
         OPC_B:
             begin
                 imm_decoder_sel_val = IMM_DECODER_B;
-                o_pc_sel_val =      ( i_flg_z ^ i_cur_instr_val.body.R.funct3 [ 2 ] ^ i_cur_instr_val.body.R.funct3 [ 0 ] == 0 )
+                o_pc_sel_val =      ( i_flg_z ^ i_cur_instr_val.body.R.funct3 [ 2 ] ^ i_cur_instr_val.body.R.funct3 [ 0 ] == 1 )
                                     ? PC_IMM_OFFSET : PC_INCR;
                 o_reg_wr_sel_val    = 0;
                 o_alu_opnd_sel_val  = 0;
