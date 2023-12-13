@@ -143,8 +143,6 @@ sign_extend sign_extend(
     .imm_o(imm_d)
 );
 
-// TODO: writeback
-
 reg_file reg_file(
     .clk_i(clk_i),
 

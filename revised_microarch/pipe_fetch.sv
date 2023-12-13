@@ -8,7 +8,9 @@ module pipe_fetch #(
 
     // data
     input logic [31:0]  instr_i,
+    input logic [31:0]  pc_inced_i,
 
+    output logic [31:0]  pc_inced_o,
     output logic [31:0] instr_o
 );
 
@@ -17,6 +19,7 @@ always_ff @(posedge clk_i)
         case(pipeline_control_i):
             CONTINUE:begin 
                 instr_o <= instr_i;
+                pc_inced_o <= pc_inced_i;
             end
             STALL: begin 
                 instr_o <= instr_o;
