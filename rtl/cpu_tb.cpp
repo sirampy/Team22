@@ -1,27 +1,25 @@
-#include "Vtop.h"
+#include "Vdata_memory.h"
 #include "verilated.h"
 #include "verilated_vcd_c.h"
-#include "vbuddy.cpp"
 
 int main(int argc, char **argv, char **env) {
     int i;
-    int clk;
+    int clk_i;
 
     Verilated::commandArgs(argc, argv);
-    Vtop* top = new Vtop;
+    Vdata_memory* top = new Vdata_memory;
 
     Verilated::traceEverOn(true);
     VerilatedVcdC* tfp = new VerilatedVcdC;
     top->trace(tfp, 99);
-    tfp->open("top.vcd");
+    tfp->open("data_memory.vcd");
 
-    top->rst = 0;
 
     for (i=0; i<1000; i++){
 
-        for (clk=0; clk<2; clk++){
-            tfp->dump (2*i + clk);
-            top->clk = !top->clk;
+        for (clk_i=0; clk_i<2; clk_i++){
+            tfp->dump (2*i + clk_i);
+            top->clk_i = !top->clk_i;
             top->eval();
         }   
 
