@@ -270,10 +270,10 @@ decoder decoder_ (
 
     .o_pc_sel_val         ( pc_sel_val ),
     .o_reg_wr_sel_val     ( reg_wr_sel_val ),
+    .o_reg_wr_en          ( reg_wr_en ),
     .o_alu_opnd_1_sel_val ( alu_opnd_1_sel_val ),
     .o_alu_opnd_2_sel_val ( alu_opnd_2_sel_val ),
     .o_alu_optr_val       ( alu_optr_val ),
-    .o_reg_wr_en          ( reg_wr_en ),
     .o_mem_wr_en          ( mem_wr_en ),
     .o_imm_val            ( imm_val )
 

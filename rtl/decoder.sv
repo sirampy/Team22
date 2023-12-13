@@ -5,10 +5,10 @@ module decoder (
     
     output pc_sel         o_pc_sel_val,         // Select PC operations
     output reg_wr_sel     o_reg_wr_sel_val,     // Select register write source
+    output logic          o_reg_wr_en,          // Register write enable
     output alu_opnd_1_sel o_alu_opnd_1_sel_val, // Select ALU operand 1
     output alu_opnd_2_sel o_alu_opnd_2_sel_val, // Select ALU operand 2
     output alu_optr       o_alu_optr_val,       // Select ALU operator
-    output logic          o_reg_wr_en,          // Register write enable
     output logic          o_mem_wr_en,          // Memory write enable
     output data_val       o_imm_val             // Immediate value
 
