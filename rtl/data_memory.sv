@@ -16,7 +16,7 @@ module data_memory # (
 
 );
 
-logic [ 7 : 0 ] memory_bytes [ 2 ** ACTUAL_ADDRESS_WIDTH - 1 : 0 ];
+logic [ 7 : 0 ] memory_bytes [32'h1FFFF:32'h0];
 
 // The following is done to fix bit length errors
 function logic[ ACTUAL_ADDRESS_WIDTH - 1 : 0 ] convert_address (input logic[ ADDRESS_WIDTH - 1 : 0 ] in);
