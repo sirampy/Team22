@@ -1,7 +1,6 @@
-# this is a copty from V2 branch - please re-write for SINGLE-CYCLE
 ## methods
 ### scope
-
+These tests are based off of the tests originally developed for the version-2 branch, which work by loading a test program into .mem files and then runing the CPU. They aim to be quick to verify, by checking the output of the program being run, and debugable using GTKWave. 
 ### prerequisites
 to run the tests properly, you must have all the required tools installed. these include verilator, the gnu riscv toolchain and gcc targeting the machine you are building the project with. 
 ### running the tests
@@ -19,7 +18,7 @@ the diference between the above 2 make targets is that all will run gtkwave (thi
 ### 1. Counter
 ![Counter program waveform](images/counter.png)
 ![Counter program source code](images/counter_code.png)
-here we can see that some basic instructions work as intended
+The counter programs works fully as intended on this branch. The above images are from tests on the version-2 branch, but the results from this branch look identical.
 ### 2. Sine
 ![sine wave waveform](images/sine_test.png) <br>
 this test demonstrates that we can load a word form memory. this branch only has lb implemented, s it gets sign extended causing artifactig at the peak of the sine wave.
