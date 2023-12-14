@@ -24,15 +24,42 @@ module hazardunit #(
 
 );
 always_comb
+begin
 //if executestage RS1 or 2 matches mem stage Rd --> forward from memstage
 // else if execute Rs1 or Rs2 matches strore stage Rd -->  forward from store stage
 //else do normal
 
 //FOR forward_alua_E_o 
-    if ( (rs1E_i== rdM_i) && reg_wrM_i && !(rs1E_i)) forward_alua_E_o=2'b10;
+    if ( (rs1E_i== rdM_i) && reg_wrM_i && !(rs1E_i)) forward_alua_E_o=2'b10;  //only forward if needing to re-use reg and its not junk
     else if ((rs1E_i == rdS_i) && read_dataM_i && !(rs1E_i)) forward_alua_E_o=2'b01;
     else forward_alua_E_o=2'b00;
 //FOR forward_alub_E_o 
     if ( (rs2E_i== rdM_i) && reg_wrM_i && !(rs2E_i)) forward_alub_E_o=2'b10;
     else if ((rs2E_i == rdS_i) && read_dataM_i && !(rs2E_i)) forward_alub_E_o=2'b01;
     else forward_alub_E_o=2'b00;
+
+//STALLING
+//either source reg in decode stage same as destination in executor stage AND instruction in execute load
+
+   if( ((rs1D_i==rdE_i) | (rs2D_i==rdE_i)) && result_srcE_i)
+        begin
+            flushFtoD_o=1'b1;
+            stallFtoD_o=1'b1;
+            flushDtoE_o=1'b1;
+            stalllPC_o=1'b1;
+
+        end
+    else
+        begin
+            flushFtoD_o=1'b0;
+            stallFtoD_o=1'b0;
+            flushDtoE_o=1'b0;
+            stalllPC_o=1'b0;
+        end
+
+
+
+
+
+end
+endmodule
