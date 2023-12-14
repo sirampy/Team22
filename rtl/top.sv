@@ -254,7 +254,7 @@ module top #(
         .mem_writeM_o (mem_writeM)
     );
 
-    main_memory main_mem (
+    data_memory data_mem (
         .clk_i (clk_i),
         .address_i (alu_resultM),
         .write_value_i (write_dataM),
@@ -262,6 +262,13 @@ module top #(
         .read_value_o (read_data)
     );
 
+    data_memory_cache data_memory_cache(
+        .mem_address_i(alu_resultM),
+        .data_in_i(write_dataM),
+        .write_en_cache_i(write_en_cache),
+        .clk_i(clk),
+        .dataout(read_data)
+    );
     // memory stage:
     logic [DATA_WIDTH-1:0] alu_resultW;
     logic [DATA_WIDTH-1:0] read_dataW;
@@ -271,6 +278,7 @@ module top #(
 
     logic       reg_writeW;
     logic [1:0] result_srcW;
+
 
     pipe_reg4 pipe_reg4 (
         .clk_i (clk_i),
