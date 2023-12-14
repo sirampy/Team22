@@ -21,8 +21,8 @@ int main(int argc, char **argv, char **env) {
 
   // initialize simulation inputs
   top->clk_i = 0;
-  top->address_i = 0;
-  top->write_value_i = 0;
+  top->address_i = 2880154460;
+  top->write_value_i = 12345;
   
   // run simulation for MAX_SIM_CYC clock cycles
   for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
@@ -35,6 +35,8 @@ int main(int argc, char **argv, char **env) {
     if(simcyc == 1){
       top->address_i = 2880154456; // load data 1 from addr 1 
       top->write_value_i = 12345;
+      top->write_enable_i = 1;
+
     }
     if(simcyc == 2){
       top->address_i = 2882190428; // load data 2 from addr 2
@@ -42,14 +44,16 @@ int main(int argc, char **argv, char **env) {
     }
     
     if(simcyc == 4){
-      top->address_i = 2880154467;
+      top->address_i = 2880154460;
       top->write_value_i = 1;
+      top->write_enable_i = 0;
+
       //top->write_value_i = 4;
       //hit -> data out 12345
     }
 
     if(simcyc == 5){
-      top->address_i = 2880154456;
+      top->address_i = 2883239260;
       top->write_value_i = 10000;
     }
     if(simcyc == 6){
