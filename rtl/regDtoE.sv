@@ -14,7 +14,7 @@ module regDtoE#(
     input logic               alu_srcD_i,     // [0] - Use register as ALU input, [1] - Use immediate value as ALU input
 
     //hazard inputs
-    input logic flush  //fliush reg
+    input logic flush_i  //fliush reg
 
 
     //reg inputs
@@ -49,7 +49,7 @@ module regDtoE#(
 );
 always_ff @(posedge clk_i)
     begin
-        if (flush) begin
+        if (flush_i) begin
             rd1E_o      <= {DATA_WIDTH{1'b0}};
             rd2E_o      <= {DATA_WIDTH{1'b0}};
             pcE_o       <= {ADDRESS_WIDTH{1'b0}};

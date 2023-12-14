@@ -29,6 +29,13 @@ logic                        result_src;    // [0] - Write ALU output to registe
 logic                        mem_write;     // Memory write enable
 logic [ 24 : 15 ]            instr24_15;    // Current instruction [ 24 : 15 ]
 logic [ 11 : 7 ]             instr11_7;     // Current instruction [ 11 : 7 ]
+logic                        pcstall;       //pc stall enable [1] for enable stall
+
+
+logic stallFtoD;
+logic flushDtoE;
+logic flushFtoD;
+
 
 assign rs1 = instr24_15 [ 19 : 15 ];
 assign rs2 = instr24_15 [ 24 : 20 ];
@@ -52,6 +59,107 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .eq_o            ( eq ),
     .alu_out_o       ( alu_out ),
     .rs2_val_o       ( mem_write_val )
+
+);
+regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
+    .clk_i           ( clk ),
+    .reg_wE_i(),
+    .result_srcE_i(),
+    .mem_wE_i(),
+    .alu_resultE_i(alu_out),
+    .data_wE_i(),
+    .rdE_i(),
+    .pc_plus4E_i(),
+    .reg_wM_o(),
+    .result_srcM_o(),
+    .mem_wM_o(),
+    .alu_resultM_o(),
+    .data_wM_o(),
+    .rdM_o(),
+    .pc_plus4M_o()
+);
+regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
+    .clk_i           ( clk ),
+    .reg_wD_i(),
+    .result_srcD_i(),
+    .mem_wD_i(),
+    .jumpD_i(),
+    .branchD_i(),
+    .alu_ctrlD_i(),
+    .alu_srcD_i(),
+    .flush_i(flushDtoE),
+    .rd1D_i(),
+    .rd2D_i(),
+    .rs1D_i(),
+    .rs2D_i(),
+    .pcD_i(),
+    .rdD_i(),
+    .ext_immD_i(),
+    .pc_plus4D_i(),
+    .reg_wE_o(),
+    .result_srcE_o(),
+    .mem_wrE_o(),
+    .jumpE_o(),
+    .branchE_o(),
+    .alu_ctrlE_o(),
+    .alu_srcE_o(),
+    .rd1E_o(),
+    .rd2E_o(),
+    .rs1E_o(),
+    .rs2E_o(),
+    .pcE_o(),
+    .rdE_o(),
+    .ext_immE_o(),
+    .pc_plus4E_o()
+
+);
+regFtoD #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_f_to_d(
+    .clk_i(clk),
+    .flush(flushFtoD),
+    .stall(stallFtoD),
+    .rd_i(),
+    .pcF_i(),
+    .pc_plus4F_i(),
+    .instrD_o(),
+    .pcD_o(),
+    .pc_plus4D_o()
+);
+regMtoS #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_m_to_s
+(
+.clk_i(clk),
+.reg_wM_i(),
+.result_srcM_i(),
+.alu_resultM_i(),
+.read_dataM_i(),
+.rdM_i(),
+.pc_plus4M_i(),
+.reg_wS_o(),
+.result_srcS_o(),
+.alu_resultS_o(),
+.read_dataS_o(),
+.rdS_o(),
+.pc_plus4S_o()
+
+);
+
+hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
+    .rs1E_i(),
+    .rs2E_i(),
+    .rdE_i(),
+    .rdM_i(),
+    .rdS_i(),
+    .reg_wrM_i(),
+    .reg_wS_i(),
+    .result_srcE_i(),
+    .rs1D_i(),
+    .rs2D_i(),
+    .pc_srcE_i(),
+    .forward_alua_E_o(),
+    .forward_alub_E_o(),
+    .flushFtoD_o(flushFtoD),
+    .stallFtoD_o(stallFtoD),
+    .flushDtoE_o(),
+    .stalllPC_o(pcstall)
 
 );
 
@@ -78,7 +186,7 @@ pc_reg pc_reg (
 
     .clk_i     ( clk ),
     .next_pc_i ( next_pc ),
-
+    .stall(pcstall),
     .pc_o      ( pc )
 
 );
