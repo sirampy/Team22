@@ -29,7 +29,7 @@ always_comb
                               instr31_7_i [ 30 : 21 ],
                               1'b0 };
         3'b100: imm_ext_o = { instr31_7_i [ 31 : 12 ],       // AUIPC and LUI
-                              { 12'b000000000010 } };
+                              { 12'h00 } };
         default: imm_ext_o = { IMM_WIDTH{ 1'b? } }; // Should never occur
     endcase
 

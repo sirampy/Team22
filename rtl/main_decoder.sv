@@ -49,15 +49,15 @@ always_comb
                     end
                     3'b100: begin // LBU
                         mem_type_o = 2'b01; 
-                        mem_sign_o = 1'b1;
+                        mem_sign_o = 1'b0;
                     end
                     3'b101: begin // LHU
                         mem_type_o = 2'b10; 
-                        mem_sign_o = 1'b1;
+                        mem_sign_o = 1'b0;
                     end
                     default: begin
                         mem_type_o = 2'b00; 
-                        mem_sign_o = 1'b1;
+                        mem_sign_o = 1'b0;
                     end
                 endcase
             end
@@ -73,6 +73,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b0100011: // S-type
             begin
@@ -92,6 +94,7 @@ always_comb
                     3'b001: assign mem_type_o = 2'b01; // SH
                     default: assign mem_type_o = 2'b00;
                 endcase
+                mem_sign_o = 1'b1;
             end
         7'b0010011: // I-type arithmetic
             begin
@@ -105,6 +108,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b1100011: // B-type
             begin
@@ -118,6 +123,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b1101111: // JAL
             begin
@@ -131,6 +138,8 @@ always_comb
                 jal = 1'b1;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b1;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b1100111: // JALR
             begin
@@ -144,6 +153,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b1;
                 Jstore_o = 1'b1;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b0010111: // AUIPC
             begin
@@ -157,6 +168,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         7'b0110111: // LUI
             begin
@@ -170,6 +183,8 @@ always_comb
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;
+                mem_type_o = 2'b00; 
+                mem_sign_o = 1'b1;
             end
         default: // Should never occur
             begin
