@@ -3,10 +3,14 @@ module data_memory_cache # (
     parameter DATA_WIDTH = 32
 ) (
     input logic                           clk_i,          // Clock
+    /* verilator lint_off UNUSED */
     input logic [ ADDRESS_WIDTH - 1 : 0 ] address_i,      // Target address
+    /* verilator lint_off UNUSED */
+
     input logic                           write_enable_i, // Write enable
     input logic [ DATA_WIDTH - 1 : 0 ]    write_value_i,   // Value to write
-    output logic [ DATA_WIDTH - 1 : 0]    read_value_o    // Value read at address
+    output logic [ DATA_WIDTH - 1 : 0]    read_value_o,    // Value read at address
+    output logic                          hit
 );
 
     logic [7:0] ram_array [32'h0001FFFF : 32'h00000000];
@@ -50,6 +54,7 @@ module data_memory_cache # (
             if (cache[cache_index].valid && cache[cache_index].tag == tag) begin
                 // Cache hit
                 read_value_o <= cache[cache_index].data;
+                hit <= 1'b1;
             end else begin
                 // Cache miss
                 logic [31:0] data;
@@ -58,6 +63,7 @@ module data_memory_cache # (
                         ram_array[{address_i[31:2], 2'b0}+2], 
                         ram_array[{address_i[31:2], 2'b0}+3]};
                 read_value_o <= data;
+                hit <= 1'b0;
 
                 // Update cache
                 cache[cache_index].valid <= 1;
