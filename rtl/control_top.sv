@@ -14,7 +14,7 @@ module control_top #(
     output logic                            reg_write_o,   // Register write enable
     output logic                            jalr_pc_src_o, // [0] - ?, [1] - ?
     output logic                            Jstore_o,
-    output logic [1:0]                      mem_type_o,
+    output logic                            mem_type_o,
     output logic                            mem_sign_o,      
 
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select

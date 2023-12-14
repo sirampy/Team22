@@ -1,0 +1,13 @@
+main:
+    addi    t1, zero, 0xff
+    addi    a0, zero, 0x0
+
+mloop:
+    addi    a1, zero, 0x0
+
+iloop:
+    lbu      a0, 0(a1)
+    addi    a1, a1, 1
+    bne     a1, t1, iloop
+    bne     t1, zero, mloop
+    

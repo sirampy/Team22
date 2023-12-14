@@ -20,7 +20,7 @@ logic [ 31 : 0 ]             memory_read;   // Value read from memory
 logic [ DATA_WIDTH - 1 : 0 ] alu_out;       // output of ALU
 logic [ DATA_WIDTH - 1 : 0 ] mem_write_val; // output of ALU
 logic                        Jstore;
-logic [ 1 : 0 ]              mem_type;
+logic                        mem_type;
 logic                        mem_sign;
 logic [ 31 : 0 ]             pc_plus4;
 logic                        reg_write;     // Register write enable
