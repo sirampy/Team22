@@ -21,7 +21,9 @@ logic [PC_WIDTH-1:0] pc_inced_w;
 
 
 // control signals
-pipeline_contron_t pipeline_control;
+pipeline_contron_t pipeline_control_f;
+pipeline_contron_t pipeline_control_d;
+pipeline_contron_t pipeline_control_e;
 
 logic [31:0] instr_f;
 logic [31:0] instr_d;
@@ -85,6 +87,10 @@ logic jump_e;
 logic [31:0] result_m;
 logic [31:0] wd3;
 
+// forwarding signals
+logic [1:0] forward_aE;
+logic [1:0] forward_bE;
+
 
 assign next_pc_f [PC_WIDTH-1:0] = jump_e ? result_e[PC_WIDTH-1:0] : pc_inced;
 
@@ -103,13 +109,13 @@ instr_mem instr_mem(
 
 pipe_fetch fetch_reg(
     .clk_i(clk_i),
-    .pipeline_control_i(pipeline_control),
+    .pipeline_control_i(pipeline_control_f),
     
-    .pc_incedd_i(pc_inced_f),
+    .pc_inced_i(pc_inced_f),
     .instr_i(instr_f),
 
-    .pc_incedd_o(pc_inced_d),
-    .instr__o(instr_d)
+    .pc_inced_o(pc_inced_d),
+    .instr_o(instr_d)
 );
 
 
@@ -162,7 +168,7 @@ assign alu_src_2_d = (src2 == RS2) ? reg_data_2_d : imm;
 
 pipe_decode decode_reg(
     .clk_i(clk_i),
-    .pipeline_control_i(pipeline_control),
+    .pipeline_control_i(pipeline_control_d),
 
     .alu_src_1_i(alu_src_1_d),
     .alu_src_2_i(alu_src_2_d),
@@ -170,7 +176,7 @@ pipe_decode decode_reg(
     .alu7_i(alu7_d),
 
     .funct3_i(funct3_d),
-    .pc_control_i(pc_control_d)
+    .pc_control_i(pc_control_d),
 
     .srcr_i(srcr_d),
     .pc_inced_i(pc_inced_d),
@@ -182,7 +188,7 @@ pipe_decode decode_reg(
     .reg_data_2_i(reg_data_2_d),
 
     .srcr_o(srcr_e),
-    .rd_o(ed_e)
+    .rd_o(rd_e),
     .reg_write_o(reg_write_e),
     .data_read_o(data_read_e),
     .data_write_o(data_write_e),
@@ -222,7 +228,7 @@ branch_tester branch_tester(
 
 pipe_excecute excecute_reg(
     .clk_i(clk_i),
-    .pipeline_control_i(pipeline_control),
+    .pipeline_control_i(pipeline_control_e),
 
     .alu_out_i(alu_out_e),
     .reag_data_2_i(reg_data_2_e),
@@ -253,7 +259,7 @@ pipe_excecute excecute_reg(
 
 data_mem data_mem(
    .a_i(alu_out_m[19:0]),
-   .wd_i(reg_data_2)_m,
+   .wd_i(reg_data_2_m),
 
    .wen_i(data_write_m),
    .load3_i(funct3_m),
@@ -266,13 +272,33 @@ assign wd3_m = (srcr == NEXT_PC) ? {16'b0, pc_inced} : result;
 
 pipe_mem mem_reg(
     .clk_i(clk_i),
-    .pipeline_control_i(pipeline_control),
+//    .pipeline_control_i(pipeline_control),
 
     .wd3_i(wd3_m),
     .reg_write_i(data_write_m),  
 
     .wd3_o(wd3_w),
     .reg_write_o(data_write_w),  
+);
+
+hazard_unit hazard(
+    .alu_src_1_i(alu_src_1_e),
+    .alu_src_2_i(alu_src_2_e),
+    .rd_e_i (rd_e),
+    .rd_m_i (rd_m),  
+    .rd_w_i (rd_w),
+    .reg_write_m_i (reg_write_m),
+    .reg_write_w_i (reg_write_e),
+    .result_src_e_i (srcr_e[0]),
+    .rs1_d_i (instr_d[19:15]),
+    .rs2_d_i (instr_d[24:20]),
+    .pc_src_e_i (pc_control_e),
+
+    .forward_aE_o (forward_aE),
+    .forward_bE_o (forward_bE),
+    .control_f (pipeline_control_f),
+    .control_d (pipeline_control_d),
+    .control_e (pipeline_control_e)
 );
 
 endmodule

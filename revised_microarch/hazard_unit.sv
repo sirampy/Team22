@@ -2,24 +2,24 @@
 module hazard_unit #(
     parameter ADDR_WIDTH = 5
 )(
-    input  logic [19:15]          rs1E_i,       // register 1 address (execute)
-    input  logic [24:20]          rs2E_i,       // resister 2 address (execute)
-    input  logic [ADDR_WIDTH-1:0] rdE_i,        // write register address (execute)
-    input  logic [ADDR_WIDTH-1:0] rdM_i,        // write register address (memory)
-    input  logic [ADDR_WIDTH-1:0] rdW_i,        // write register address (writeback)
-    input  logic                  reg_writeM_i, // write enable (m)
-    input  logic                  reg_writeW_i, // write enable (w)
-    input  logic                  result_srcE_i,
-    input  logic [19:15]          rs1D_i,       // to check for lw
-    input  logic [24:20]          rs2D_i,       // to check for lw
-    input  logic                  pc_srcE_i,    // to check for branch instructions
+    input  logic [19:15]          alu_src_1_i,       // register 1 address (execute)
+    input  logic [24:20]          alu_src_2_i,       // resister 2 address (execute)
+    input  logic [ADDR_WIDTH-1:0] rd_e_i,        // write register address (execute)
+    input  logic [ADDR_WIDTH-1:0] rd_m_i,        // write register address (memory)
+    input  logic [ADDR_WIDTH-1:0] rd_w_i,        // write register address (writeback)
+    input  logic                  reg_write_m_i, // write enable (m)
+    input  logic                  reg_write_w_i, // write enable (w)
+    input  logic                  result_src_e_i,
+    input  logic [19:15]          rs1_d_i,       // to check for lw
+    input  logic [24:20]          rs2_d_i,       // to check for lw
+    input  logic                  pc_src_e_i,    // to check for branch instructions
 
     output logic [1:0] forward_aE_o, // forward select for register 1 (execute)
     output logic [1:0] forward_bE_o, // forward select for register 2 (execute)
-    output logic       stallF_o,     // stall fetch register (ff0)
-    output logic       stallD_o,     // stall decode register (ff1)
-    output logic       flushD_o,     // clear decode register (ff1) - for control hazards
-    output logic       flushE_o     // clear execute register (ff2)
+
+    output pipeline_control       control_f,    // stall or flush fetch register 
+    output pipeline_control       control_d,    // stall or flush decode register 
+    output pipeline_control       control_e     // stall or flush execute register 
 );
 
     logic lw_stall;
@@ -38,11 +38,22 @@ module hazard_unit #(
         else forward_bE_o = 2'b00;
 
         // dealing with lw stalls
-        lw_stall = result_srcE_i & ((rs1D_i == rdE_i) | (rs2D_i == rdE_i));
-        stallF_o = lw_stall;
-        stallD_o = lw_stall;
-        flushD_o = pc_srcE_i;
-        flushE_o = lw_stall | pc_srcE_i;
+        lw_stall = result_srcE_i & ((rs1D_i == rdE_i) | (rs2D_i == rdE_i)); // identifies when there is an lw stall
+        if(lw_stall) begin
+            control_f = STALL;
+            control_d = STALL;
+            control_e = FLUSH;
+        end
+        else if(pc_srcE_i)  begin
+            control_f = CONTINUE;
+            control_d = FLUSH;
+            control_e = FLUSH;
+        end
+        else begin
+            control_f = CONTINUE;
+            control_d = CONTINUE;
+            control_e = CONTINUE;
+        end
     end
 
 endmodule

@@ -16,8 +16,8 @@ module pipe_fetch #(
 
 always_ff @(posedge clk_i)
     begin
-        case(pipeline_control_i):
-            CONTINUE:begin 
+        case(pipeline_control_i)
+            CONTINUE: begin 
                 instr_o <= instr_i;
                 pc_inced_o <= pc_inced_i;
             end
