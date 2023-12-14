@@ -162,11 +162,11 @@ always_comb
             begin
                 reg_write_o = 1'b1;
                 imm_src_o = 3'b100; 
-                alu_src_o = 1'b0; 
+                alu_src_o = 1'b1; 
                 mem_write_o = 1'b0;
                 result_src_o = 1'b0; 
                 branch = 1'b0;
-                alu_op_o = 2'b10; 
+                alu_op_o = 2'b11; 
                 jal = 1'b0;
                 jalr_pc_src_o = 1'b0;
                 Jstore_o = 1'b0;

@@ -20,7 +20,7 @@ module data_memory #(
 
     initial begin
         $display("Loading ram.");
-        $readmemh("datamem.mem", ram_array, 17'h10000);
+        $readmemh("./rom_bin/data.mem", ram_array, 17'h10000);
         $display("Ram successfully loaded.");
     end;
 

@@ -44,6 +44,7 @@ always_comb
         
                 default: alu_control_o = 4'b0000;
             endcase
+        2'b11: alu_control_o = 4'b1010;
         default: alu_control_o = 4'b0000;
     endcase
 

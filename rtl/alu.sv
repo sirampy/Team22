@@ -28,6 +28,7 @@ always_comb
         4'b0111: out_o = op1_i >>> op2_i; // SRA
         4'b1000: out_o={ { DATA_WIDTH - 1 { 1'b0 } },(op1_i < op2_i)}; // SLTU
         4'b1001: out_o = op1_i ^ op2_i; // XOR
+        4'b1010: out_o = op2_i; //load upper immediate
         default: out_o = { DATA_WIDTH { 1'b0 } };
     endcase
 
