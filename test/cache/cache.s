@@ -1,0 +1,3 @@
+ADDI	s0, 5
+ADDI	s1, 0
+BEQ 	s0, 28 

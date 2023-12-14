@@ -23,6 +23,7 @@ module pipe_reg2 #(
     input logic       branchD_i,
     input logic [3:0] alu_ctrlD_i,
     input logic       alu_srcD_i,
+    input logic       cache_weD_i,
 
     // main outputs
     output logic [DATA_WIDTH-1:0]    rd1E_o,    // read register 1 values (execute)
@@ -41,7 +42,8 @@ module pipe_reg2 #(
     output logic       jumpE_o,
     output logic       branchE_o,
     output logic [3:0] alu_ctrlE_o,
-    output logic       alu_srcE_o
+    output logic       alu_srcE_o,
+    output logic       cache_weE_o
 );
 
 always_ff @(posedge clk_i)
@@ -60,6 +62,7 @@ always_ff @(posedge clk_i)
             branchE_o     <= 1'b0;
             alu_ctrlE_o   <= 4'b0000;
             alu_srcE_o    <= 1'b0;
+            cache_weE_o   <= 1'b0;
         end
         else begin
             rd1E_o      <= rd1D_i;
@@ -77,6 +80,7 @@ always_ff @(posedge clk_i)
             branchE_o     <= branchD_i;
             alu_ctrlE_o   <= alu_ctrlD_i;
             alu_srcE_o    <= alu_srcD_i;
+            cache_weE_o   <= cache_weD_i;
         end
     end
 

@@ -14,6 +14,7 @@ module pipe_reg3 #(
     input logic       reg_writeE_i,
     input logic [1:0] result_srcE_i,
     input logic       mem_writeE_i,
+    input logic       cache_weE_i,
 
     // main outputs
     output logic [DATA_WIDTH-1:0]    alu_resultM_o, // alu output (memory)
@@ -24,6 +25,7 @@ module pipe_reg3 #(
     // control unit outputs
     output logic       reg_writeM_o,
     output logic [1:0] result_srcM_o,
+    output logic       cache_weM_o,
     output logic       mem_writeM_o
 );
 
@@ -36,6 +38,7 @@ always_ff @(posedge clk_i)
         reg_writeM_o  <= reg_writeE_i;
         result_srcM_o <= result_srcE_i;
         mem_writeM_o  <= mem_writeE_i;
+        cache_weM_o   <= cache_weE_i;
     end
 
 endmodule

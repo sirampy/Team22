@@ -14,9 +14,9 @@ int main(int argc, char **argv, char **env) {
     tfp->open("data_memory_cache.vcd");
 
     top->clk_i = 0;
-    top->address_i = 0x12345678; // Example address
-    top->write_value_i = 0xABCD; // Example data
-    top->write_enable_i = 1;     // Enable write operation
+    top->mem_address_i = 0x12345678; // Example address
+    top->data_in_i = 0xABCD; // Example data
+    top->write_en_cache_i = 1;     // Enable write operation
 
     // Run simulation for a few cycles
     for (int simcyc = 0; simcyc < MAX_SIM_CYC; simcyc++) {
@@ -26,14 +26,14 @@ int main(int argc, char **argv, char **env) {
 
         if (simcyc == 1) {
             // Disable write operation after first cycle
-            top->write_enable_i = 0;
+            top->write_en_cache_i = 0;
         }
 
         if (simcyc == 2) {
             // Read from the same address
             // Expect: Cache hit and data 0xABCD should be read
-            if (top->read_value_o != 0xABCD) {
-                std::cerr << "Mismatch at cycle " << simcyc << ": expected 0xABCD, got " << std::hex << top->read_value_o << std::endl;
+            if (top->data_out_o != 0xABCD) {
+                std::cerr << "Mismatch at cycle " << simcyc << ": expected 0xABCD, got " << std::hex << top->data_out_o << std::endl;
                 exit(1);
             }
         }

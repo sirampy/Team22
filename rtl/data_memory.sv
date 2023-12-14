@@ -13,12 +13,14 @@ module data_memory # (
 
 );
 
-    logic [7:0] ram_array [32'h0001FFFF : 32'h00000000]
+    logic [7:0] ram_array [32'h0001FFFF : 32'h00000000];
+
     initial begin 
-            $display  ("Loading ram.");
-            $readmemh("", ram_array);
-            $display ("ram loaded fully");
-        end;
+        $display  ("Loading ram.");
+        $readmemh("data.mem", ram_array);
+        $display ("ram loaded fully");
+    end
+
     assign read_value_o = {ram_array[{address_i[31:2], 2'b0}], 
                             ram_array[{address_i[31:2], 2'b0}+1], 
                             ram_array[{address_i[31:2], 2'b0}+2], 

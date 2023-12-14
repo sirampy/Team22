@@ -163,6 +163,7 @@ module top #(
         .branchD_i (branch),
         .alu_ctrlD_i (alu_ctrl),
         .alu_srcD_i (alu_src),
+        .cache_weD_i (write_en_cache),
 
         // main outputs
         .rd1E_o (rd1E),
@@ -181,7 +182,8 @@ module top #(
         .jumpE_o (jumpE),
         .branchE_o (branchE),
         .alu_ctrlE_o (alu_ctrlE),
-        .alu_srcE_o (alu_srcE)
+        .alu_srcE_o (alu_srcE),
+        .cache_weE_o (cache_weE)
     );
 
     logic [DATA_WIDTH-1:0] alu_op2_a; // to use for alu_op2 mux
@@ -229,6 +231,8 @@ module top #(
     logic [1:0] result_srcM;
     logic       mem_writeM;
 
+    logic [DATA_WIDTH-1:0] data_mem_out;
+
     pipe_reg3 pipe_reg3 (
         // main input
         .clk_i(clk_i),
@@ -241,6 +245,7 @@ module top #(
         .reg_writeE_i (reg_writeE),
         .result_srcE_i (result_srcE),
         .mem_writeE_i (mem_writeE),
+        .cache_weE_i (cache_weE),
 
         // main output
         .alu_resultM_o (alu_resultM),
@@ -251,7 +256,8 @@ module top #(
         // control output
         .reg_writeM_o (reg_writeM),
         .result_srcM_o (result_srcM),
-        .mem_writeM_o (mem_writeM)
+        .mem_writeM_o (mem_writeM),
+        .cache_weM_o (cache_weM)
     );
 
     data_memory data_mem (
@@ -259,14 +265,14 @@ module top #(
         .address_i (alu_resultM),
         .write_value_i (write_dataM),
         .write_enable_i (mem_writeM),
-        .read_value_o (read_data)
+        .read_value_o (data_mem_out),
     );
 
     data_memory_cache data_memory_cache(
         .mem_address_i(alu_resultM),
-        .data_in_i(write_dataM),
-        .write_en_cache_i(write_en_cache),
-        .clk_i(clk),
+        .data_in_i(data_mem_out),
+        .write_en_cache_i(cache_weM),
+        .clk_i(clk_i),
         .dataout(read_data)
     );
     // memory stage:
