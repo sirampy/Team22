@@ -1,71 +1,47 @@
 #include "verilated.h"
 #include "verilated_vcd_c.h"
 #include "Vdata_memory_cache.h"
+#include <iostream>
 
-#define MAX_SIM_CYC 100000
+#define MAX_SIM_CYC 100
 
 int main(int argc, char **argv, char **env) {
-  int simcyc;     // simulation clock count
-  int tick;       // each clk cycle has two ticks for two edges
-  int lights = 0; // state to toggle LED lights
+    Verilated::commandArgs(argc, argv);
+    Vdata_memory_cache* top = new Vdata_memory_cache;
+    Verilated::traceEverOn(true);
+    VerilatedVcdC* tfp = new VerilatedVcdC;
+    top->trace(tfp, 99);
+    tfp->open("data_memory_cache.vcd");
 
-  Verilated::commandArgs(argc, argv);
-  // init top verilog instance
-  Vdata_memory_cache* top = new Vdata_memory_cache;
-  // init trace dump
-  Verilated::traceEverOn(true);
-  VerilatedVcdC* tfp = new VerilatedVcdC;
-  top->trace (tfp, 99);
-  tfp->open ("data_memory_cache.vcd");
- 
+    top->clk_i = 0;
+    top->address_i = 0x12345678; // Example address
+    top->write_value_i = 0xABCD; // Example data
+    top->write_enable_i = 1;     // Enable write operation
 
-  // initialize simulation inputs
-  top->clk_i = 0;
-  top->address_i = 2880154460;
-  top->write_value_i = 12345;
-  
-  // run simulation for MAX_SIM_CYC clock cycles
-  for (simcyc=0; simcyc<MAX_SIM_CYC; simcyc++) {
-    // dump variables into VCD file and toggle clock
-    for (tick=0; tick<2; tick++) {
-      tfp->dump (2*simcyc+tick);
-      top->clk_i = !top->clk_i;
-      top->eval ();
-    }
-    if(simcyc == 1){
-      top->address_i = 2880154456; // load data 1 from addr 1 
-      top->write_value_i = 12345;
-      top->write_enable_i = 1;
+    // Run simulation for a few cycles
+    for (int simcyc = 0; simcyc < MAX_SIM_CYC; simcyc++) {
+        tfp->dump(simcyc);
+        top->clk_i = !top->clk_i;
+        top->eval();
 
-    }
-    if(simcyc == 2){
-      top->address_i = 2882190428; // load data 2 from addr 2
-      top->write_value_i = 67890;
-    }
-    
-    if(simcyc == 4){
-      top->address_i = 2880154460;
-      top->write_value_i = 1;
-      top->write_enable_i = 0;
+        if (simcyc == 1) {
+            // Disable write operation after first cycle
+            top->write_enable_i = 0;
+        }
 
-      //top->write_value_i = 4;
-      //hit -> data out 12345
+        if (simcyc == 2) {
+            // Read from the same address
+            // Expect: Cache hit and data 0xABCD should be read
+            if (top->read_value_o != 0xABCD) {
+                std::cerr << "Mismatch at cycle " << simcyc << ": expected 0xABCD, got " << std::hex << top->read_value_o << std::endl;
+                exit(1);
+            }
+        }
+
+        if (Verilated::gotFinish()) exit(0);
     }
 
-    if(simcyc == 5){
-      top->address_i = 2883239260;
-      top->write_value_i = 10000;
-    }
-    if(simcyc == 6){
-      top->address_i = 2883239260;
-      top->write_value_i = 10001;
-      top->write_enable_i = 1;
-    }
-
-
-    if (Verilated::gotFinish())  exit(0);
-  }
-
-  tfp->close(); 
-  exit(0);
+    tfp->close();
+    delete top;
+    exit(0);
 }

@@ -9,7 +9,8 @@ module main_decoder (
     output logic           reg_write_o,  // Register write enable
     output logic [ 1 : 0 ] alu_op_o,     // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
     output logic           jalr_pc_src_o,// [1] Write JALR register to PC, [0] Otherwise
-    output logic           branch_o      // [1] - Branch, [0] Otherwise
+    output logic           branch_o,      // [1] - Branch, [0] Otherwise
+    output logic           write_en_cache
 
 );
 
@@ -25,6 +26,7 @@ always_comb
                 branch_o = 1'b0;
                 alu_op_o = 2'b00;
                 jalr_pc_src_o = 1'b0;
+                write_en_cache = 1'b1
             end
         7'b0110011: // R-type
             begin

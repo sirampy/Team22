@@ -66,6 +66,7 @@ module top #(
     logic       branchE;
     logic [3:0] alu_ctrlE;
     logic       alu_srcE;
+    logic       write_en_cache;
 
 
     // program counter
@@ -122,7 +123,8 @@ module top #(
         .reg_write_o   (reg_write),
         .jalr_pc_src_o (jump),
         .branch_o      (branch),
-        .alu_op_o      (alu_op)
+        .alu_op_o      (alu_op),
+        .write_en_cache (write_en_cache)
     );
 
     alu_decoder alu_decoder (

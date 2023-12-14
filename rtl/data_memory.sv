@@ -25,7 +25,7 @@ module data_memory # (
                             ram_array[{address_i[31:2], 2'b0}+3]};
 
     always_ff @(posedge clk_i) begin
-            if (write_en_i) begin
+            if (write_enable_i) begin
                 ram_array[{address_i[31:2], 2'b0}]   <= write_data_i[31:24];      
                 ram_array[{address_i[31:2], 2'b0}+1] <= write_data_i[23:16];
                 ram_array[{address_i[31:2], 2'b0}+2] <= write_data_i[15:8];
