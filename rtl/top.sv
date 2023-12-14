@@ -111,7 +111,6 @@ data_memory data_mem (
     .mem_sign_i     ( mem_sign ),
 
     .read_value_o   ( memory_read )
-
 );
 
 endmodule
