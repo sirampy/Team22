@@ -79,16 +79,6 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
 
 );
 
-pc_reg pc_reg (
-
-    .clk_i     ( clk ),
-    .next_pc_i ( next_pc ),
-    .rst (rst),
-
-    .pc_o      ( pc )
-
-);
-
 pc_mux pc_mux (
 
     .pc_i          ( pc ),
@@ -102,6 +92,15 @@ pc_mux pc_mux (
 
 );
 
+pc_reg pc_reg (
+
+    .clk_i     ( clk ),
+    .next_pc_i ( next_pc ),
+    .rst (rst),
+
+    .pc_o      ( pc )
+
+);
 
 data_memory data_mem (
 
