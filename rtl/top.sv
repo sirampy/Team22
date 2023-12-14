@@ -5,7 +5,8 @@ module top #(
 
 ) (
 
-    input logic clk
+    input logic clk,
+    input logic rst
 );
     
 logic [ ADDR_WIDTH - 1 : 0 ] rs1;           // ALU registers read address 1
@@ -82,6 +83,7 @@ pc_reg pc_reg (
 
     .clk_i     ( clk ),
     .next_pc_i ( next_pc ),
+    .rst (rst),
 
     .pc_o      ( pc )
 
