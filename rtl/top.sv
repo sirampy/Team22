@@ -203,9 +203,9 @@ always_comb
 always_comb
     case ( l_s_sel_val )
     L_S_BYTE:
-        mem_wr_val = { 24'h000000, reg_val_2 [ 7 : 0 ] };
+        mem_wr_val = { mem_rd_val [ 31 : 8 ], reg_val_2 [ 7 : 0 ] };
     L_S_HALF:
-        mem_wr_val = { 16'h0000, reg_val_2 [ 15 : 0 ] };
+        mem_wr_val = { mem_rd_val [ 31 : 16 ], reg_val_2 [ 15 : 0 ] };
     L_S_WORD:
         mem_wr_val = reg_val_2;
     default: mem_wr_val = 0;
