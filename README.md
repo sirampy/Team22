@@ -1,85 +1,96 @@
+[diagram]: images/main_diagram.png "Main diagram"
+[waves]: images/waves.png "Waveforms"
 
-# RISC-V simple single-cycle implementation:
-
-  
+# RISC-V simple pipelined implementation:
 
 ## What is this?
 
-  
+This is a pipelined implementation of a RISC-V CPU according to the instructions provided in lectures. All instructions shown in lectures have been implemented (see lecture 6 for full tables). This comes with a testbench which tests every available instruction, and we can verify that it produces the desired outputs if we compare against our simple single-cycle implementation:
 
-This is a single cycle implementation of a RISC-V CPU according to the instructions provided in lectures. All instructions shown in lectures have been implemented (see lecture 6 for full tables). This comes with a testbench which tests every available instruction, and produces an expected waveform (IMAGE????), which can then be used to compare against our other branches to verify they work.
+![alt text][waves]
 
-The full test code is in `rtl/top_tb.cpp`, where the comments show every assembled instruction and explain the intended result of that instruction. These are in `rtl/test.mem`, and corresponding main memory values for testing L and S instructions are in `rtl/test2.mem`. Keep in mind, to test, **you need to use the big endian instruction memory code, see **`rtl/instr_mem.sv`** for more details!**
+**For more information about running, see the simple single-cycle implementation, as the steps are the same.**
 
-**To run: make sure your terminal is in the **`Team22`** directory, then type:**
-`./run.sh rtl top`
-**You will be prompted to press enter twice, and, after doing so, you should see the waveform.**
+## Alterations to single-cycle design
 
-## Alterations to design provided in lectures
+The priority with this design was to implement fetch, decode, execute, memory and write-back stages while minimising stalls and fully removing hazards:
 
-This design was made to be as simple and minimal as possible, and this is the final design: (IMAGE???)
+![alt text][diagram]
 
-The goal was to remove redundant wires, decoders and modules from the design provided in lectures.
+Data hazards are removed using fast-forward paths from each of the stages, and control hazards are removed using stalls.
 
-### ALU Decoder
+### Data hazards
 
-An easy place to start was the ALU decoder (IMAGE???):
+In our CPU, this only occurs when:
 
-The main purpose of the ALU decoder was to translate `funct7` and `funct3` into an `ALUControl` signal, however they were both the same, just assigning different 4-bit values to ALU operations. Therefore, we can remove it completely, and just pass the instruction bits into the ALU.
+- An instruction involves writing to a register,
+- This instruction's output value doesn't yet reach and finish the write-back stage, hence is not written to a register,
+- Another instruction uses this register's value as an operand, hence causing an out-of-date value to be read from the register.
 
-### Decoder Outputs
+We solved this problem with fast-forward paths from every cycle. While data is passed around synchronously between the different stages, all the outputs are asynchronously passed to the decode stage.
 
-The outputs of the main (and now only) decoder have been updated to reflect the new design, and these changes are discussed below. In the end, we decided that all we need is:
+In practice this works as follows:
 
-- A program counter write source select;
-- A register write source select, and write enable;
-- An ALU operand select (as discussed later, there is a select for operand 1 and operand 2);
-- Memory write enable;
-- Immediate value;
+- An instruction is called which modifies register `X`.
+- (Potentially other instructions are executed here),
+- An instruction is executed which uses register `X` as an operand,
+- We check if the execute stage* has an updated value for register `X` (which would be as recent as a value could be). If it does, we use it.
+- If not, we check if the memory stage* has an updated value for register `X` (which would be the most recent possible value given the execute stage doesn't have a more recent one, which we know it doesn't). If it does, we use it.
+- If not, we check the write-back stage, in the same way we did the other stages previously.
+- If none of the stages have a more recent value for register `X`, we know we can safely assume the value of register `X` is the most recently set.
 
-#### Program Counter Write
+*(With a minor exception, see **L error** below)
 
-As we were adding more instructions, we realised that we need a multiplexer into the program counter. As in the previous design, it can increment by 4 (a single instruction) and an immediate value (for branching and JAL).
+With this method, we do not need to stall if we detect a data hazard, as we can always access the most recent value of the register, hence not requiring any further modifications to the design.
 
-However, `JALR` does not work elegantly with this, as it requires adding an immediate value to a register. We noticed its similar format to `ADDI` (`funct3 = 000`) and that the ALU output would be the desired program counter value. To prevent adding redundant addition hardware, we therefore added the ALU output as another program counter write source, and use it for `JALR` (this is discussed more below).
+#### L error
 
-#### Register Write Select
+Conceptually, the fast-forward must say which address they have a value for, and the updated value. However, when we call an L-type instruction, a problem arises.
 
-When writing the value to a register, our previous design already had the potential sources of the ALU output and memory read.
+If we want to load memory location `Z` into register `X`, we spend the execute stage performing addition to get `Z`, as it involves performing an equivalent operation to `ADDI`.
 
-However, we needed to add 2 more:
+This means that we will have a fast-forward output from the execute stage claiming that the most recent value of register `X` is the memory address `Z`, which is obviously wrong, it should be the value read at memory address `Z`. However, we only obtain this value in the memory stage, which happens next.
 
-- Immediate value: `LUI` requires us to write the immediate value to a register without performing any arithmetic. Another considered option to implement this was to add the immediate value to the zero register and storing the ALU output. However, `funct3` could be any value (as it is in the immediate) and this would be the only instruction requiring the ALU operator to not be `funct3`, resulting in an inelegant solution. It is much easier to just pass the immediate value directly to the register.
-- Incremented program counter:` JAL` and `JALR` write the incremented program counter to a register. While we could do something similar to what we previously mentioned with `JALR`, and use the ALU, it isn't practical as `funct3` is again an immediate value. Also, `JALR` is already using the ALU, and cannot use it to also increment the program counter. It is much easier to just pass the incremented program counter value to the register.
+This therefore means that we must stall the CPU for one cycle if:
 
-#### ALU Operand Selects
+- The previously loaded instruction loaded a value into register `X`;
+- The current instruction uses register `X` as an operand;
 
-Operand 2 remains unchanged, with its possible inputs being the register (`rs2`) or the immediate value.
+In this instance, we do not perform the current instruction for 1 cycle, so we can wait until the load is complete.
 
-However, we modified operand 1. Instead of just accepting a register value (`rs1`), it can also accept the program counter. This is because, as mentioned previously, we want to use the ALU hardware to perform the addition for the `JALR` instruction. This lets us pass the program counter and immediate value into the ALU, and provides an elegant implementation for `JALR`.
+### Control hazards
 
-#### Immediate Value
+These arise when an instruction involves changing the program counter in a way which doesn't just involve the usual increment by 4. These are:
 
-The immediate value depends entirely on the instruction. Therefore,  we moved it to the `decoder` module from a stand-alone `sign-extend` module.
+- B-type instructions,
+- `JAL`,
+- `JALR`
 
-### Branching
+We consider each of these separately:
 
-We noticed that the branching conditions are very similar to existing ALU instructions, and they come in 3 pairs:
+#### B-type
 
-- `BEQ` has the opposite condition to `BNE`, and would require `SUB`,
-- `BLT` has the opposite condition to `BGE`, and would require `SLT`,
-- `BLTU` has the opposite condition to `BGEU`, and would require `SLTU`
+Because we are using the ALU and zero flag to determine whether or not a jump has been successful, we have to stall until at least that operation is performed, which would involve stalling for 2 cycles. We can make this only 1 cycle if we use our asynchronous fast-forward output which we created for data hazards.
 
-These pairs have the same `funct3[2:1]` but different `funct3[0]`. In fact, `funct3[2:1]` for these branches is the same as `funct[1:0]` for the corresponding ALU instructions.
+#### JAL
 
-We also noticed that if we use our previously implemented zero flag (high when ALU output is zero, low otherwise), we see the following:
+The decoder immediately knows the desired offset for the program counter, and we do not need to write to the program counter and register file simultaneously. Therefore, we decided that the easiest solution is to make a fast-forward output from the decoder to the program counter, which means we do not need to stall. The register write can continue as usual.
 
-- `BEQ`: if `op1 == op2` we get `Z = 1`, otherwise we get `Z = 0`,
-- `BLT`/`BLTU`: if `op1 < op2` we get `Z = 0`, otherwise we get `Z = 1`
+#### JALR
 
-And `funct3[2] = 0` for BEQ and BNE, but `1` for the other instructions.
+We need to wait for the ALU to perform the equivalent of an `ADDI` instruction, to get the target value for the program counter. Therefore, this works similarly to the B-type instructions, only without the need for the zero flag, requiring only 1 stall cycle.
 
-This gives us our final branching algorithm:
+### Decoder changes
 
-- Pass the instruction to the ALU like a normal R-type instruction with `funct3` shifted logically left by 1 bit,
-- `PERFORM_BRANCH = Z ^ funct3[2] ^ funct3[0]` (given, of course, that the current instruction is a B-type instruction)
+We had to do some minor alterations to the decoder to account for the different stages.
+
+- The decoder no longer evaluates whether a branch has or hasn't occurred, that is now in the fetch stage. This means we need to output `funct3[0]` along with the operator to the execute stage so it can be passed back into the decode stage;
+- The decoder no longer selects a register write source, as that would involve adding buffers for each of those sources, and complicates the fast-forward values. Instead, we added a flag to the execute stage which determines whether to pass on the ALU output, or an alternate value passed in from the decode stage (to which no arithmetic is performed). What would have previously been the register write source is now an ALU alternate input select;
+- There is now a memory read enable. Memory is still read every time a value is input into the memory stage, the enable just toggles whether we pass out the ALU output or the just read memory value to the next stage;
+- We now output a stall, which is used internally within the decode stage. This passes a null instruction into the pipeline (we write to register 0 with `write enable = 0`, and we have it hard-coded so we ignore fast-forward values for register 0);
+- Similarly, we have to detect L errors, and force a stall if we detect one.
+- Instead of outputting a select for what to write to the program counter, it now outputs a stall state. This can be any of:
+	- Stall for 1 cycle and continue as usual (for L errors),
+	- Stall for 1 cycle then do branch condition (for B-type instructions),
+	- Use immediate value without stalling (for JAL),
+	- Stall for 1 cycle then use ALU output (for JALR)

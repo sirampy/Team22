@@ -116,9 +116,9 @@ always_comb
 
 always_comb
     if ( was_l == 1 )
-        if ( ( alu_opnd_1_sel_val == ALU_OPND_1_REG ) && ( reg_wr_addr == reg_rd_addr_1 ) && ( reg_wr_en == 1 ) )
+        if ( ( alu_opnd_1_sel_val == ALU_OPND_1_REG ) && ( o_reg_wr_addr == reg_rd_addr_1 ) && ( reg_wr_en == 1 ) )
             l_error = 1;
-        else if ( ( alu_opnd_2_sel_val == ALU_OPND_2_REG ) && ( reg_wr_addr == reg_rd_addr_2 ) && ( reg_wr_en == 1 ) )
+        else if ( ( alu_opnd_2_sel_val == ALU_OPND_2_REG ) && ( o_reg_wr_addr == reg_rd_addr_2 ) && ( reg_wr_en == 1 ) )
             l_error = 1;
         else
             l_error = 0;
