@@ -10,6 +10,7 @@ main:
     # loop until s1 not equal 0 - ie vbdflag pressed
     #TRIGGER REMOVED FOR TESTING
     JAL ra, lights_loop
+    JAL ra, turn_off
     BEQ zero,zero,init
     
 lights_loop:
@@ -17,7 +18,6 @@ lights_loop:
     SLLI a5, a5, 1                # shifts t0 left
     ADDI a5, a5, 1                # adds 1 to t0
     BNE  a5, a2, lights_loop      # loops until all lights are on
-    JAL ra, turn_off
     RET
 
 lightdelay:

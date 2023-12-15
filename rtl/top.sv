@@ -16,14 +16,17 @@ logic [ 31 : 0 ]             pc;            // Current PC value
 logic [ 31 : 0 ]             next_pc;       // Write value for PC
 logic                        jalr_pc_src;   // [1] Write JALR register to PC, [0] Otherwise
 logic [ 31 : 0 ]             memory_read;   // Value read from memory
+logic [ 31 : 0 ]             memory_readS;  //^^ from M to s pipline
 logic [ DATA_WIDTH - 1 : 0 ] alu_out;       // output of ALU
 logic [ DATA_WIDTH - 1 : 0 ] mem_write_val; // output of ALU
 logic                        Jstore;
 logic [ 31 : 0 ]             pc_plus4;
-logic                        reg_write;     // Register write enable
+//logic                        reg_write;     // Register write enable
 logic                        eq;            // Equal/zero flag
 logic                        alu_src;       // [0] - Use rs2 as ALU input, [1] - Use imm_op as ALU input
+logic                        alu_srcE;      //^^ after pip regester D to E
 logic [ 3 : 0 ]              alu_ctrl;      // ALU operation select
+logic [ 3 : 0]               alu_ctrlE      //^^ after pip regester D to E
 logic [ DATA_WIDTH - 1 : 0 ] imm_op;        // Immediate value
 logic                        result_src;    // [0] - Write ALU output to register, [1] - Write memory value to register
 logic                        mem_write;     // Memory write enable
@@ -60,6 +63,24 @@ logic [ 1 : 0 ] result_srcS;
 logic stallFtoD;
 logic flushDtoE;
 logic flushFtoD;
+logic regwriteE;
+logic regwriteD;
+logic [ 1 : 0] result_srcE;
+logic [ 1 : 0] result_srcM;
+logic [ 1 : 0] result_srcS;
+logic [ 1 : 0] result_srcD;
+logic mem_wD;
+logic mem_wE;
+logic mem_wM;
+logic jumpD;
+logic jumpE;
+logic [ 31 : 0 ] pcD;
+logic [ 31 : 0 ] pcE;
+logic [ 31 : 0 ] pc_plus4D;
+logic [ 31 : 0 ] pc_plus4E;
+logic [ DATA_WIDTH - 1 : 0 ] alu_resultM;
+
+
 
 
 assign rs1 = instr24_15 [ 19 : 15 ];
@@ -78,7 +99,7 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .imm_op_i        ( imm_op ),
     .alu_src_i       ( alu_src ),
     .mem_read_val_i  ( memory_read ),
-    .alu_ctrl_i      ( alu_ctrl ),
+    .alu_ctrl_i      ( alu_ctrlE ),
     .Jstore_i        ( Jstore ),
     .pc_plus4_i      ( pc_plus4 ),
 
@@ -87,24 +108,28 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .rs2_val_o       ( mem_write_val )
 
 );
-
-regFtoD #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_f_to_d(
-    .clk_i(clk),
-    .flush(flushFtoD),
-    .stall(stallFtoD),
-    .rd_i(),
-    .pcF_i(),
-    .pc_plus4F_i(),
-    .instrD_o(),
-    .pcD_o(),
-    .pc_plus4D_o()
+regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
+    .clk_i           ( clk ),
+    .reg_wE_i(regwriteE),
+    .result_srcE_i(result_srcE),
+    .mem_wE_i(mem_wE),
+    .alu_resultE_i(alu_out),
+    .data_wE_i(),
+    .rdE_i(),
+    .pc_plus4E_i(pc_plus4E),
+    .reg_wM_o(),
+    .result_srcM_o(result_srcM),
+    .mem_wM_o(mem_wM),
+    .alu_resultM_o(alu_resultM),
+    .data_wM_o(),
+    .rdM_o(),
+    .pc_plus4M_o(pc_plus4M)
 );
-
 regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .clk_i           ( clk ),
-    .reg_wD_i(reg_write),
-    .result_srcD_i(result_src),
-    .mem_wD_i(mem_write),
+    .reg_wD_i(regwriteD),
+    .result_srcD_i(result_srcD),
+    .mem_wD_i(mem_wD),
     .jumpD_i(),
     .branchD_i(),
     .alu_ctrlD_i(alu_ctrl),
@@ -112,27 +137,52 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .flush_i(flushDtoE),
     .rd1D_i(),
     .rd2D_i(),
-    .rs1D_i(rs1),
-    .rs2D_i(rs2),
-    .pcD_i(),
-    .rdD_i(rd),
+    .rs1D_i(),
+    .rs2D_i(),
+    .pcD_i(pcD),
+    .rdD_i(),
     .ext_immD_i(),
-    .pc_plus4D_i(),
-    .reg_wE_o(reg_writeE),
+    .pc_plus4D_i(pc_plus4D),
+    .reg_wE_o(regwriteE),
     .result_srcE_o(result_srcE),
-    .mem_wrE_o(mem_writeE),
-    .jumpE_o(jumpE),
-    .branchE_o(branchE),
+    .mem_wrE_o(mem_wE),
+    .jumpE_o(),
+    .branchE_o(),
     .alu_ctrlE_o(alu_ctrlE),
     .alu_srcE_o(alu_srcE),
     .rd1E_o(),
     .rd2E_o(),
-    .rs1E_o(rs1E),
-    .rs2E_o(rs2E),
-    .pcE_o(),
-    .rdE_o(rdE),
+    .rs1E_o(),
+    .rs2E_o(),
+    .pcE_o(pcE),
+    .rdE_o(),
     .ext_immE_o(),
-    .pc_plus4E_o()
+    .pc_plus4E_o(pc_plus4E)
+
+);
+
+regMtoS #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_m_to_s
+(
+.clk_i(clk),
+.reg_wM_i(),
+.result_srcM_i(result_srcM),
+.alu_resultM_i(alu_resultM),
+.read_dataM_i(memory_read),
+.rdM_i(),
+.pc_plus4M_i(pc_plus4M),
+.reg_wS_o(),
+.result_srcS_o(result_srcS),
+.alu_resultS_o(alu_resultS),
+.read_dataS_o(memory_readS),
+.rdS_o(),
+.pc_plus4S_o(pc_plus4S)
+
+);
+3inputmulplx MtS_multiplexer(
+    .select(result_srcS),
+    .choice00(alu_resultS),
+    .choice01(memory_readS),
+    .choice10(pc_plus4S)
 
 );
 
@@ -196,13 +246,17 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
 
     .pc_i          ( pc ),
     .eq_i          ( eq ),
-
+    .clk           (clk),
+    .flushFtoD(stallFtoD),
+    .stallFtoD(stallFtoD),
+    .pcD_o(pcD),
+    .pc_plus4D_o(pc_plus4D),
     .Jstore_o      ( Jstore ),
     .pc_src_o      ( pc_src ),
-    .result_src_o  ( result_src ),
-    .mem_write_o   ( mem_write ),
+    .result_src_o  ( result_srcD ),
+    .mem_write_o   ( mem_wD ),
     .alu_src_o     ( alu_src ),
-    .reg_write_o   ( reg_write ),
+    .reg_write_o   ( regwriteD ),
     .jalr_pc_src_o ( jalr_pc_src ),
     .alu_ctrl_o    ( alu_ctrl ),
     .imm_op_o      ( imm_op ),
@@ -237,11 +291,12 @@ main_memory main_mem (
 
     .clk_i          ( clk ),
     .address_i      ( alu_out ),
-    .write_enable_i ( mem_write ),
+    .write_enable_i ( mem_wM ),
     .write_value_i  ( mem_write_val ),
 
     .read_value_o   ( memory_read )
 
 );
+
 
 endmodule

@@ -6,6 +6,9 @@ module control_top #(
 
     input  logic [ 31 : 0 ]                 pc_i,          // Program counter
     input  logic                            eq_i,          // Equal/zero flag
+    input logic                             clk,           //clock
+    input logic                             flushFtoD,
+    input logic                             stallFtoD,
 
     output logic                            pc_src_o,      // [0] - Increment PC by 4, [1] - Increment PC by immediate value
     output logic                            result_src_o,  // [0] - Write ALU output to register, [1] - Write memory value to register
@@ -18,21 +21,23 @@ module control_top #(
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
     output logic [ 24 : 15 ]                instr24_15_o,  // Current instruction [ 24 : 15 ]
     output logic [ 11 : 7 ]                 instr11_7_o    // Current instruction [ 31 : 7 ]
+    output logic [ 31 : 0 ]                 pcD_o,          // Program counter out of pipeline register
 
 );
-
+logic 
 logic [ 1 : 0 ] alu_op;              // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
 logic [ 6 : 0 ] op;                  // Instruction operand
 logic [ 2 : 0 ] funct3;              // Operator select
 logic           funct7;              // Operator select
 logic [ 2 : 0 ] imm_src;             // Immediate value type
-logic [ INSTR_WIDTH - 1 : 0 ] instr; // Current instruction to execute
+logic [ INSTR_WIDTH - 1 : 0 ] instr; // Current instruction from intr mem
+logic [ INSTR_WIDTH - 1 : 0 ] instr_frompip; // Current instruction to execute from flip flop
 
-assign op = instr [ 6 : 0 ];
-assign funct3 = instr [ 14 : 12 ];
-assign funct7 = instr [ 30 ];
-assign instr24_15_o = instr [ 24 : 15 ];
-assign instr11_7_o = instr [ 11 : 7 ];
+assign op = instr_frompip [ 6 : 0 ];
+assign funct3 = instr_frompip [ 14 : 12 ];
+assign funct7 = instr_frompip [ 30 ];
+assign instr24_15_o = instr_frompip [ 24 : 15 ];
+assign instr11_7_o = instr_frompip [ 11 : 7 ];
 
 instr_mem instr_mem (
 
@@ -78,6 +83,19 @@ sign_extend sign_extend (
     
     .imm_ext_o   ( imm_op_o )
 
+);
+
+
+regFtoD #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_f_to_d(
+    .clk_i(clk),
+    .flush(flushFtoD),
+    .stall(stallFtoD),
+    .rd_i(instr),
+    .pcF_i(pc_i),
+    .pc_plus4F_i((pc_i +4)),
+    .instrD_o(instr_frompip),
+    .pcD_o(pcD_o),
+    .pc_plus4D_o((pcD_o +4))
 );
 
 endmodule
