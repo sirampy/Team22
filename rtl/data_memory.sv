@@ -48,12 +48,16 @@ module data_memory # (
         endcase 
     end
 
+
     always_ff @(posedge clk_i) begin
-        if (write_enable_i) begin
-            ram_array[address_i[31:0]]   <= write_data_i[31:24];      
-            ram_array[address_i[31:0]+1] <= write_data_i[23:16];
-            ram_array[address_i[31:0]+2] <= write_data_i[15:8]; 
-            ram_array[address_i[31:0]+3] <= write_data_i[7:0];
+        if (mem_type_i == 1'b1 && write_enable_i == 1'b1) begin
+            ram_array[{address_i[31:2], 2'b00}] <= write_data_i[7:0];
+        end
+        else if (mem_type_i == 1'b0 && write_enable_i == 1'b1) begin
+            ram_array[{address_i[31:2], 2'b00}]   <= write_data_i[31:24];      
+            ram_array[{address_i[31:2], 2'b00}+1] <= write_data_i[23:16];
+            ram_array[{address_i[31:2], 2'b00}+2] <= write_data_i[15:8];
+            ram_array[{address_i[31:2], 2'b00}+3] <= write_data_i[7:0];
         end
     end 
 
