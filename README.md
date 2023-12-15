@@ -62,8 +62,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Memory | instr_mem.sv, program_mem.sv | x | | | | p |
 | Top | top.sv | x | | |
 | Testbenches and debugging | x | | | | 
-| F1 Testing | p | | | | 
-| Other testing | x | | | |
+| Other testing | counter, sine, pdf | x | | |
 | V2 Pipeline | all | p | | |
 
 #### Lab 4:
@@ -76,7 +75,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Top | top.sv | | | x |
 | Testbenches and debugging | alu_top_tb.cpp,  | | | x | 
 | Run files | |  | | p | p 
-| Formatting | | | | |  x
+| Formatting | x | | | |  x
 
 &nbsp; 
 ## Repository Structure
