@@ -4,13 +4,13 @@ module regMtoS #(
 )(
     input logic clk_i,
     //control inout
-    input logic reg_wM_i, //reg write enable [1]-fior enable
+    input logic reg_wM_i, //reg write enable [1]-for enable
     input logic [ 1 : 0 ] result_srcM_i, // select write source: [00] - [01]-data mem ,[10]-
 
 
     //pther input
     input  logic [ DATA_WIDTH-1 : 0 ]    alu_resultM_i, // alu output result (from memory)
-    input  logic [ ADDRESS_WIDTH-1 : 0 ] read_dataM_i,  // read from data mem (from memmory)
+    input  logic [ ADDRESS_WIDTH-1 : 0 ] read_dataM_i,  // read from data mem (from memory)
     input  logic [11:7]              rdM_i, 
     input  logic [ADDRESS_WIDTH-1:0] pc_plus4M_i,
     //control output
