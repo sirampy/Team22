@@ -33,64 +33,56 @@ logic [ DATA_WIDTH - 1 : 0 ] imm_op;        // Immediate value
 logic [ 24 : 15 ]            instr24_15;    // Current instruction [ 24 : 15 ]
 logic [ 11 : 7 ]             instr11_7;     // Current instruction [ 11 : 7 ]
 logic                        pcstall;       //pc stall enable [1] for enable stall
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcAE;  //alu sources [00]- RD1E, [01] - resultS, [10]-aluresultm
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcBE;  //alu sources [00]- RD1E, [01] - resultS, [10]-aluresultm
+logic [ DATA_WIDTH - 1 : 0 ] rd1;  //information straight out of reg file
+logic [ DATA_WIDTH - 1 : 0 ] rd2;  //information straight out of reg file
 
-// execute signals
+///////////////hazard logic
+logic [ 1 : 0] ForwardAE;  //fatsword alu src a
+logic flushFtoD;   
+logic flushDtoE;
+logic [ 1 : 0] ForwardBE;  //fastfowrad alu src b
+logic stallFtoD;
+/////////////////////////////////////////// execute signals
 logic [ ADDR_WIDTH - 1 : 0 ] rs1E;
 logic [ ADDR_WIDTH - 1 : 0 ] rs2E; 
 logic [ ADDR_WIDTH - 1 : 0 ] rdE;
-
-
+logic mem_wE;
 //logic           branchE;
 logic [  DATA_WIDTH - 1 : 0] imm_opE;
-
-// memory signals
-logic [ ADDR_WIDTH - 1 : 0 ] rdM;
- 
-logic           reg_writeM;
-
-
-// s signals
-logic [ ADDR_WIDTH - 1 : 0 ] rdS;
-
-logic [ DATA_WIDTH - 1 : 0 ] resultS;
-logic reg_writeS;
-
-logic stallFtoD;
-logic [ 1 : 0] ForwardAE;
-logic [ 1 : 0] ForwardBE;
-
-logic flushFtoD;
-logic flushDtoE;
 logic regwriteE;
-logic regwriteD;
 logic [ 1 : 0] result_srcE;
-logic [ 1 : 0] result_srcM;
-logic [ 1 : 0] result_srcS;
-logic [ 1 : 0] result_srcD;
-logic mem_wD;
-logic mem_wE;
-logic mem_wM;
-logic [  DATA_WIDTH - 1 : 0] pcD;
 logic [  DATA_WIDTH - 1 : 0 ] pcE;
-logic [  DATA_WIDTH - 1 : 0 ] pc_plus4D;
+
 logic [  DATA_WIDTH - 1 : 0 ] pc_plus4E;
-logic [  DATA_WIDTH - 1 : 0 ] pc_plus4M;
-logic [  DATA_WIDTH - 1 : 0 ] pc_plus4S;
-logic [ DATA_WIDTH - 1 : 0 ] alu_resultM;
-logic [ DATA_WIDTH - 1 : 0 ] alu_resultS;
-logic [ DATA_WIDTH - 1 : 0 ] rd1;
-logic [ DATA_WIDTH - 1 : 0 ] rd2;
+logic pc_srcE;
 logic [ DATA_WIDTH - 1 : 0 ] rd1E;
 logic [ DATA_WIDTH - 1 : 0 ] rd2E;
-logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcAE;
-logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcBE;
+///////////////////////////////////////////  memory signals
+logic [ ADDR_WIDTH - 1 : 0 ] rdM;
+logic           reg_writeM;
+logic [ 1 : 0] result_srcM;
+logic mem_wM;
+logic [  DATA_WIDTH - 1 : 0 ] pc_plus4M;
 logic [ DATA_WIDTH - 1 : 0 ] data_wM;
+logic [ DATA_WIDTH - 1 : 0 ] alu_resultM;
+/////////////////////////////////////////// store signals
+logic [ ADDR_WIDTH - 1 : 0 ] rdS;
+logic [ DATA_WIDTH - 1 : 0 ] resultS;
+logic reg_writeS;
+logic [ 1 : 0] result_srcS;
+logic [ DATA_WIDTH - 1 : 0 ] alu_resultS;
+
+logic [  DATA_WIDTH - 1 : 0 ] pc_plus4S;
+///////////////////////////////////////////// Decode signals
+
+logic regwriteD;
+logic [ 1 : 0] result_srcD;
+logic mem_wD;
+logic [  DATA_WIDTH - 1 : 0] pcD;
+logic [  DATA_WIDTH - 1 : 0 ] pc_plus4D;
 logic pc_srcD;
-logic pc_srcE;
-
-
-
-
 logic [ 4 : 0 ] rs1D;
 logic [ 4 : 0 ] rs2D;
 logic [ 4 : 0 ] rdD;
