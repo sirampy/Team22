@@ -21,7 +21,7 @@ It can be seen that the simple individual instructions are working.
 This generates it as expected.
 
 #### F1 lights
-We then tested out F1 assembly code to see if the J-type instructions worked. The Vbuddy succesfully used our assembly code show display the F1 lights
+We then tested ou1 F1 assembly code to see if the J-type instructions worked. The Vbuddy succesfully used our assembly code show display the F1 lights
 
 
 https://github.com/sirampy/Team22/assets/48381979/83a4b378-8004-4d97-8427-617aa3a2eff7
