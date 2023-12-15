@@ -20,7 +20,6 @@ the diference between the above 2 make targets is that all will run gtkwave (thi
 ![Counter program source code](images/counter_code.png)
 The counter programs works fully as intended on this branch. The above images are from tests on the version-2 branch, but the results from this branch look identical.
 ### 2. Sine
-![sine wave waveform](images/sine_test.png) <br>
-this test demonstrates that we can load a word form memory. (NOTE NEED TO CHANGE)
+![sinewaveform](images\sine_working.png)
+
 ### 3. PDF
-lui isnt implemented in this branch yet, so PDF wont work properly

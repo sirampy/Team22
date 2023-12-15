@@ -7,7 +7,9 @@ module data_memory # (
 ) (
 
     input logic                           clk_i,          // Clock
+    /* verilator lint_off UNUSED */
     input logic [ ADDRESS_WIDTH - 1 : 0 ] address_i,      // Target address
+    /* verilator lint_on UNUSED */
     input logic                           write_enable_i, // Write enable
     input logic [ DATA_WIDTH - 1 : 0 ]    write_data_i,  // Value to write
 
@@ -27,26 +29,24 @@ module data_memory # (
         $display ("ram loaded fully");
     end;
 
-    /* verilator lint_off UNUSED */
-    logic [ ADDRESS_WIDTH - 1 : 0 ] address;
-    /* verilator lint_on UNUSED */
+    logic [ DATA_WIDTH - 1 : 0]    read_value;
+
+    assign read_value = {ram_array[{address_i[31:2], 2'b00}], 
+                            ram_array[{address_i[31:2], 2'b00}+1], 
+                            ram_array[{address_i[31:2], 2'b00}+2], 
+                            ram_array[{address_i[31:2], 2'b00}+3]};
 
     always_comb begin
         case (mem_type_i)
             1'b1: // byte
                 case (mem_sign_i)
-                    1'b0: address = {{24{1'b0}}, ram_array[address_i]}; // zero ext
-                    1'b1: address = {{24{ram_array[address_i][7]}}, ram_array[address_i]}; // signed
+                    1'b0: read_value_o = {24'b0, read_value[7:0]}; // zero ext
+                    1'b1: read_value_o = {{24{read_value[7]}}, read_value[7:0]}; // sign ext
                 endcase   
-            1'b0: address = address_i; // word
-            default: address = address_i;
+            1'b0: read_value_o = read_value; // word
+            default: read_value_o = read_value;
         endcase 
     end
-
-    assign read_value_o = {ram_array[{address[31:2], 2'b00}], 
-                            ram_array[{address[31:2], 2'b00}+1], 
-                            ram_array[{address[31:2], 2'b00}+2], 
-                            ram_array[{address[31:2], 2'b00}+3]};
 
 
     always_ff @(posedge clk_i) begin
