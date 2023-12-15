@@ -19,7 +19,7 @@ match signal:
 f = open("rom_bin/data.mem","w")
 data = open(f"test/pdf/{signal_filename}","r")
 
-# create 0x1000 offset
+# create 0x10000 offset
 for i in range(0x10000):
     v = int(0) # initialise the memory to zeroes
     if (i+1)%16 == 0:
