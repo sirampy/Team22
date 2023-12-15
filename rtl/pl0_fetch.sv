@@ -11,14 +11,13 @@ module pl0_fetch (
 
 );
 
-instr_val       pc_wr_val, pc_rd_val;
+instr_val       pc_wr_val;
 logic           flg_z, use_imm_mem;
 pc_sel          pc_sel_val;
 pl0_stall_state stall_state, next_stall_state;
 data_val        imm_val_mem;
 
 assign flg_z    = i_alu_out_val == 0 ? 1 : 0;
-assign o_pc_val = stall_state == PL0_STALL_NONE ? pc_rd_val : pc_rd_val - 4;
 
 always_ff @( posedge i_clk )
 begin
@@ -82,13 +81,13 @@ always_comb
 always_comb
     case ( pc_sel_val )
     PC_FREEZE:
-        pc_wr_val = pc_rd_val;
+        pc_wr_val = o_pc_val;
     PC_INCR:
-        pc_wr_val = pc_rd_val + 4;
+        pc_wr_val = o_pc_val + 4;
     PC_IMM_OFF:
         pc_wr_val = use_imm_mem == 1
-                    ? pc_rd_val + data_val_to_instr_val ( imm_val_mem )
-                    : pc_rd_val + data_val_to_instr_val ( i_imm_val );
+                    ? o_pc_val + data_val_to_instr_val ( imm_val_mem )
+                    : o_pc_val + data_val_to_instr_val ( i_imm_val );
     PC_ALU_OUT:
         pc_wr_val = data_val_to_instr_val ( i_alu_out_val );
     endcase
@@ -98,7 +97,7 @@ pc pc_ (
     .i_clk    ( i_clk ),
     .i_wr_val ( pc_wr_val ), 
 
-    .o_val    ( pc_rd_val )
+    .o_val    ( o_pc_val )
 
 );
 

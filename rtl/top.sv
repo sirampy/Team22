@@ -180,7 +180,7 @@ pl1_decode pl1_decode_ (
     .o_mem_rd_en              ( mem_rd_en ),
     .o_l_s_sel_val            ( l_s_sel_val ),
     .o_funct3_0               ( funct3_0 ),
-    .ff_val_1                 ( ff_val_1 )
+    .o_ff_val_1               ( ff_val_1 )
 
 );
 

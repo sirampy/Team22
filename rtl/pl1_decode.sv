@@ -26,13 +26,13 @@ module pl1_decode (
     output logic           o_mem_rd_en,
     output l_s_sel         o_l_s_sel_val,
     output logic           o_funct3_0,
-    output data_val        ff_val_1
+    output data_val        o_ff_val_1
 
 );
 
 data_val        reg_rd_val_1, reg_rd_val_2, reg_val_1, reg_val_2, alu_opnd_1, alu_opnd_2, imm_val, mem_wr_val, alu_alt_out_val;
 reg_addr        reg_rd_addr_1, reg_rd_addr_2, reg_wr_addr;
-logic           reg_wr_en, mem_wr_en, mem_rd_en, funct3_0, was_l, l_error, stall, stall_dec, stall_dec_d1, alu_use_optr;
+logic           reg_wr_en, mem_wr_en, mem_rd_en, funct3_0, was_l, l_error, stall, stall_dec, stall_dec_d1, alu_use_optr, prev_stall;
 alu_opnd_1_sel  alu_opnd_1_sel_val;
 alu_opnd_2_sel  alu_opnd_2_sel_val;
 alu_optr        alu_optr_val;
@@ -44,10 +44,10 @@ assign reg_rd_addr_2 = cur_instr_val.body.R.rs2;
 assign l_s_sel_val   = cur_instr_val.body.R.funct3;
 assign reg_wr_addr   = cur_instr_val.body.R.rd;
 assign mem_wr_val    = reg_val_2;
-assign o_pl0_stall_state_val  = l_error == 0 ? pl0_stall_state_val : PL0_STALL_1;
+assign o_pl0_stall_state_val  = stall == 0 ? ( l_error == 0 ? pl0_stall_state_val : PL0_STALL_1 ) : 0;
 assign funct3_0      = cur_instr_val.body.R.funct3 [ 0 ];
-assign stall         = l_error || stall_dec;
-assign ff_val_1      = imm_val;
+assign stall         = ( l_error || stall_dec ) && !prev_stall;
+assign o_ff_val_1      = imm_val;
 
 always_ff @( posedge i_clk )
 begin
@@ -65,6 +65,7 @@ begin
     o_funct3_0        <= funct3_0;
     stall_dec         <= stall_dec_d1;
     was_l             <= cur_instr_val.opc == OPC_L ? 1 : 0;
+    prev_stall        <= stall;
 end
 
 always_comb
