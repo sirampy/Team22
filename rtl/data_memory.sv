@@ -23,7 +23,7 @@ module data_memory # (
 
     initial begin 
         $display  ("Loading ram.");
-        $readmemh("./rom_bin/data.mem", ram_array);
+        $readmemh("data.mem", ram_array);
         $display ("ram loaded fully");
     end;
 
