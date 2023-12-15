@@ -1,6 +1,6 @@
 module main_mem # (
     
-    parameter ACTUAL_ADDRESS_WIDTH = 16 // IF MODIFYING THIS, MODIFY convert_address FUNCTION BELOW
+    parameter ACTUAL_ADDRESS_WIDTH = 20 // IF MODIFYING THIS, MODIFY convert_address FUNCTION BELOW
 
 ) (
 
@@ -17,7 +17,7 @@ byte mem_bytes [ 2 ** ACTUAL_ADDRESS_WIDTH - 1 : 0 ];
 
 // The following is done to fix bit length errors
 function logic [ ACTUAL_ADDRESS_WIDTH - 1 : 0 ] convert_address ( input data_val in );
-    convert_address = in [ 31 : 16 ] + in [ 15 : 0 ]; // Addition performed to remove errors involving unused bits
+    convert_address = { 8'h00, in [ 31 : 20 ] } + in [ 19 : 0 ]; // Addition performed to remove errors involving unused bits
 endfunction
 
 
