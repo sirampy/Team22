@@ -24,13 +24,13 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | p | | | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | x | 
-| PC | pc_mux.sv, pc_reg.sv| | | p | 
+| PC | pc_mux.sv, pc_reg.sv|  | | | | x |
 | Memory | instr_mem.sv, data_memory.sv | p | p | x | 
 | Top | top.sv | | | |
 | Testbenches and debugging | top_tb.cpp | p | p | x | 
 | Formatting | - | p | | | 
 | Setup | .gitignore, Makefile | x | | | 
-| F1 Testing | f1_tb.cpp, f1.s | | | x | 
+| F1 Testing | f1_tb.cpp, f1.s |  | | | | x | 
 | Other testing | alutest.s, counter.s, pdf.s, sine.s | x | p | p |
 
 #### Pipelining:
