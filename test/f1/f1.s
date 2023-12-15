@@ -1,16 +1,17 @@
 # F1 Program Implementation - Assembly Language
 init:
-    ADDI a1, zero, 0              # vbd flag value - trigger
-    ADDI a2, zero, 255            # all lights are on - written in decimal
-    ADDI a3, zero, 5       # TODO: need to adjust to get 1s delay
-    ADDI a4, zero, 0              # reset the count for light delay
-    ADDI a5, zero, 0              # final output for turning on lights
+    ADDI a1, a0, 0              # vbd flag value - trigger
+    ADDI a2, a0, 255            # all lights are on - written in decimal
+    ADDI a3, a0, 10       # TODO: need to adjust to get 1s delay
+    ADDI a4, a0, 0              # reset the count for light delay
+    ADDI a5, a0, 0              # final output for turning on lights
 main:
-    #BEQ a1, a0, main            
+    ##BEQ a1, zero, main            
     # loop until s1 not equal 0 - ie vbdflag pressed
     #TRIGGER REMOVED FOR TESTING
     JAL ra, lights_loop
-    BEQ zero,zero,init
+    BEQ a0,a0, init
+    
     
 lights_loop:
     JAL ra, lightdelay            # 1s delay
@@ -21,12 +22,14 @@ lights_loop:
     RET
 
 lightdelay:
+    ADDI  a4, zero, 0
+0:
     ADDI  a4, a4, 1               # a4 acts as counter
-    BNE   a4, a3, lightdelay
-    ADDI  a4, a0, 0
+    BNE   a4, a3, lightdelay      #loop until a second has passed
+    ADDI  a1, a0, 0
     RET
 
 turn_off:                        # wait some delay and turn off all lights
     JAL ra, lightdelay
-    ADDI a5, a0, 0             # switch lights off
+    ADDI a5, zero, 0             # switch lights off
     RET
