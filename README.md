@@ -11,8 +11,9 @@ Thus, this branch has been tested for most simple instructions but is not fully 
 
  ### Testing results
  #### Instructions testing - ADDI, SUB, OR, LBU, SB etc
-![ALU test instructions](images\alutest_instructions.png)
-![ALU test](images\alutest_results.png)
+<img width="227" alt="alutest_instructions" src="https://github.com/sirampy/Team22/assets/48381979/8b24a0d2-5d1f-472f-be88-43f67720a553">
+<img width="1018" alt="alutest_results (1)" src="https://github.com/sirampy/Team22/assets/48381979/d6b6609c-1d60-476a-9524-15a0807f0cbb">
+
 It can be seen that the simple individual instructions are working.
 
 #### Sine test
@@ -20,3 +21,8 @@ It can be seen that the simple individual instructions are working.
 This generates it as expected.
 
 #### F1 lights
+We then tested out F1 assembly code to see if the J-type instructions worked. The Vbuddy succesfully used our assembly code show display the F1 lights
+
+
+https://github.com/sirampy/Team22/assets/48381979/83a4b378-8004-4d97-8427-617aa3a2eff7
+
