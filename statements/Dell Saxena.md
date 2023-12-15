@@ -215,7 +215,7 @@ end
 ```
 
 ##### Two Way Set Associative Cache
-`two_way.sv` was created as a separate module for a two-way set-associative cache. This module is not integrated into the processor but was made to better my understanding of cache memory. 
+`two_way.sv` was created as a separate module for a two-way set-associative cache. This module is not integrated into the processor but was made to better my understanding of cache memory. However if I had more time, I would have liked to implement this due to improved cache utilisation and reduced miss rates.
 
 ---
 ### Implementing F1 Lights on Vbuddy
