@@ -36,13 +36,13 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Pipelining:
 | Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | x |
+| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | p | x | | | x |
 | Hazard unit | hazard_unit.sv | | x | | | x |
-| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | | x |
+| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | p | x | | | x |
 | Testbenches | cpu_tb.cpp | | | x | | x |
-| Debugging | - | p | p | | | x |
+| Debugging | - | x | p | | | x |
 | F1 Testing | f1.s, f1_tb.cpp | | | | | x |
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | p | | | | |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | x| | | | |
 
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
