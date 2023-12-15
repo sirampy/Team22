@@ -48,12 +48,6 @@ module data_memory # (
         endcase 
     end
 
-    assign read_value_o = {ram_array[address[31:0]], 
-                            ram_array[address[31:0]+1], 
-                            ram_array[address[31:0]+2], 
-                            ram_array[address[31:0]+3]};
-
-
     always_ff @(posedge clk_i) begin
         if (write_enable_i) begin
             ram_array[address[31:0]]   <= write_data_i[31:24];      
