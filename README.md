@@ -116,8 +116,10 @@ For each new feature we added, a new branch was created. The final repo includes
 |6. **[`version-2`](https://github.com/sirampy/Team22/tree/version-2#)**|While creating the single cycle CPU, we realised the microarchitecture could be further improved on with a few changes. Thus, version-2 was created as a way to explore what in the CPU could be upgraded to become more efficient beyond what we were taught. This CPU is stable and tested to run the pdf program|
 |7. **[`v2-full`](https://github.com/sirampy/Team22/tree/v2-full#)**|Version-2 with pipelining and cache incorporated. work on this branch was stoped before completion to focus on other pipelining branches|
 |8. **[`pipeline-2.0`](https://github.com/sirampy/Team22/tree/pipeline-2.0#)**| the working single - cycle cpu with pipelining and hazard detection.|
+|8. **[`SINGLE-CYCLE-REDO`](https://github.com/sirampy/Team22/tree/SINGLE-CYCLE-REDO#)**|a full implementation of the instruction set provided in lecture 6, with a revised minimalist design|
+|8. **[`SINGLE_CYCLE-REDO-PIPELINED`](https://github.com/sirampy/Team22/tree/SINGLE-CYCLE-REDO-PIPELINED#)**|a 5-stage pipelined version of SINGLE-CYCLE-REDO, using fast-forwards to prevent data hazards and only occassional single-cycle stalls|
 &nbsp; 
-> A more in-depth explanation of each of the branches can be found in their individual READMEs linked above. 
+> A more in-depth explanation of each of the branches can be found in their individual READMEs linked above.
 
 The main branch is purely used for README ans statement purposes.
 
