@@ -50,10 +50,10 @@ module data_memory # (
 
     always_ff @(posedge clk_i) begin
         if (write_enable_i) begin
-            ram_array[address[31:0]]   <= write_data_i[31:24];      
-            ram_array[address[31:0]+1] <= write_data_i[23:16];
-            ram_array[address[31:0]+2] <= write_data_i[15:8]; 
-            ram_array[address[31:0]+3] <= write_data_i[7:0];
+            ram_array[address_i[31:0]]   <= write_data_i[31:24];      
+            ram_array[address_i[31:0]+1] <= write_data_i[23:16];
+            ram_array[address_i[31:0]+2] <= write_data_i[15:8]; 
+            ram_array[address_i[31:0]+3] <= write_data_i[7:0];
         end
     end 
 
