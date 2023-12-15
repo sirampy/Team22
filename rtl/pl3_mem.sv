@@ -40,9 +40,9 @@ always_comb
             L_S_WORD:
                 mem_rd_val = mem_rd_val_full;
             L_S_BYTE_U:
-                mem_rd_val = { 24'h000000, mem_rd_val_full [ 7 : 0 ] };
+                mem_rd_val = { mem_rd_val_full [ 31 : 8 ], mem_rd_val_full [ 7 : 0 ] };
             L_S_HALF_U:
-                mem_rd_val = { 16'h0000, mem_rd_val_full [ 15 : 0 ] };
+                mem_rd_val = { mem_rd_val_full [ 31 : 16 ], mem_rd_val_full [ 15 : 0 ] };
             default: mem_rd_val = 0;
         endcase
     else
