@@ -44,10 +44,11 @@ assign reg_rd_addr_2 = cur_instr_val.body.R.rs2;
 assign l_s_sel_val   = cur_instr_val.body.R.funct3;
 assign reg_wr_addr   = cur_instr_val.body.R.rd;
 assign mem_wr_val    = reg_val_2;
-assign o_pl0_stall_state_val  = stall == 0 ? ( l_error == 0 ? pl0_stall_state_val : PL0_STALL_1 ) : 0;
+assign o_pl0_stall_state_val  = l_error == 0 ? pl0_stall_state_val : PL0_STALL_1;//( stall == 0 ) ? ( l_error == 0 ? pl0_stall_state_val : PL0_STALL_1 ) : PL0_STALL_NONE;
 assign funct3_0      = cur_instr_val.body.R.funct3 [ 0 ];
 assign stall         = ( l_error || stall_dec ) && !prev_stall;
 assign o_ff_val_1      = imm_val;
+
 
 always_ff @( posedge i_clk )
 begin

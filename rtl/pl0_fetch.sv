@@ -26,7 +26,7 @@ begin
 end
 
 always_comb
-    case ( i_stall_state == PL0_STALL_NONE ? stall_state : i_stall_state )
+    case ( stall_state != PL0_STALL_NONE ? stall_state : i_stall_state )
     PL0_STALL_NONE:
     begin
         next_stall_state = PL0_STALL_NONE;

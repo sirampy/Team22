@@ -157,7 +157,7 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x10      - Expect R1 = 0x10          -> ...0010000 000 00001 0010011           -> [66] 01 00 00 93
                               //                        - Note: Verify R2 after JAL and R3 after JALR equals PC + 4 both times
 
-    for (int j = 0; j < 10000; ++j) {
+    for (int j = 0; j < 100; ++j) {
 
         evalAndDump(tfp, top, i);
     
