@@ -11,7 +11,7 @@ module data_memory # (
     input logic                           write_enable_i, // Write enable
     input logic [ DATA_WIDTH - 1 : 0 ]    write_data_i,  // Value to write
 
-    input logic [ 1 : 0 ]                 mem_type_i,       // [0] - word, [1] - byte, [2] - half
+    input logic                           mem_type_i,       // [0] - word, [1] - byte
     input logic                           mem_sign_i,       // [0] - unsigned, [1] - signed
 
     output logic [ DATA_WIDTH - 1 : 0]    read_value_o    // Value read at address
@@ -33,17 +33,13 @@ module data_memory # (
 
     always_comb begin
         case (mem_type_i)
-            2'b01: // byte
+            1'b1: // byte
                 case (mem_sign_i)
                     1'b0: address = {{24{1'b0}}, ram_array[address_i]}; // zero ext
                     1'b1: address = {{24{ram_array[address_i][7]}}, ram_array[address_i]}; // signed
                 endcase   
-            2'b10: // half
-                case (mem_sign_i)
-                    1'b0: address = {{16{1'b0}},  {ram_array[address_i]}, {ram_array[address_i+1]}}; // zero ext
-                    1'b1: address = {{16{ram_array[address_i][7]}},  {ram_array[address_i]}, {ram_array[address_i+1]}}; // signed
-                endcase
-            default: address = address_i; // word
+            1'b0: address = address_i; // word
+            default: address = address_i;
         endcase 
     end
 
@@ -54,11 +50,14 @@ module data_memory # (
 
 
     always_ff @(posedge clk_i) begin
-        if (write_enable_i) begin
-            ram_array[{address[31:2], 2'b00}]   <= write_data_i[31:24];      
-            ram_array[{address[31:2], 2'b00}+1] <= write_data_i[23:16];
-            ram_array[{address[31:2], 2'b00}+2] <= write_data_i[15:8];
-            ram_array[{address[31:2], 2'b00}+3] <= write_data_i[7:0];
+        if (mem_type_i == 1'b1 && write_enable_i == 1'b1) begin
+            ram_array[{address_i[31:2], 2'b00}] <= write_data_i[7:0];
+        end
+        else if (mem_type_i == 1'b0 && write_enable_i == 1'b1) begin
+            ram_array[{address_i[31:2], 2'b00}]   <= write_data_i[31:24];      
+            ram_array[{address_i[31:2], 2'b00}+1] <= write_data_i[23:16];
+            ram_array[{address_i[31:2], 2'b00}+2] <= write_data_i[15:8];
+            ram_array[{address_i[31:2], 2'b00}+3] <= write_data_i[7:0];
         end
     end 
 
