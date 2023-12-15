@@ -44,8 +44,8 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // SLTIU R2, R1, 0x05     - Expect R2 = 0x0           -> ...00101 00001 011 00010 0010011       -> [5]  00 50 b1 13
     evalAndDump(tfp, top, i); // SLTIU R3, R1, 0x06     - Expect R3 = 0x1           -> ...00110 00001 011 00011 0010011       -> [6]  00 60 b1 93
     evalAndDump(tfp, top, i); // XORI R1, R1, 0x0f      - Expect R1 = 0xa           -> ...01111 00001 100 00001 0010011       -> [7]  00 f0 c0 93
-    evalAndDump(tfp, top, i); // SRLI R5, R4, 0x02      - Expect R1 = 0xa           -> ...00010 00100 101 00101 0010011       -> [8]  00 22 52 93
-    evalAndDump(tfp, top, i); // SRAI R5, R4, 0x02      - Expect R1 = 0xa           -> 010000000010 00100 101 00101 0010011   -> [9]  40 22 52 93
+    evalAndDump(tfp, top, i); // SRLI R5, R4, 0x02      - Expect R1 = 0x2800...     -> ...00010 00100 101 00101 0010011       -> [8]  00 22 52 93
+    evalAndDump(tfp, top, i); // SRAI R5, R4, 0x02      - Expect R1 = 0xe800...     -> 010000000010 00100 101 00101 0010011   -> [9]  40 22 52 93
     evalAndDump(tfp, top, i); // ORI  R1, R1, 0x04      - Expect R1 = 0xe           -> ...00100 00001 110 00001 0010011       -> [10] 00 40 e0 93
     evalAndDump(tfp, top, i); // ANDI R1, R1, 0x08      - Expect R1 = 0x8           -> ...01000 00001 111 00001 0010011       -> [11] 00 80 f0 93
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x05      - Expect R1 = 0x5           -> ...00101 00000 000 00001 0010011       -> [27] 00 50 00 93
     evalAndDump(tfp, top, i); // ADD  R2, R0, R1        - Expect R2 = 0x5           -> ...001 00000 000 00010 0110011         -> [28] 00 10 01 33
     evalAndDump(tfp, top, i); // ADDI R2, R2, 0x8       - Expect R2 = 0xd           -> ...001000 00010 000 00010 0010011      -> [29] 00 81 01 13
-    evalAndDump(tfp, top, i); // SUB  R3, R2, R1        - Expect R3 = 0x3           -> 0100000 00001 00010 000 00011 0110011  -> [30] 40 11 01 b3
+    evalAndDump(tfp, top, i); // SUB  R3, R2, R1        - Expect R3 = 0x8           -> 0100000 00001 00010 000 00011 0110011  -> [30] 40 11 01 b3
     evalAndDump(tfp, top, i); // ADDI R3, R0, 0x1c      - Expect R3 = 0x1c          -> ...0011100 00000 000 00011 0010011     -> [31] 01 c0 01 93
     evalAndDump(tfp, top, i); // SLL  R4, R2, R3        - Expect R4 = 0xd00..       -> ...00011 00010 001 00100 0110011       -> [32] 00 31 12 33
     evalAndDump(tfp, top, i); // SLT  R3, R2, R1        - Expect R3 = 0x0           -> ...001 00010 010 00011 0110011         -> [33] 00 11 21 b3
@@ -157,11 +157,11 @@ int main(int argc, char **argv, char **env) {
     evalAndDump(tfp, top, i); // ADDI R1, R0, 0x10      - Expect R1 = 0x10          -> ...0010000 000 00001 0010011           -> [66] 01 00 00 93
                               //                        - Note: Verify R2 after JAL and R3 after JALR equals PC + 4 both times
 
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
-    evalAndDump(tfp, top, i);
+    for (int j = 0; j < 30; ++j) {
+
+        evalAndDump(tfp, top, i);
+    
+    }
 
     tfp->close();
     exit(0);

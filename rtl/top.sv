@@ -59,18 +59,11 @@ typedef struct packed {
 } instr;
 
 typedef enum logic [ 1 : 0 ] {
-    PC_RST,
+    PC_FREEZE,
     PC_INCR,
     PC_IMM_OFF,
     PC_ALU_OUT
 } pc_sel;
-
-typedef enum logic [ 1 : 0 ] {
-    REG_WR_ALU_OUT,
-    REG_WR_IMM,
-    REG_WR_MEM,
-    REG_WR_PC_INCR
-} reg_wr_sel;
 
 typedef enum logic {
     ALU_OPND_1_REG,
@@ -118,6 +111,16 @@ typedef enum opcode {
     OPC_JAL   = 7'b1101111
 } opcode_vals;
 
+typedef enum logic [ 2 : 0 ] {
+    PL0_STALL_NONE,
+    PL0_STALL_IMM,
+    PL0_STALL_BRANCH,
+    PL0_STALL_1_BRANCH,
+    PL0_STALL_ALU,
+    PL0_STALL_1_ALU,
+    PL0_STALL_1
+} pl0_stall_state;
+
 
 
 module top (
@@ -126,156 +129,106 @@ module top (
 
 );
 
-instr_val       pc_val, pc_val_incr, pc_val_imm_off, pc_wr_val;
+instr_val       pc_val;
 instr           cur_instr_val;
-data_val        reg_val_1, reg_val_2, imm_val, reg_wr_val, alu_out_val,
-                mem_addr_val, mem_rd_val, mem_wr_val, alu_opnd_1, alu_opnd_2;
-reg_addr        reg_rd_addr_1, reg_rd_addr_2, reg_wr_addr;
-logic           reg_wr_en, mem_wr_en, flg_z;
-pc_sel          pc_sel_val;
-reg_wr_sel      reg_wr_sel_val;
-alu_opnd_1_sel  alu_opnd_1_sel_val;
-alu_opnd_2_sel  alu_opnd_2_sel_val;
-alu_optr        alu_optr_val;
+data_val        alu_out_val, ff_val_1, ff_val_2, ff_val_3, ff_val_4, ff_alu_out_val, alu_opnd_1, alu_opnd_2,
+                alu_out_mem_val, mem_wr_val, alu_alt_out_val;
+reg_addr        ff_addr_2, ff_addr_3, ff_addr_4, reg_wr_addr;
+logic           funct3_2XOR0, funct3_0, reg_wr_en, mem_wr_en, mem_rd_en, reg_wr_en4, alu_use_optr;
 l_s_sel         l_s_sel_val;
+alu_optr        alu_optr_val;
+pl0_stall_state pl0_stall_state_val;
 
-assign pc_val_incr            = pc_val + 4;
-assign pc_val_imm_off         = pc_val + data_val_to_instr_val( imm_val );
-assign mem_addr_val           = alu_out_val;
-assign flg_z                  = alu_out_val == 0 ? 1 : 0;
-assign reg_rd_addr_1          = cur_instr_val.body.R.rs1;
-assign reg_rd_addr_2          = cur_instr_val.body.R.rs2;
-assign reg_wr_addr            = cur_instr_val.body.R.rd;
-assign l_s_sel_val            = cur_instr_val.body.R.funct3;
-
-always_comb
-    case ( pc_sel_val )
-    PC_RST:
-        pc_wr_val = 0;
-    PC_INCR:
-        pc_wr_val = pc_val_incr;
-    PC_IMM_OFF:
-        pc_wr_val = pc_val_imm_off;
-    PC_ALU_OUT:
-        pc_wr_val = data_val_to_instr_val( alu_out_val );
-    endcase
-
-always_comb
-    case ( alu_opnd_1_sel_val )
-        ALU_OPND_1_REG:
-            alu_opnd_1 = reg_val_1;
-        ALU_OPND_1_PC:
-            alu_opnd_1 = pc_val;
-    endcase
-
-always_comb
-    case ( alu_opnd_2_sel_val )
-        ALU_OPND_2_REG:
-            alu_opnd_2 = reg_val_2;
-        ALU_OPND_2_IMM:
-            alu_opnd_2 = imm_val;
-    endcase
-
-always_comb
-    case ( reg_wr_sel_val )
-    REG_WR_ALU_OUT:
-        reg_wr_val = alu_out_val;
-    REG_WR_MEM:
-        case ( l_s_sel_val )
-        L_S_BYTE:
-            reg_wr_val = { { 24 { mem_rd_val [ 7 ] } }, mem_rd_val [ 7 : 0 ] };
-        L_S_HALF:
-            reg_wr_val = { { 16 { mem_rd_val [ 15 ] } }, mem_rd_val [ 15 : 0 ] };
-        L_S_WORD:
-            reg_wr_val = mem_rd_val;
-        L_S_BYTE_U:
-            reg_wr_val = { 24'h000000, mem_rd_val [ 7 : 0 ] };
-        L_S_HALF_U:
-            reg_wr_val = { 16'h0000, mem_rd_val [ 15 : 0 ] };
-        default: reg_wr_val = 0;
-        endcase
-    REG_WR_PC_INCR:
-        reg_wr_val = pc_val_incr;
-    REG_WR_IMM:
-        reg_wr_val = imm_val;
-    endcase
-
-always_comb
-    case ( l_s_sel_val )
-    L_S_BYTE:
-        mem_wr_val = { 24'h000000, reg_val_2 [ 7 : 0 ] };
-    L_S_HALF:
-        mem_wr_val = { 16'h0000, reg_val_2 [ 15 : 0 ] };
-    L_S_WORD:
-        mem_wr_val = reg_val_2;
-    default: mem_wr_val = 0;
-    endcase
-
-pc pc_ (
-
-    .i_clk    ( i_clk ),
-    .i_wr_val ( pc_wr_val ), 
-
-    .o_val    ( pc_val )
-
-);
-
-instr_mem instr_mem_ (
-
-    .i_addr ( pc_val ),
+pl0_fetch pl0_fetch_ (
     
-    .o_val  ( cur_instr_val )
+    .i_clk           ( i_clk ),
+    .i_stall_state   ( pl0_stall_state_val ),
+    .i_funct3_2XOR0  ( funct3_2XOR0 ),
+    .i_imm_val       ( ff_val_1 ),
+    .i_alu_out_val   ( ff_alu_out_val ),
+
+    .o_cur_instr_val ( cur_instr_val ),
+    .o_pc_val        ( pc_val )
 
 );
 
-regs regs_ (
+pl1_decode pl1_decode_ (
 
-    .i_clk       ( i_clk ),
-    .i_rd_addr_1 ( reg_rd_addr_1 ),
-    .i_rd_addr_2 ( reg_rd_addr_2 ),
-    .i_wr_addr   ( reg_wr_addr ),
-    .i_wr_en     ( reg_wr_en ),
-    .i_wr_val    ( reg_wr_val ),
+    .i_clk                    ( i_clk ),
+    .i_pc_val                 ( pc_val ),
+    .i_cur_instr_val          ( cur_instr_val ),
+    .i_ff_val_2               ( ff_val_2 ),
+    .i_ff_addr_2              ( ff_addr_2 ),
+    .i_ff_val_3               ( ff_val_3 ),
+    .i_ff_addr_3              ( ff_addr_3 ),
+    .i_ff_val_4               ( ff_val_4 ),
+    .i_ff_addr_4              ( ff_addr_4 ),
+    .i_reg_wr_en              ( reg_wr_en4 ),
+    .i_reg_wr_addr            ( ff_addr_4 ),
+    .i_reg_wr_val             ( ff_val_4 ),
 
-    .o_val_1     ( reg_val_1 ),
-    .o_val_2     ( reg_val_2 )
-
-);
-
-alu alu_ (
-
-    .i_opnd1 ( alu_opnd_1 ),
-    .i_opnd2 ( alu_opnd_2 ),
-    .i_optr  ( alu_optr_val ),
-    
-    .o_out   ( alu_out_val )
-
-);
-
-main_mem main_mem_ (
-
-    .i_clk    ( i_clk ),
-    .i_addr   ( mem_addr_val ),
-    .i_wr_en  ( mem_wr_en ),
-    .i_wr_val ( mem_wr_val ),
-
-    .o_val    ( mem_rd_val )
+    .o_alu_opnd_1             ( alu_opnd_1 ),
+    .o_alu_opnd_2             ( alu_opnd_2 ),
+    .o_alu_optr_val           ( alu_optr_val ),
+    .o_alu_use_optr           ( alu_use_optr ),
+    .o_alu_alt_out_val        ( alu_alt_out_val ),
+    .o_reg_wr_en              ( reg_wr_en ),
+    .o_reg_wr_addr            ( reg_wr_addr ),
+    .o_pl0_stall_state_val    ( pl0_stall_state_val ),
+    .o_mem_wr_en              ( mem_wr_en ),
+    .o_mem_wr_val             ( mem_wr_val ),
+    .o_mem_rd_en              ( mem_rd_en ),
+    .o_l_s_sel_val            ( l_s_sel_val ),
+    .o_funct3_0               ( funct3_0 ),
+    .ff_val_1                 ( ff_val_1 )
 
 );
 
-decoder decoder_ (
+pl2_exec pl2_exec_ (
 
-    .i_cur_instr_val      ( cur_instr_val ),
-    .i_flg_z              ( flg_z ),
+    .i_clk             ( i_clk ),
+    .i_alu_opnd_1      ( alu_opnd_1 ),
+    .i_alu_opnd_2      ( alu_opnd_2 ),
+    .i_alu_optr_val    ( alu_optr_val ),
+    .i_alu_use_optr    ( alu_use_optr ),
+    .i_alu_alt_out_val ( alu_alt_out_val ),
+    .i_ff_addr         ( reg_wr_addr ),
+    .i_funct3_0        ( funct3_0 ),
 
-    .o_pc_sel_val         ( pc_sel_val ),
-    .o_reg_wr_sel_val     ( reg_wr_sel_val ),
-    .o_reg_wr_en          ( reg_wr_en ),
-    .o_alu_opnd_1_sel_val ( alu_opnd_1_sel_val ),
-    .o_alu_opnd_2_sel_val ( alu_opnd_2_sel_val ),
-    .o_alu_optr_val       ( alu_optr_val ),
-    .o_mem_wr_en          ( mem_wr_en ),
-    .o_imm_val            ( imm_val )
+    .o_alu_out_val     ( alu_out_val ),
+    .o_ff_addr         ( ff_addr_2 ),
+    .o_ff_val          ( ff_val_2 ),
+    .o_ff_alu_out_val  ( ff_alu_out_val ),
+    .o_funct3_2XOR0    ( funct3_2XOR0 )
+
+);
+
+pl3_mem pl3_mem_ (
+
+    .i_clk         ( i_clk ),
+    .i_alu_out_val ( alu_out_val ),
+    .i_mem_wr_en   ( mem_wr_en ),
+    .i_mem_wr_val  ( mem_wr_val ),
+    .i_mem_rd_en   ( mem_rd_en ),
+    .i_l_s_sel_val ( l_s_sel_val ),
+    .i_ff_addr     ( ff_addr_2 ),
+
+    .o_mem_rd_val  ( alu_out_mem_val ),
+    .o_ff_addr     ( ff_addr_3 ),
+    .o_ff_val      ( ff_val_3 )
+
+);
+
+pl4_write pl4_write_ (
+
+    .i_clk                    ( i_clk ),
+    .i_reg_wr_val             ( alu_out_mem_val ),
+    .i_reg_wr_addr            ( ff_addr_3 ),
+    .i_reg_wr_en              ( reg_wr_en ),
+
+    .o_reg_wr_en              ( reg_wr_en4 ),
+    .o_ff_addr                ( ff_addr_4 ),
+    .o_ff_val                 ( ff_val_4 )
 
 );
 
