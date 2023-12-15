@@ -6,7 +6,8 @@ module top #(
 ) (
 
     input logic clk,
-    input logic rst
+    input logic rst,
+    output logic [DATA_WIDTH-1:0]   a0
 );
     
 logic [ ADDR_WIDTH - 1 : 0 ] rs1;           // ALU registers read address 1
@@ -54,7 +55,9 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
     .eq_o            ( eq ),
     .alu_out_o       ( alu_out ),
-    .rs2_val_o       ( mem_write_val )
+    .rs2_val_o       ( mem_write_val ),
+    .a0 (a0)
+
 
 );
 
