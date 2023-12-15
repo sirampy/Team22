@@ -22,6 +22,6 @@ the diference between the above 2 make targets is that all will run gtkwave (thi
 here we can see that some basic instructions work as intended
 ### 2. Sine
 ![sine wave waveform](images/sine_test.png) <br>
-this test demonstrates that we can load a word form memory. this branch only has lb implemented, s it gets sign extended causing artifactig at the peak of the sine wave.
+this test demonstrates that we can load a word form memory. this branch only has lb implemented, s it gets sign extended causing artifacting at the peak of the sine wave.
 ### 3. PDF
 lui isnt implemented in this branch yet, so PDF wont work properly
