@@ -23,27 +23,26 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | x | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | p | x | 
 | PC | pc_mux.sv, pc_reg.sv| | | x | 
-| Memory | instr_mem.sv, main_memory.sv | | | | 
+| Memory | instr_mem.sv, data_memory.sv | | p | | 
 | Top | top.sv | | | |
-| Testbenches and debugging | top_tb.cpp | | | p | 
+| Testbenches and debugging | top_tb.cpp | | p | p | 
 | Formatting | - | | | | 
 | Setup | .gitignore, Makefile |  | | | 
 | F1 Testing | f1_tb.cpp, f1.s | | | | 
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | | | |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | | p | |
 
 #### Pipelining:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | 
 | Hazard unit | hazard_unit.sv | | x | | 
-| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | 
+| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | |x|
 | Testbenches | cpu_tb.cpp | | | x | 
-| Debugging | - | | p | p | 
+| Debugging | - | | p | | | x|
 | F1 Testing | f1.s, f1_tb.cpp | | | | | x|
 | Other testing | alutest.s, counter.s, pdf.s, sine.s | | | |
-| V2 Pipeline | all | x | | |
 
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
@@ -65,11 +64,12 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Testbenches and debugging | | | | | 
 | F1 Testing | | | | | 
 | Other testing | | | | |
+| V2 Pipeline | all | x | | |
 
 #### Lab 4:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | x | x | | | 
+| ALU | alu.sv, alu_top.sv, reg_file.sv | | x | | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | 
 | PC | pc_mux.sv, pc_reg.sv| | | | | x |
 | Memory | instr_mem.sv, program.mem| x | | | x
@@ -93,6 +93,8 @@ For each new feature we added, a new branch was created. The final repo includes
 |7. **[`v2-full`](https://github.com/sirampy/Team22/tree/v2-full#)**|Version-2 with pipelining and cache incorporated.|
 &nbsp; 
 > A more in-depth explanation of each of the branches can be found in their individual READMEs linked above. 
+
+The main branch is purely used for README ans statement purposes.
 
 &nbsp; 
 ## Testing Instructions
