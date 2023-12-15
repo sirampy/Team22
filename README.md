@@ -47,7 +47,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | p |  | x | x | | 
+| Direct cache |  | p | x | x | | 
 | Two-way cache | | | | x | 
 | Testbenches and debugging | |  | x | x | 
 | F1 Testing | | | | | |
@@ -59,7 +59,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | ALU | alu.sv, alu_top.sv, reg_file.sv | x | | | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | | | 
 | PC | pc_mux.sv, pc_reg.sv| x | | | 
-| Memory | instr_mem.sv, program_mem.sv | x | | | 
+| Memory | instr_mem.sv, program_mem.sv | x | | | | p |
 | Top | top.sv | x | | |
 | Testbenches and debugging | x | | | | 
 | F1 Testing | p | | | | 
