@@ -13,14 +13,14 @@
 | Alex Charlton | 02226326 | **sirampy**  |    ac5522@ic.ac.uk   | [Alex's Statement](https://github.com/sirampy/Team22/blob/main/statements/Alex%20Charlton.md) |
 | Beth Cham    | 02193797 | **bethcham** | beth.cham22@imperial.ac.uk | [Beth's Statement](https://github.com/sirampy/Team22/blob/main/statements/Beth%20Cham.md) |
 | Dell Saxena | 02258324 | **Dell-S** | dell.saxena22@imperial.ac.uk |  [Dell's Statement](https://github.com/sirampy/Team22/blob/main/statements/Dell%20Saxena.md) |
-| Mateusz Pietrzkiewicz | 02257454 | **MateuszP137**  | mp1622@ic.ac.uk | [Mateusv's Statement](https://github.com/sirampy/Team22/blob/main/statements/Mateusz%20Pietrzkiewicz.md) |
+| Mateusz Pietrzkiewicz | 02257454 | **MateuszP137**  | mp1622@ic.ac.uk | [Mateusz's Statement](https://github.com/sirampy/Team22/blob/main/statements/Mateusz%20Pietrzkiewicz.md) |
 | Sophie Jayson |02254802  | **Slayque3n**  |  sj922@ic.ac.uk| [Sophie's Statement](https://github.com/sirampy/Team22/blob/main/statements/Sophie%20Jayson.md) |
 
 ## Division of Tasks
 ### Work split by component
 LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution; 
 #### Single Cycle:
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | p | | p | | |
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | x | x |
@@ -34,7 +34,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Other testing | alutest.s, counter.s, pdf.s, sine.s | x | p | p | | x |
 
 #### Pipelining:
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | x |
 | Hazard unit | hazard_unit.sv | | x | | | x |
@@ -45,7 +45,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Other testing | alutest.s, counter.s, pdf.s, sine.s | p | | | | |
 
 #### Cache:
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | Direct cache | data_memory_cache.sv | p | x | x | | |
 | Two-way cache | two_way.sv | | | x | | 
@@ -54,7 +54,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 
 
 #### Version-2 (Revised Microarchitecture):
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | x | | | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | | | 
@@ -66,7 +66,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | V2 Pipeline | all | p | | |
 
 #### Lab 4:
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, alu_top.sv, reg_file.sv | p | x | | x | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | x | |
@@ -78,7 +78,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Formatting | x | x | | | x | |
 
 #### Single cycle redo (revised design):
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, regs.sv | | | | x | |
 | Control Unit | decoder.sv | | | | x | |
@@ -88,7 +88,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Testbenches and debugging | top_tb.cpp | | | | x | |
 
 #### Single cycle redo pipelind (revised design):
-| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+| Task | File Names    | Alex  | Beth | Dell | Mateusz |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
 | ALU | alu.sv, regs.sv | | | | x | |
 | Control Unit | decoder.sv | | | | x | |
