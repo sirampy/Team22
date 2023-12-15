@@ -47,9 +47,9 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | x | p | x | | |
-| Two-way cache | | | | | 
-| Testbenches and debugging | x | | | | | 
+| Direct cache | | x | p | x | | |
+| Two-way cache | | | | | | 
+| Testbenches and debugging | | x | | | | | 
 
 | Other testing | | | | |
 
