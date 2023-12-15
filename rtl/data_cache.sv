@@ -2,7 +2,7 @@
 this is a basic direct mapped cache to get us started. 
 this cache is self controlled and is "in charge" of the memory itself
 the cache is write back - not write through
-*/
+
 
 module data_cache #(
     parameter   ADDRESS_WIDTH = 16,
@@ -82,4 +82,4 @@ endcase
 end
 
 endmodule
-
+*/
