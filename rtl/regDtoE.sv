@@ -1,6 +1,6 @@
 //reg for decode to execute
 module regDtoE#(
-    parameter ADDRESS_WIDTH = 32,
+    parameter 
               DATA_WIDTH = 32
 )(
     input logic clk_i,
@@ -21,10 +21,10 @@ module regDtoE#(
     input  logic [ DATA_WIDTH-1 : 0 ]    rd2D_i,      // read register 2 (from deocde)
     input  logic [ 19 : 15 ]             rs1D_i,      // read reg 1 address (from deocde)
     input  logic [ 24 : 20 ]             rs2D_i,      // read reg 2 address (from deocde)
-    input  logic  [ADDRESS_WIDTH-1 : 0 ] pcD_i,       // pc (from deocde)
+    input  logic  [DATA_WIDTH-1 : 0 ] pcD_i,       // pc (from deocde)
     input  logic [ 11 : 7 ]              rdD_i,       // write register address (from deocde)
     input  logic [ DATA_WIDTH-1 : 0 ]    ext_immD_i,  // imm extend (from deocde)
-    input  logic [ ADDRESS_WIDTH-1 : 0 ] pc_plus4D_i, // pc+4 (from deocde)
+    input  logic [ DATA_WIDTH-1 : 0 ] pc_plus4D_i, // pc+4 (from deocde)
 
 //control outputs
 
@@ -33,27 +33,27 @@ module regDtoE#(
     output logic       mem_wrE_o,       
     output logic [ 3 : 0 ] alu_ctrlE_o,  
     output logic pc_srcE_o, 
-    output logic       alu_srcE_o  
+    output logic       alu_srcE_o, 
 
 // reg outputs
   output logic [ DATA_WIDTH-1 : 0 ]    rd1E_o, // read register 1 (for execute)
   output logic [ DATA_WIDTH-1 : 0]     rd2E_o, // read register 2 (for execute)
    output logic [ 19 : 15 ]             rs1E_o, // read reg 1 address  (for execute)
    output logic [ 24 : 20 ]             rs2E_o, // read reg 2 address (for execute)
-   output logic [ ADDRESS_WIDTH-1 : 0 ] pcE_o, // pc (for execute)
+   output logic [ DATA_WIDTH-1 : 0 ] pcE_o, // pc (for execute)
    output logic [ 11 : 7 ]              rdE_o,  // write register address (for execute)
     output logic [ DATA_WIDTH-1 : 0 ]    ext_immE_o,  // imm extend  (for execute)
-    output logic [ ADDRESS_WIDTH-1 : 0 ] pc_plus4E_o,  // pc+4  (for execute)
+    output logic [ DATA_WIDTH-1 : 0 ] pc_plus4E_o  // pc+4  (for execute)
 );
 always_ff @(posedge clk_i)
     begin
         if (flush_i) begin
             rd1E_o      <= {DATA_WIDTH{1'b0}};
             rd2E_o      <= {DATA_WIDTH{1'b0}};
-            pcE_o       <= {ADDRESS_WIDTH{1'b0}};
+            pcE_o       <= {DATA_WIDTH{1'b0}};
             rdE_o       <= 5'b0;
             ext_immE_o  <= {DATA_WIDTH{1'b0}};
-            pc_plus4E_o <= {ADDRESS_WIDTH{1'b0}};
+            pc_plus4E_o <= {DATA_WIDTH{1'b0}};
             reg_wE_o  <= 1'b0;
             result_srcE_o <= 2'b00;
             mem_wrE_o  <= 1'b0;

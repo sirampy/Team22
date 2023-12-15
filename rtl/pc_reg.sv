@@ -13,6 +13,7 @@ module pc_reg #(
 );
 
 always_ff @( posedge clk_i )
-    pc_o <= next_pc_i;
-
+    begin
+        if (!stall) pc_o <= next_pc_i;
+    end
 endmodule

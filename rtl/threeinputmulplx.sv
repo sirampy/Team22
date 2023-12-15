@@ -1,5 +1,5 @@
 module threeinputmulplx#(
-    parameter ADDRESS_WIDTH = 32
+    parameter DATA_WIDTH = 32
 )
 (
     input logic [ 1 : 0] select,
@@ -10,9 +10,14 @@ module threeinputmulplx#(
 );
 always_comb
     case (select)
+    
     2'b00: out=choice00;
     2'b01: out=choice01;
     2'b10: out=choice10;
     //11 does not happen
-
+   default:
+    out=0;
+    
+    endcase
 endmodule
+

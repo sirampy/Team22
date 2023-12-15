@@ -1,6 +1,8 @@
 module control_top #(
 
-    parameter INSTR_WIDTH = 32
+    parameter INSTR_WIDTH = 32,
+            ADDR_WIDTH=32,
+             DATA_WIDTH = 32
 
 ) (
 
@@ -11,7 +13,7 @@ module control_top #(
     input logic                             stallFtoD,
 
     output logic                            pc_src_o,      // [0] - Increment PC by 4, [1] - Increment PC by immediate value
-    output logic                            result_src_o,  // [0] - Write ALU output to register, [1] - Write memory value to register
+    output logic [ 1 : 0 ]                           result_src_o,  // [0] - Write ALU output to register, [1] - Write memory value to register
     output logic                            mem_write_o,   // Memory write enable
     output logic                            alu_src_o,     // [0] - Use rs2 as ALU input, [1] - Use imm_op as ALU input
     output logic                            reg_write_o,   // Register write enable
@@ -20,11 +22,10 @@ module control_top #(
     output logic [ 3 : 0 ]                  alu_ctrl_o,    // ALU operation select
     output logic [ 31 : 0 ]                 imm_op_o,      // Immediate value
     output logic [ 24 : 15 ]                instr24_15_o,  // Current instruction [ 24 : 15 ]
-    output logic [ 11 : 7 ]                 instr11_7_o    // Current instruction [ 31 : 7 ]
-    output logic [ 31 : 0 ]                 pcD_o,          // Program counter out of pipeline register
+    output logic [ 11 : 7 ]                 instr11_7_o,    // Current instruction [ 31 : 7 ]
+    output logic [ 31 : 0 ]                 pcD_o          // Program counter out of pipeline register
 
-);
-logic 
+); 
 logic [ 1 : 0 ] alu_op;              // [00] - LW/SW, [01] - B-type, [10] - Mathematical expression (R-type or I-type)
 logic [ 6 : 0 ] op;                  // Instruction operand
 logic [ 2 : 0 ] funct3;              // Operator select
@@ -86,7 +87,7 @@ sign_extend sign_extend (
 );
 
 
-regFtoD #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_f_to_d(
+regFtoD #( .DATA_WIDTH( DATA_WIDTH )) reg_f_to_d(
     .clk_i(clk),
     .flush(flushFtoD),
     .stall(stallFtoD),
