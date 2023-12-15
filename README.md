@@ -22,16 +22,16 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Single Cycle:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | p | x | 
+| ALU | alu.sv, alu_top.sv, reg_file.sv | p | | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | x | 
 | PC | pc_mux.sv, pc_reg.sv| | | x | 
-| Memory | instr_mem.sv, data_memory.sv | | p | | 
+| Memory | instr_mem.sv, data_memory.sv | p | p | | 
 | Top | top.sv | | | |
-| Testbenches and debugging | top_tb.cpp | | p | p | 
-| Formatting | - | | | | 
-| Setup | .gitignore, Makefile |  | | | 
+| Testbenches and debugging | top_tb.cpp | p | p | p | 
+| Formatting | - | p | | | 
+| Setup | .gitignore, Makefile | x | | | 
 | F1 Testing | f1_tb.cpp, f1.s | | | | 
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | | p | |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | x | p | |
 
 #### Pipelining:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
@@ -40,14 +40,14 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Hazard unit | hazard_unit.sv | | x | | 
 | Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | |x|
 | Testbenches | cpu_tb.cpp | | | x | 
-| Debugging | - | | p | | | x|
+| Debugging | - | p | p | | | x|
 | F1 Testing | f1.s, f1_tb.cpp | | | | | x|
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | | | |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | p | | |
 
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | |  | x | x | | 
+| Direct cache | p |  | x | x | | 
 | Two-way cache | | | | x | 
 | Testbenches and debugging | |  | x | x | 
 | F1 Testing | | | | | |
@@ -56,15 +56,15 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Version-2 (Revised Microarchitecture):
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | | | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | | | | 
-| PC | pc_mux.sv, pc_reg.sv| | | | 
-| Memory | instr_mem.sv, program_mem.sv | | | | 
-| Top | top.sv | | | |
-| Testbenches and debugging | | | | | 
-| F1 Testing | | | | | 
-| Other testing | | | | |
-| V2 Pipeline | all | x | | |
+| ALU | alu.sv, alu_top.sv, reg_file.sv | x | | | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | | | 
+| PC | pc_mux.sv, pc_reg.sv| x | | | 
+| Memory | instr_mem.sv, program_mem.sv | x | | | 
+| Top | top.sv | x | | |
+| Testbenches and debugging | x | | | | 
+| F1 Testing | p | | | | 
+| Other testing | x | | | |
+| V2 Pipeline | all | p | | |
 
 #### Lab 4:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
