@@ -227,14 +227,14 @@ Links to relevant commits:
 Once everything was completed in single-cycle, I tested different instructions as well as the sine wave programme to ensure they were working. This involved using GTKwave to look through each of the signals and figure out which instruction was causing issues. 
 
 For example, the waveform was initially as below:
-![wrong_sine](images\wrong_sine.png)
+![wrong_sine](../images/wrong_sine.png)
 
 I then tested a few instructions to see what wasn't working. I realised that the LBU instruction was not working accurately and fixed a typo that was causing errors. As seen below, the instructions now work as expected: 
-![instructions](images\instructions.png)
-![instructions_result](images\instructions_result.png)
+![instructions](../images/instructions.png)
+![instructions_result](../images/instructions_result.png)
 
 The sine wave programme now correctly produces the waveform below:
-![sine](images\sine.png)
+![sine](../images/sine.png)
 
 ### Reflections
 Overall, I felt like having to implement the whole CPU helped me to learn a great deal more about hardware design and the workings of the CPU than I would have otherwise. I also learnt that i nthe future it would be better to plan to do the project more sequentially. For instrance, it would have helped to complete the CPU before implementing pipelining and cache, as it would have been easier to debug and ensure that everything was working. If there was more time, I would have liked to have been able to implement two-way association cache in the memory as well. 
