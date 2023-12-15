@@ -10,7 +10,7 @@
 ## Group Details
 | Name           | CID      | GitHub   | Email                     | Personal Statement|
 |----------------|----------|----------|---------------------------|--------------|
-| Alex Charlton |  | **sirampy**  |       | [Alex's Statement](https://github.com/sirampy/Team22/blob/main/statements/Alex%20Charlton.md) |
+| Alex Charlton | 02226326 | **sirampy**  |    ac5522@ic.ac.uk   | [Alex's Statement](https://github.com/sirampy/Team22/blob/main/statements/Alex%20Charlton.md) |
 | Beth Cham    | 02193797 | **bethcham** | beth.cham22@imperial.ac.uk | [Beth's Statement](https://github.com/sirampy/Team22/blob/main/statements/Beth%20Cham.md) |
 | Dell Saxena | 02258324 | **Dell-S** | dell.saxena22@imperial.ac.uk |  [Dell's Statement](https://github.com/sirampy/Team22/blob/main/statements/Dell%20Saxena.md) |
 | Mateusz Pietrzkiewicz | 02257454 | **MateuszP137**  | mp1622@ic.ac.uk | [Mateusv's Statement](https://github.com/sirampy/Team22/blob/main/statements/Mateusz%20Pietrzkiewicz.md) |
