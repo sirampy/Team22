@@ -19,7 +19,7 @@ The full test code is in `rtl/top_tb.cpp`, where the comments show every assembl
 
 This design was made to be as simple and minimal as possible, and this is the final design:
 
-![alt text][main_diagram]
+![alt text][diagram]
 
 The goal was to remove redundant wires, decoders and modules from the design provided in lectures.
 
