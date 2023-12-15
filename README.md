@@ -101,6 +101,8 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 | Memory | pl3_mem.sv | p | | | x | |
 | Write back | pl4_write.sv | | | | x | |
 | Testbenches and debugging | top_tb.cpp | p | | | x | |
+| caching | V3-PIPELINED+CACHED branch | X | | | | |
+
 
 &nbsp; 
 ## Repository Structure
