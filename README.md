@@ -1,13 +1,13 @@
+[diagram]: images/main_diagram.png "Main diagram"
+[waves]: images/waves.png "Waveforms"
 
 # RISC-V simple single-cycle implementation:
 
-  
-
 ## What is this?
 
-  
+This is a single cycle implementation of a RISC-V CPU according to the instructions provided in lectures. All instructions shown in lectures have been implemented (see lecture 6 for full tables). This comes with a testbench which tests every available instruction, and produces an expected waveform, which can then be used to compare against our other branches to verify they work.
 
-This is a single cycle implementation of a RISC-V CPU according to the instructions provided in lectures. All instructions shown in lectures have been implemented (see lecture 6 for full tables). This comes with a testbench which tests every available instruction, and produces an expected waveform (IMAGE????), which can then be used to compare against our other branches to verify they work.
+![alt text][waves]
 
 The full test code is in `rtl/top_tb.cpp`, where the comments show every assembled instruction and explain the intended result of that instruction. These are in `rtl/test.mem`, and corresponding main memory values for testing L and S instructions are in `rtl/test2.mem`. Keep in mind, to test, **you need to use the big endian instruction memory code, see **`rtl/instr_mem.sv`** for more details!**
 
@@ -17,7 +17,9 @@ The full test code is in `rtl/top_tb.cpp`, where the comments show every assembl
 
 ## Alterations to design provided in lectures
 
-This design was made to be as simple and minimal as possible, and this is the final design: (IMAGE???)
+This design was made to be as simple and minimal as possible, and this is the final design:
+
+![alt text][main_diagram]
 
 The goal was to remove redundant wires, decoders and modules from the design provided in lectures.
 
