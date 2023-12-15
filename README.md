@@ -1,1 +1,1 @@
-This branch is a copy of SINGLE-CYCLE-REDO-PIPELINED adapted to fit the testing format and file structure of other branches
+This branch is a copy of SINGLE-CYCLE-REDO-PIPELINED with work being carried out to cache the data memory. 
