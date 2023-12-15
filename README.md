@@ -13,7 +13,7 @@
 | Alex Charlton |  | **sirampy**  |       | [Alex's Statement](https://github.com/sirampy/Team22/blob/main/statements/Alex%20Charlton.md) |
 | Beth Cham    | 02193797 | **bethcham** | beth.cham22@imperial.ac.uk | [Beth's Statement](https://github.com/sirampy/Team22/blob/main/statements/Beth%20Cham.md) |
 | Dell Saxena | 02258324 | **Dell-S** | dell.saxena22@imperial.ac.uk |  [Dell's Statement](https://github.com/sirampy/Team22/blob/main/statements/Dell%20Saxena.md) |
-| Mateusz Pietrzkiewicz |  | **MateuszP137**  |  | [Mateusv's Statement](https://github.com/sirampy/Team22/blob/main/statements/Mateusz%20Pietrzkiewicz.md) |
+| Mateusz Pietrzkiewicz | 02257454 | **MateuszP137**  | mp1622@ic.ac.uk | [Mateusv's Statement](https://github.com/sirampy/Team22/blob/main/statements/Mateusz%20Pietrzkiewicz.md) |
 | Sophie Jayson |  | **Slayque3n**  |  | [Sophie's Statement](https://github.com/sirampy/Team22/blob/main/statements/Sophie%20Jayson.md) |
 
 ## Division of Tasks
@@ -22,36 +22,36 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Single Cycle:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | p | | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | x | 
+| ALU | alu.sv, alu_top.sv, reg_file.sv | p | | p | | |
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | p | p | x | x |
 | PC | pc_mux.sv, pc_reg.sv|  | | p | | x |
-| Memory | instr_mem.sv, data_memory.sv | p | p | x | 
-| Top | top.sv | | | |
-| Testbenches and debugging | top_tb.cpp | p | p | x | 
-| Formatting | - | p | | | 
-| Setup | .gitignore, Makefile | x | | | 
+| Memory | instr_mem.sv, data_memory.sv | p | p | x | x | |
+| Top | top.sv | | | | x | |
+| Testbenches and debugging | top_tb.cpp | p | p | x | x | |
+| Formatting | - | p | | | x | | 
+| Setup | .gitignore, Makefile | x | | | p | |
 | F1 Testing | f1_tb.cpp, f1.s |  | | p |  | x | 
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | x | p | p |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | x | p | p | | x |
 
 #### Pipelining:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | |x|
-| Hazard unit | hazard_unit.sv | | x | | |x|
-| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | |x|
-| Testbenches | cpu_tb.cpp | | | x | 
-| Debugging | - | p | p | | | x|
-| F1 Testing | f1.s, f1_tb.cpp | | | | | x|
-| Other testing | alutest.s, counter.s, pdf.s, sine.s | p | | |
+| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | x |
+| Hazard unit | hazard_unit.sv | | x | | | x |
+| Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | | x |
+| Testbenches | cpu_tb.cpp | | | x | | x |
+| Debugging | - | p | p | | | x |
+| F1 Testing | f1.s, f1_tb.cpp | | | | | x |
+| Other testing | alutest.s, counter.s, pdf.s, sine.s | p | | | | |
 
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache |  | p | x | x | | 
-| Two-way cache | | | | x | 
-| Testbenches and debugging | |  | x | x | 
+| Direct cache | x | p | x | | |
+| Two-way cache | | | | | 
+| Testbenches and debugging | x | | | | | 
 
-| Other testing | | | | x |
+| Other testing | | | | |
 
 #### Version-2 (Revised Microarchitecture):
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
@@ -68,14 +68,39 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Lab 4:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | | x | | | 
-| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | 
-| PC | pc_mux.sv, pc_reg.sv| | | | | x |
-| Memory | instr_mem.sv, program.mem| x | | | x
-| Top | top.sv | | | x |
-| Testbenches and debugging | alu_top_tb.cpp,  | | | x | 
-| Run files | |  | | p | p 
-| Formatting | x | | | |  x
+| ALU | alu.sv, alu_top.sv, reg_file.sv | | x | | x | | 
+| Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | x | |
+| PC | pc_mux.sv, pc_reg.sv | | | | | x |
+| Memory | instr_mem.sv, program.mem | x | | | x | |
+| Top | top.sv | | | | x | |
+| Testbenches and debugging | alu_top_tb.cpp | | | x | x | | 
+| Run files | |  | | | p | |
+| Formatting | | x | | | x | |
+
+#### Single cycle redo (revised design):
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| ALU | alu.sv, regs.sv | | | | x | |
+| Control Unit | decoder.sv | | | | x | |
+| PC | pc.sv | | | | x | p |
+| Memory | instr_mem.sv, main_mem.sv | | | | x | |
+| Top | top.sv | | | | x | |
+| Testbenches and debugging | top_tb.cpp | | | | x | |
+
+#### Single cycle redo pipelind (revised design):
+| Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
+|:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+| ALU | alu.sv, regs.sv | | | | x | |
+| Control Unit | decoder.sv | | | | x | |
+| PC | pc.sv | | | | x | p |
+| Memory | instr_mem.sv, main_mem.sv | | | | x | |
+| Top | top.sv | | | | x | |
+| Fetch | pl0_fetch.sv | | | | x | |
+| Decode | pl1_decode.sv | | | | x | |
+| Execute | pl2_exec.sv | | | | x | |
+| Memory | pl3_mem.sv | p | | | x | |
+| Write back | pl4_write.sv | | | | x | |
+| Testbenches and debugging | top_tb.cpp | p | | | x | |
 
 &nbsp; 
 ## Repository Structure
