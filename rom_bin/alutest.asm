@@ -4,20 +4,19 @@ rom_bin/alutest-reloc.out:     file format elf32-littleriscv
 
 Disassembly of section .text:
 
-bfc00000 <__BSS_END__-0x1010> (File Offset: 0x1000):
+bfc00000 <__BSS_END__-0x100c> (File Offset: 0x1000):
 bfc00000:	00100593          	addi	a1,zero,1
 bfc00004:	00100613          	addi	a2,zero,1
-bfc00008:	00c595b3          	sll	a1,a1,a2
-bfc0000c:	00159593          	slli	a1,a1,0x1
+bfc00008:	00c586b3          	add	a3,a1,a2
 
 Disassembly of section .riscv.attributes:
 
-00000000 <.riscv.attributes> (File Offset: 0x1010):
+00000000 <.riscv.attributes> (File Offset: 0x100c):
    0:	1e41                	.2byte	0x1e41
    2:	0000                	.2byte	0x0
    4:	7200                	.2byte	0x7200
    6:	7369                	.2byte	0x7369
-   8:	01007663          	bgeu	zero,a6,14 <__BSS_END__-0xbfc00ffc> (File Offset: 0x1024)
+   8:	01007663          	bgeu	zero,a6,14 <__BSS_END__-0xbfc00ff8> (File Offset: 0x1020)
    c:	0014                	.2byte	0x14
    e:	0000                	.2byte	0x0
   10:	7205                	.2byte	0x7205

@@ -24,14 +24,14 @@ if the system has predicted the wrong next instruction (aka a jump or branch ins
 
 ### Fetch to Decode
 
-this register sits between the instruction memory and the control and register units and delays the instruction passed to the respective units as well as the pcplus4 result. this register Contains both a stall and a flush option
+This register sits between the instruction memory and the control and register units and delays the instruction passed to the respective units as well as the pcplus4 result. this register Contains both a stall and a flush option
 
 ### Decode to Execute
-this register sits between  the reg file and the alu, as well as taking in the necessary control signlas. This register also contains a flush option and the rs inputs and outputs flowing into the hazard unit to check the intructions.
+This register sits between  the reg file and the alu, as well as taking in the necessary control signles. This register also contains a flush option and the rs inputs and outputs flowing into the hazard unit to check the intructions.
 
 ### Execute to Memory
- this register sits between the alu output ans the data memory, it stores the control signals for the reg and memory writing as well as the pc plus 4
+ This register sits between the alu output and the data memory, it stores the control signals for the reg and memory writing as well as the pc plus 4. The outputs of this register will be have to be attached to the fast-forward multiplexers to allow for data depneddancies.
 
 ### Memory to Store
 
-this reguster stores the data  and control signalas necessary for wwriting back to the register file.
+This reguster stores the data  and control signalas necessary for wwriting back to the register file. This register does not need any kind of hazard Unit input as it is only storing information that has already been executed, and therefore is not going to have any kind of ionterfence with previous instructions.
