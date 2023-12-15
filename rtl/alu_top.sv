@@ -49,7 +49,7 @@ reg_file regfile (
 alu alu (
 
     .op1_i  ( Alu_SrcAE ),
-    .op2_i  ( Alu_SrcBE ), // alu_op2),
+    .op2_i  (  alu_src_i ? imm_op_i :Alu_SrcBE  ), // alu_op2),
     .ctrl_i ( alu_ctrl_i ),
 
     .out_o  ( alu_out_o ),

@@ -8,8 +8,6 @@ module regDtoE#(
     input logic           reg_wD_i,     // register wright enable [1]-enable
     input logic [ 1 : 0 ] result_srcD_i,  // select write source: [00] - [01]-data mem ,[10]-
     input logic            mem_wD_i,      // mem wright enable [1]-enable
-    input logic            jumpD_i,        //jump instruction deceted [1]-jump dected, [0]- not jump instruction
-    input logic             branchD_i,    //branch instruction deceted [1]-branch dected, [0]- not braqnch instruction
     input logic [ 3 : 0 ]    alu_ctrlD_i,  // ALU operation select (to ALU)
     input logic               alu_srcD_i,     // [0] - Use register as ALU input, [1] - Use immediate value as ALU input
     input logic pc_srcD_i,
@@ -32,9 +30,7 @@ module regDtoE#(
 
      output logic       reg_wE_o,      
     output logic [ 1 : 0 ] result_srcE_o, 
-    output logic       mem_wrE_o,   
-    output logic       jumpE_o,     
-    output logic       branchE_o,    
+    output logic       mem_wrE_o,       
     output logic [ 3 : 0 ] alu_ctrlE_o,  
     output logic pc_srcE_o, 
     output logic       alu_srcE_o  
@@ -61,8 +57,6 @@ always_ff @(posedge clk_i)
             reg_wE_o  <= 1'b0;
             result_srcE_o <= 2'b00;
             mem_wrE_o  <= 1'b0;
-            jumpE_o       <= 1'b0;
-            branchE_o     <= 1'b0;
             alu_ctrlE_o   <= 4'b0000;
             alu_srcE_o    <= 1'b0;
             pc_srcE_o    <= 1'b0;
@@ -79,8 +73,6 @@ always_ff @(posedge clk_i)
             reg_wE_o    <= reg_wD_i;
             result_srcE_o <= result_srcD_i;
             mem_wrE_o  <= mem_wD_i;
-            jumpE_o       <= jumpD_i;
-            branchE_o     <= branchD_i;
             alu_ctrlE_o   <= alu_ctrlD_i;
             alu_srcE_o    <= alu_srcD_i;
             alu_srcE_o    <= pc_srcD_i;

@@ -45,6 +45,7 @@ logic           jumpE;
 logic           branchE;
 logic [ 3 : 0 ] alu_ctrlE;
 logic           alu_srcE;
+logic [ 31 : 0] imm_opE;
 
 // memory signals
 logic [ ADDR_WIDTH - 1 : 0 ] rdM;
@@ -86,8 +87,9 @@ logic [ DATA_WIDTH - 1 : 0 ] rd1;
 logic [ DATA_WIDTH - 1 : 0 ] rd2;
 logic [ DATA_WIDTH - 1 : 0 ] rd1E;
 logic [ DATA_WIDTH - 1 : 0 ] rd2E;
-logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcAE,
-logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcBE,
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcAE;
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcBE;
+logic [ DATA_WIDTH - 1 : 0 ] data_wM;
 
 
 
@@ -127,14 +129,14 @@ regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
     .result_srcE_i(result_srcE),
     .mem_wE_i(mem_wE),
     .alu_resultE_i(alu_out),
-    .data_wE_i(),
+    .data_wE_i(Alu_SrcBE),
     .rdE_i(rdE),
     .pc_plus4E_i(pc_plus4E),
     .reg_wM_o(reg_writeM),
     .result_srcM_o(result_srcM),
     .mem_wM_o(mem_wM),
     .alu_resultM_o(alu_resultM),
-    .data_wM_o(),
+    .data_wM_o(data_wM),
     .rdM_o(rdM),
     .pc_plus4M_o(pc_plus4M)
 );
@@ -143,8 +145,6 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .reg_wD_i(regwriteD),
     .result_srcD_i(result_srcD),
     .mem_wD_i(mem_wD),
-    .jumpD_i(),
-    .branchD_i(),
     .alu_ctrlD_i(alu_ctrl),
     .alu_srcD_i(alu_src),
     .flush_i(flushDtoE),
@@ -155,13 +155,11 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .pcD_i(pcD),
     .pc_srcD_i(pc_srcD)
     .rdD_i(rdD),
-    .ext_immD_i(),
+    .ext_immD_i(imm_op),
     .pc_plus4D_i(pc_plus4D),
     .reg_wE_o(regwriteE),
     .result_srcE_o(result_srcE),
     .mem_wrE_o(mem_wE),
-    .jumpE_o(),
-    .branchE_o(),
     .alu_ctrlE_o(alu_ctrlE),
     .alu_srcE_o(alu_srcE),
     .rd1E_o(rd1E),
@@ -170,7 +168,7 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .rs2E_o(rs2E),
     .pcE_o(pcE),
     .rdE_o(rdE),
-    .ext_immE_o(),
+    .ext_immE_o(imm_opE),
     .pc_plus4E_o(pc_plus4E),
     .pc_srcE_o(pc_srcE)
 
@@ -183,11 +181,11 @@ threeinputmulplx DtoE_AluSrcAE(
     .out(Alu_SrcAE)
 );
 threeinputmulplx DtoE_AluSrcBE(
-    .select(ForwardAE),
+    .select(ForwardBE),
     .choice00(rd2E),
     .choice01(resultS),
     .choice10(alu_resultM),
-    .out()
+    .out(Alu_SrcBE)
 );
 
 regMtoS #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_m_to_s
@@ -230,7 +228,7 @@ hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
     .rs2D_i(rs2D),
     .pc_srcE_i(pc_srcE),
     .forward_alua_E_o(ForwardAE),
-    .forward_alub_E_o(),
+    .forward_alub_E_o(ForwardBE),
     .flushFtoD_o(flushFtoD),
     .stallFtoD_o(stallFtoD),
     .flushDtoE_o(flushDtoE),
@@ -274,7 +272,7 @@ pc_reg pc_reg (
 pc_mux pc_mux (
 
     .pc_i          ( pc ),
-    .imm_op_i      ( imm_op ),
+    .imm_op_i      ( imm_opE ),
     .pc_src_i      ( pc_srcE ),
     .pc_jalr_i     ( alu_out ),
     .jalr_pc_src_i ( jalr_pc_src ),
@@ -289,7 +287,7 @@ main_memory main_mem (
     .clk_i          ( clk ),
     .address_i      ( alu_out ),
     .write_enable_i ( mem_wM ),
-    .write_value_i  ( mem_write_val ),
+    .write_value_i  ( data_wM ),
 
     .read_value_o   ( memory_read )
 
