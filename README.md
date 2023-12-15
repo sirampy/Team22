@@ -1,19 +1,19 @@
-# Lab 4 completed:
+# PIPELINING 2.0
+When beginning testing and debugging of the original pipeline-hazards branch, we noticed lots of errors, mostly within the top level file and the use of an old, uncompleted control unit, but also from  within the logic of the hazard unit. And so, in order to get pipelining working for the original SINGLE-CYCLE branch, we, as a team, decided it would be best to start again; which created this branch.
 
-## What needed doing:
+This branch aims to create and run the architecture seen below:
 
-- Many compile-time bugs and incompatibilities across sheets needed fixing - bit mismatches across sheets, misspelled variable names etc;
-- Logical errors needed fixing - Typos in case-switches copied from lecture slide tables, incorrect concatenations etc;
-- Implemented BNE;
-- Implemented I-type instructions;
-- Fixed instruction register, making it byte addressed, not word addressed, and an issue with it being too large;
+![cpu](Documents/Team22/images/cpu.png)
 
-To run, enter Team22 directory and write:
+## Hazard unit logic
+### forwarding 
 
-`./run.sh rtl top alu+regfile control pc memory`
+One hazard that could evolve is data depndancies to combat this the results and other data would have to be fast forwarded. If the the registers in the execute stage match the Rd in the memmory stage, then the mem stage needs to be fast forwarded. Otherwise if the the registers in the execute stage match the Rd in the store stage, then the store stage needs to be fast forwarded. Finally, if 
+anything else is happening the cycle just continues on normally.
 
-# Stretch goal complete
 
-## What is observed
-
-As expected, we have the sine wave read from memory. Since the sinerom is stored as bytes but we are reading words, and since we are using little endian, after every read we have the a0[7:0] be the current sine value, and the 24 remaining bits have extra readings (a potential optimisation to remove memory reads would be to read word, then logical shift right 3 times, meaning we only do 0.25x the reads). The code also never reads memory location 255, jumping back to main loop after reading 254 (which is a logical error in the provided code, not a hardware fault). When we are at the final memory locations we can see the undefined memory (in our case just 0's) fill the most significant bits of a0 (8 bits for 253, 16 bits for 254).
+### stalling 
+An error will occur typically when a lw instruction takes place, as the correct value will not be fully passed through the system for 5 clock cycles. Therefore the system has to be paused (stalled) to allow the instruction to pass through the pipelining registers, and the execute registers will be flushed in order to create a bubble for it.
+ 
+### flushing
+if the system has predicted the wrong next instruction (aka a jump or branch instruction has occured) then the system needs to be flushed to remove the wrong data loaded into the pipeline
