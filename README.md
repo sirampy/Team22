@@ -47,7 +47,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | data_memory_cache.sv | x | p | x | | |
+| Direct cache | data_memory_cache.sv | | p | x | | |
 | Two-way cache | two_way.sv | | | x | | 
 | Testbenches and debugging | top_tb.cpp, direct_cache_tb.cpp | | x | x | | | 
 
@@ -112,7 +112,7 @@ For each new feature we added, a new branch was created. The final repo includes
 |2. **[`SINGLE-CYCLE`](https://github.com/sirampy/Team22/tree/SINGLE-CYCLE#)**|Original implemented lab 4 based RISC-V RV32I Processor. |
 |3. **[`pipelining`](https://github.com/sirampy/Team22/tree/pipelining#)**|Original Pipelined CPU <u>without</u> hazard handling. |
 |4. **[`pipelining-hazards`](https://github.com/sirampy/Team22/tree/pipelining-hazards#)**|Original Pipelined CPU <u>with</u> hazard handling, including forwarding and stalls.|
-|5. **[`cache`](https://github.com/sirampy/Team22/tree/cache#)**|This branch contains both direct mapped cache and 2-way associative cache, with implementation of direct mapped cache in the fully pipelined CPU.  |
+|5. **[`cache`](https://github.com/sirampy/Team22/tree/cache#)**|This branch contains both direct mapped cache and 2-way associative cache, with implementation of direct mapped cache in the original pipelined CPU.  |
 |6. **[`version-2`](https://github.com/sirampy/Team22/tree/version-2#)**|While creating the single cycle CPU, we realised the microarchitecture could be further improved on with a few changes. Thus, version-2 was created as a way to explore what in the CPU could be upgraded to become more efficient beyond what we were taught. This CPU is stable and tested to run the pdf program|
 |7. **[`v2-full`](https://github.com/sirampy/Team22/tree/v2-full#)**|Version-2 with pipelining and cache incorporated. work on this branch was stopped before completion to focus on other pipelining branches|
 |8. **[`pipeline-2.0`](https://github.com/sirampy/Team22/tree/pipeline-2.0#)**| the working single - cycle cpu with pipelining and hazard detection.|
