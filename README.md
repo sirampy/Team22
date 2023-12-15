@@ -47,7 +47,7 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Cache:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Direct cache | data_memory_cache.sv | | p | x | | |
+| Direct cache | data_memory_cache.sv | | x | x | | |
 | Two-way cache | two_way.sv | | | x | | 
 | Testbenches and debugging | top_tb.cpp, direct_cache_tb.cpp | | x | x | | | 
 
