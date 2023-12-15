@@ -1,4 +1,6 @@
 ### Pipelining
+Note: This branch was branched off from SINGLE-CYCLE for pipelining. The updated pipeline-2.0 uses logic and code from this branch and was created in order to debug issues. Thus, this branch is currently not fully working but is kept in order for us to be able to trace back past commits and the original code. 
+
 #### Single-Cycle
 In order to add pipelining to the single-cycle CPU, 4 pipeline registers were added in between the 5 different stages of the CPU. 
 
@@ -20,5 +22,3 @@ However, an error occurs for the lw intruction as the correct value will not be 
 
 #### Control Hazards
 After that, we had to resolve control hazards, which occur when the next instruction may be fetched wrongly as the branch decision have not yet been made. This is dealt with by predicting that branches are not taken until pc_src in the execute stage determines which branch is taken. If the prediction is wrong, the predictions will be flushed.
-
-## Testing Results
