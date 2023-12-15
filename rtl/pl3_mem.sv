@@ -31,7 +31,7 @@ begin
 end
 
 always_comb
-    if ( mem_rd_en_d1 )
+    if ( mem_rd_en_d1 ) // selecting the byted to write to is done in teh memory iteslf
         case ( l_s_sel_val_d1 )
             L_S_BYTE:
                 mem_rd_val = { { 24 { mem_rd_val_full [ 7 ] } }, mem_rd_val_full [ 7 : 0 ] };
@@ -48,23 +48,13 @@ always_comb
     else
         mem_rd_val = i_alu_out_val;
 
-always_comb
-    case ( l_s_sel_val_d1 )
-        L_S_BYTE:
-            mem_wr_val = { mem_rd_val_full[31:8], mem_wr_val_d1 [ 7 : 0 ] };
-        L_S_HALF:
-            mem_wr_val = { mem_rd_val_full[31:16], mem_wr_val_d1 [ 15 : 0 ] };
-        L_S_WORD:
-            mem_wr_val = mem_wr_val_d1;
-        default: mem_wr_val = 0;
-    endcase
-
 main_mem main_mem_ (
 
     .i_clk    ( i_clk ),
     .i_addr   ( i_alu_out_val ),
     .i_wr_en  ( mem_wr_en_d1 ),
     .i_wr_val ( mem_wr_val ),
+    .i_wr_type( l_s_sel_val_d1),
 
     .o_val    ( mem_rd_val_full )
 
