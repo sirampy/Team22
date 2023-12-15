@@ -7,7 +7,7 @@
 int main(int argc, char **argv, char **env) {
     int i;
     int clk;
-    bool flag;
+
 
     Verilated::commandArgs(argc, argv);
     Vtop* top = new Vtop;
@@ -19,14 +19,15 @@ int main(int argc, char **argv, char **env) {
     tfp->open ("top.vcd");
 
     if (vbdOpen()!=1) return (-1);
-    vbdHeader("F1 Sequence");
+    vbdHeader("Team 22: F1");
 
     top->clk = 0;
     top->rst = 0;
 
     vbdSetMode(1);
+    vbdBar(0);
 
-    for (i=0; i<10000; i++) {
+    for (i=0; i<1000; i++) {
 
         for (clk=0; clk<2; clk++) {
             tfp->dump (2*i+clk);
@@ -34,8 +35,8 @@ int main(int argc, char **argv, char **env) {
             top->eval ();
         }
 
-        flag = vbdFlag();
-        top->rst = flag && (vbdValue() == 0);
+        vbdFlag();
+
         vbdBar(top->a0 & 0xFF);
         vbdCycle(i);
         

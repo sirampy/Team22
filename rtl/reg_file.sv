@@ -31,7 +31,7 @@ end
 
 assign rd1_o = reg_data [ ad1_i ];
 assign rd2_o = reg_data [ ad2_i ];
-assign a0 = reg_data [ 15 ];
+assign a0 = reg_data [ 10 ];
  
 
 endmodule

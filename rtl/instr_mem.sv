@@ -14,7 +14,7 @@ module instr_mem #(
 
     initial begin 
         $display ("Loading rom.");  
-        $readmemh("program.mem", rom_array);
+        $readmemh("./rom_bin/program.mem", rom_array);
     end;
 
     always_comb begin 
