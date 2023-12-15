@@ -36,8 +36,8 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Pipelining:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | | 
-| Hazard unit | hazard_unit.sv | | x | | 
+| Pipeline registers | pipe_reg1.sv, pipe_reg2.sv, pipe_reg3.sv, pipe_reg4.sv | | x | | |x|
+| Hazard unit | hazard_unit.sv | | x | | |x|
 | Top | top.sv (single-cycle pipeline), top.sv (full pipeline) | | x | | |x|
 | Testbenches | cpu_tb.cpp | | | x | 
 | Debugging | - | p | p | | | x|
@@ -90,6 +90,7 @@ For each new feature we added, a new branch was created. The final repo includes
 |5. **[`cache`](https://github.com/sirampy/Team22/tree/cache#)**|This branch contains both direct mapped cache and 2-way associative cache, with implementation of **[WRITE WHICH]** in the fully pipelined CPU.  |
 |6. **[`version-2`](https://github.com/sirampy/Team22/tree/version-2#)**|While creating the single cycle CPU, we realised the microarchitecture could be further improved on with a few changes. Thus, version-2 was created as a way to explore what in the CPU could be upgraded to become more efficient beyond what we were taught. This CPU is stable and tested to run the pdf program|
 |7. **[`v2-full`](https://github.com/sirampy/Team22/tree/v2-full#)**|Version-2 with pipelining and cache incorporated. work on this branch was stoped before completion to focus on other pipelining branches|
+|8. **[`pipeline-2.0`](https://github.com/sirampy/Team22/tree/pipeline-2.0#)**| the working single - cycle cpu with pipelining and hazard detection.|
 &nbsp; 
 > A more in-depth explanation of each of the branches can be found in their individual READMEs linked above. 
 
