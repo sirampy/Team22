@@ -2,7 +2,7 @@
 ---
 ## Table of Contents
 1. [Group Details](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#group-details)
-2. [Division of Tasks]((https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#division-of-tasks))
+2. [Division of Tasks](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#division-of-tasks)
 3. [Repository Structure](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#respository-structure)
 4. [Testing instructions](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#testing-instructions)
 5. [Evidence](https://github.com/sirampy/Team22/tree/main?tab=readme-ov-file#evidence)
