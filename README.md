@@ -68,14 +68,14 @@ LEGEND :       `x` = full/main responsibility;  `p` = small/partial contribution
 #### Lab 4:
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
 |:-----------|:-----------:|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|
-| ALU | alu.sv, alu_top.sv, reg_file.sv | | x | | x | | 
+| ALU | alu.sv, alu_top.sv, reg_file.sv | p | x | | x | | 
 | Control Unit | control_top.sv, main_decoder.sv, alu_decoder.sv, sign_extend.sv, | x | x | | x | |
-| PC | pc_mux.sv, pc_reg.sv | | | | | x |
+| PC | pc_mux.sv, pc_reg.sv | p | | | | x |
 | Memory | instr_mem.sv, program.mem | x | | | x | |
-| Top | top.sv | | | | x | |
+| Top | top.sv | p | | | x | |
 | Testbenches and debugging | alu_top_tb.cpp, alu_decoder_tb.cpp, control_top_tb.cpp, sign_extend_tb.cpp | | | x | x | | 
 | Run files | |  | | | p | |
-| Formatting | | x | | | x | |
+| Formatting | x | x | | | x | |
 
 #### Single cycle redo (revised design):
 | Task | File Names    | Alex  | Beth | Dell | Mateusv |  Sophie  |
