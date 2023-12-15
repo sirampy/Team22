@@ -1,4 +1,4 @@
-module 3inputmulplx#(
+module threeinputmulplx#(
     parameter ADDRESS_WIDTH = 32
 )
 (

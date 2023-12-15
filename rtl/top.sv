@@ -59,8 +59,11 @@ logic [ DATA_WIDTH - 1 : 0 ] alu_outS;
 logic [ 31 : 0 ]             memory_readS;
 logic           reg_writeS;
 logic [ 1 : 0 ] result_srcS;
+logic [ DATA_WIDTH - 1 : 0 ] resultS;
+logic reg_writeS;
 
 logic stallFtoD;
+logic ForwardAE;
 logic flushDtoE;
 logic flushFtoD;
 logic regwriteE;
@@ -79,22 +82,28 @@ logic [ 31 : 0 ] pcE;
 logic [ 31 : 0 ] pc_plus4D;
 logic [ 31 : 0 ] pc_plus4E;
 logic [ DATA_WIDTH - 1 : 0 ] alu_resultM;
+logic [ DATA_WIDTH - 1 : 0 ] rd1;
+logic [ DATA_WIDTH - 1 : 0 ] rd2;
+logic [ DATA_WIDTH - 1 : 0 ] rd1E;
+logic [ DATA_WIDTH - 1 : 0 ] rd2E;
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcAE,
+logic [ DATA_WIDTH - 1 : 0 ] Alu_SrcBE,
 
 
 
 
-assign rs1 = instr24_15 [ 19 : 15 ];
-assign rs2 = instr24_15 [ 24 : 20 ];
-assign rd = instr11_7 [ 11 : 7 ];
+assign rs1D = instr24_15 [ 19 : 15 ];
+assign rs2D = instr24_15 [ 24 : 20 ];
+assign rdD = instr11_7 [ 11 : 7 ];
 
 
 alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
 
     .clk_i           ( clk ),
-    .rs1_i           ( rs1 ),
-    .rs2_i           ( rs2 ),
-    .rd_i            ( rd ),
-    .reg_write_i     ( reg_write ),
+    .rs1_i           ( rs1D ),
+    .rs2_i           ( rs2D ),
+    .rd_i            ( rdD ),
+    .reg_write_i     ( reg_writeS ),
     .reg_write_src_i ( result_src ),
     .imm_op_i        ( imm_op ),
     .alu_src_i       ( alu_src ),
@@ -102,12 +111,16 @@ alu_top #( .ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH ) ) alu_regfile (
     .alu_ctrl_i      ( alu_ctrlE ),
     .Jstore_i        ( Jstore ),
     .pc_plus4_i      ( pc_plus4 ),
-
+    .wd3_i(resultS),
+    .Alu_SrcAE_i(Alu_SrcAE),
+    .Alu_SrcBE_i(Alu_SrcBE),
     .eq_o            ( eq ),
     .alu_out_o       ( alu_out ),
-    .rs2_val_o       ( mem_write_val )
+    .rs2_val_o       ( rd1 )
+    .rs1_val_o       (rd2 )
 
 );
+
 regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
     .clk_i           ( clk ),
     .reg_wE_i(regwriteE),
@@ -115,14 +128,14 @@ regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
     .mem_wE_i(mem_wE),
     .alu_resultE_i(alu_out),
     .data_wE_i(),
-    .rdE_i(),
+    .rdE_i(rdE),
     .pc_plus4E_i(pc_plus4E),
-    .reg_wM_o(),
+    .reg_wM_o(reg_writeM),
     .result_srcM_o(result_srcM),
     .mem_wM_o(mem_wM),
     .alu_resultM_o(alu_resultM),
     .data_wM_o(),
-    .rdM_o(),
+    .rdM_o(rdM),
     .pc_plus4M_o(pc_plus4M)
 );
 regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
@@ -135,12 +148,13 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .alu_ctrlD_i(alu_ctrl),
     .alu_srcD_i(alu_src),
     .flush_i(flushDtoE),
-    .rd1D_i(),
-    .rd2D_i(),
-    .rs1D_i(),
-    .rs2D_i(),
+    .rd1D_i(rd1),
+    .rd2D_i(rd2),
+    .rs1D_i(rs1D),
+    .rs2D_i(rs2D),
     .pcD_i(pcD),
-    .rdD_i(),
+    .pc_srcD_i(pc_srcD)
+    .rdD_i(rdD),
     .ext_immD_i(),
     .pc_plus4D_i(pc_plus4D),
     .reg_wE_o(regwriteE),
@@ -150,76 +164,58 @@ regDtoE #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_d_to_e(
     .branchE_o(),
     .alu_ctrlE_o(alu_ctrlE),
     .alu_srcE_o(alu_srcE),
-    .rd1E_o(),
-    .rd2E_o(),
-    .rs1E_o(),
-    .rs2E_o(),
+    .rd1E_o(rd1E),
+    .rd2E_o(rd2E),
+    .rs1E_o(rs1E),
+    .rs2E_o(rs2E),
     .pcE_o(pcE),
-    .rdE_o(),
+    .rdE_o(rdE),
     .ext_immE_o(),
-    .pc_plus4E_o(pc_plus4E)
+    .pc_plus4E_o(pc_plus4E),
+    .pc_srcE_o(pc_srcE)
 
+);
+threeinputmulplx DtoE_AluSrcAE(
+    .select(ForwardAE),
+    .choice00(rd1E),
+    .choice01(resultS),
+    .choice10(alu_resultM),
+    .out(Alu_SrcAE)
+);
+threeinputmulplx DtoE_AluSrcBE(
+    .select(ForwardAE),
+    .choice00(rd2E),
+    .choice01(resultS),
+    .choice10(alu_resultM),
+    .out()
 );
 
 regMtoS #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_m_to_s
 (
 .clk_i(clk),
-.reg_wM_i(),
+.reg_wM_i(reg_writeM),
 .result_srcM_i(result_srcM),
 .alu_resultM_i(alu_resultM),
 .read_dataM_i(memory_read),
-.rdM_i(),
+.rdM_i(rdM),  
 .pc_plus4M_i(pc_plus4M),
-.reg_wS_o(),
+.reg_wS_o(reg_writeS),
 .result_srcS_o(result_srcS),
 .alu_resultS_o(alu_resultS),
 .read_dataS_o(memory_readS),
-.rdS_o(),
+.rdS_o(rdS), 
 .pc_plus4S_o(pc_plus4S)
 
 );
-3inputmulplx MtS_multiplexer(
+threeinputmulplx MtS_multiplexer(
     .select(result_srcS),
     .choice00(alu_resultS),
     .choice01(memory_readS),
-    .choice10(pc_plus4S)
+    .choice10(pc_plus4S),
+    .out(resultS)
 
 );
 
-regEtoM #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_e_to_m(
-    .clk_i           ( clk ),
-    .reg_wE_i(reg_writeE),
-    .result_srcE_i(result_srcE),
-    .mem_wE_i(mem_writeE),
-    .alu_resultE_i(alu_out),
-    .data_wE_i(),
-    .rdE_i(),
-    .pc_plus4E_i(),
-    .reg_wM_o(reg_writeM),
-    .result_srcM_o(result_srcM),
-    .mem_wM_o(mem_writeM),
-    .alu_resultM_o(alu_outM),
-    .data_wM_o(),
-    .rdM_o(rdM),
-    .pc_plus4M_o()
-);
-
-regMtoS #(.ADDR_WIDTH( ADDR_WIDTH ), .DATA_WIDTH( DATA_WIDTH )) reg_m_to_s
-(
-    .clk_i(clk),
-    .reg_wM_i(reg_writeM),
-    .result_srcM_i(result_srcM),
-    .alu_resultM_i(alu_outM),
-    .read_dataM_i(memory_read),
-    .rdM_i(rdM),
-    .pc_plus4M_i(),
-    .reg_wS_o(reg_writeS),
-    .result_srcS_o(result_srcS),
-    .alu_resultS_o(alu_outS),
-    .read_dataS_o(memory_readS),
-    .rdS_o(rdS),
-    .pc_plus4S_o()
-);
 
 hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
     .rs1E_i(rs1E),
@@ -230,10 +226,10 @@ hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
     .reg_wrM_i(reg_writeM),
     .reg_wS_i(reg_writeS),
     .result_srcE_i(result_srcE),
-    .rs1D_i(rs1),
-    .rs2D_i(rs2),
-    .pc_srcE_i(),
-    .forward_alua_E_o(),
+    .rs1D_i(rs1D),
+    .rs2D_i(rs2D),
+    .pc_srcE_i(pc_srcE),
+    .forward_alua_E_o(ForwardAE),
     .forward_alub_E_o(),
     .flushFtoD_o(flushFtoD),
     .stallFtoD_o(stallFtoD),
@@ -241,6 +237,7 @@ hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
     .stalllPC_o(pcstall)
 
 );
+
 
 control_top #( .INSTR_WIDTH( DATA_WIDTH ) ) control_unit (
 
@@ -278,7 +275,7 @@ pc_mux pc_mux (
 
     .pc_i          ( pc ),
     .imm_op_i      ( imm_op ),
-    .pc_src_i      ( pc_src ),
+    .pc_src_i      ( pc_srcE ),
     .pc_jalr_i     ( alu_out ),
     .jalr_pc_src_i ( jalr_pc_src ),
 

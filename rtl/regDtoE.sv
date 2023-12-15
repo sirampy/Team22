@@ -12,9 +12,10 @@ module regDtoE#(
     input logic             branchD_i,    //branch instruction deceted [1]-branch dected, [0]- not braqnch instruction
     input logic [ 3 : 0 ]    alu_ctrlD_i,  // ALU operation select (to ALU)
     input logic               alu_srcD_i,     // [0] - Use register as ALU input, [1] - Use immediate value as ALU input
+    input logic pc_srcD_i,
 
     //hazard inputs
-    input logic flush_i  //fliush reg
+    input logic flush_i,  //fliush reg
 
 
     //reg inputs
@@ -34,7 +35,8 @@ module regDtoE#(
     output logic       mem_wrE_o,   
     output logic       jumpE_o,     
     output logic       branchE_o,    
-    output logic [ 3 : 0 ] alu_ctrlE_o,   
+    output logic [ 3 : 0 ] alu_ctrlE_o,  
+    output logic pc_srcE_o, 
     output logic       alu_srcE_o  
 
 // reg outputs
@@ -63,6 +65,7 @@ always_ff @(posedge clk_i)
             branchE_o     <= 1'b0;
             alu_ctrlE_o   <= 4'b0000;
             alu_srcE_o    <= 1'b0;
+            pc_srcE_o    <= 1'b0;
         end
         else begin
             rd1E_o      <= rd1D_i;
@@ -80,6 +83,7 @@ always_ff @(posedge clk_i)
             branchE_o     <= branchD_i;
             alu_ctrlE_o   <= alu_ctrlD_i;
             alu_srcE_o    <= alu_srcD_i;
+            alu_srcE_o    <= pc_srcD_i;
 
         end
     end
