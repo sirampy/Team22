@@ -3,17 +3,35 @@ When beginning testing and debugging of the original pipeline-hazards branch, we
 
 This branch aims to create and run the architecture seen below:
 
-![cpu](Documents/Team22/images/cpu.png)
+![cpu](images/cpu.png)
 
 ## Hazard unit logic
-### forwarding 
+### Forwarding 
 
 One hazard that could evolve is data depndancies to combat this the results and other data would have to be fast forwarded. If the the registers in the execute stage match the Rd in the memmory stage, then the mem stage needs to be fast forwarded. Otherwise if the the registers in the execute stage match the Rd in the store stage, then the store stage needs to be fast forwarded. Finally, if 
 anything else is happening the cycle just continues on normally.
 
+In order to do this we added in multiplexers to the sources of the alu inputs, with the options of picking between the regular input from the pipeline register or the fast wards values.
 
-### stalling 
+
+### Stalling 
 An error will occur typically when a lw instruction takes place, as the correct value will not be fully passed through the system for 5 clock cycles. Therefore the system has to be paused (stalled) to allow the instruction to pass through the pipelining registers, and the execute registers will be flushed in order to create a bubble for it.
  
-### flushing
+### Flushing
 if the system has predicted the wrong next instruction (aka a jump or branch instruction has occured) then the system needs to be flushed to remove the wrong data loaded into the pipeline
+
+## Pipeline registers
+
+### Fetch to Decode
+
+this register sits between the instruction memory and the control and register units and delays the instruction passed to the respective units as well as the pcplus4 result. this register Contains both a stall and a flush option
+
+### Decode to Execute
+this register sits between  the reg file and the alu, as well as taking in the necessary control signlas. This register also contains a flush option and the rs inputs and outputs flowing into the hazard unit to check the intructions.
+
+### Execute to Memory
+ this register sits between the alu output ans the data memory, it stores the control signals for the reg and memory writing as well as the pc plus 4
+
+### Memory to Store
+
+this reguster stores the data  and control signalas necessary for wwriting back to the register file.
