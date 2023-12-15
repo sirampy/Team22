@@ -238,17 +238,18 @@ hazardunit #(.ADDR_WIDTH( ADDR_WIDTH )) hazardunit(
 );
 
 
-control_top #( .INSTR_WIDTH( DATA_WIDTH ), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(DATA_WIDTH) ) control_unit (
+control_top #( .INSTR_WIDTH( DATA_WIDTH ),  .DATA_WIDTH(DATA_WIDTH) ) control_unit (
 
     .pc_i          ( pc ),
     .eq_i          ( eq ),
     .clk           (clk),
-    .flushFtoD(stallFtoD),
+    .flushFtoD(flushFtoD),
     .stallFtoD(stallFtoD),
     .pcD_o(pcD),
+    .pc_plus4(pc_plus4),
     
-    .Jstore_o      ( Jstore ),
-    .pc_src_o      ( pc_src ),
+    //.Jstore_o      ( Jstore ),
+    .pc_src_o      ( pc_srcD ),
     .result_src_o  ( result_srcD ),
     .mem_write_o   ( mem_wD ),
     .alu_src_o     ( alu_src ),
@@ -257,7 +258,8 @@ control_top #( .INSTR_WIDTH( DATA_WIDTH ), .ADDR_WIDTH(ADDR_WIDTH), .DATA_WIDTH(
     .alu_ctrl_o    ( alu_ctrl ),
     .imm_op_o      ( imm_op ),
     .instr24_15_o  ( instr24_15 ),
-    .instr11_7_o   ( instr11_7 )
+    .instr11_7_o   ( instr11_7 ),
+    .pc_plus4D_o(pc_plus4D)
 
 );
 
@@ -272,7 +274,7 @@ pc_reg pc_reg (
 
 pc_mux pc_mux (
 
-    .pc_i          ( pc ),
+    .pc_i          ( pcE ),
     .imm_op_i      ( imm_opE ),
     .pc_src_i      ( pc_srcE ),
     .pc_jalr_i     ( alu_out ),
