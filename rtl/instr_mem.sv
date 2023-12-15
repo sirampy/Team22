@@ -19,20 +19,19 @@ endfunction
 
 initial begin
         $display( "Loading instructions into ROM." );
-        $readmemh( "test.mem", instr_bytes ); // Choose correct .mem location here
+        $readmemh( "rom_bin/program.mem", instr_bytes ); // Choose correct .mem location here
 end;
 
-
+/*
 assign o_val = { instr_bytes [ convert_address( i_addr ) ], // Big endian, works better with hand-written files
                  instr_bytes [ convert_address( i_addr ) + 1 ],
                  instr_bytes [ convert_address( i_addr ) + 2 ],
                  instr_bytes [ convert_address( i_addr ) + 3 ] };
 
-/*
+*/
 assign o_val = { instr_bytes [ convert_address( i_addr ) + 3], // Little endian, used by assembler
                  instr_bytes [ convert_address( i_addr ) + 2 ],
                  instr_bytes [ convert_address( i_addr ) + 1 ],
                  instr_bytes [ convert_address( i_addr ) ] };
-*/
 
 endmodule

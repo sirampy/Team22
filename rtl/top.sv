@@ -122,7 +122,6 @@ typedef enum logic [ 2 : 0 ] {
 } pl0_stall_state;
 
 
-
 module top (
 
     input clock i_clk

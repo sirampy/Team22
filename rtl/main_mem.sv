@@ -23,7 +23,7 @@ endfunction
 
 initial begin
         $display( "Loading main memory" );
-        $readmemh( "test2.mem", mem_bytes ); // Choose correct .mem location here
+        $readmemh( "rom_bin/data.mem", mem_bytes ); // Choose correct .mem location here
 end
 
 
