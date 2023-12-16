@@ -126,10 +126,6 @@ For each new feature we added, a new branch was created. The final repo includes
 The main branch is purely used for README and statement purposes.
 
 &nbsp; 
-## Testing Instructions
-
-
-## Evidence
 
 ## References
 > instruction set reference: https://www.cs.sfu.ca/~ashriram/Courses/CS295/assets/notebooks/RISCV/RISCV_CARD.pdf <br>
